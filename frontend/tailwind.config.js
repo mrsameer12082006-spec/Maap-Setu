@@ -39,7 +39,7 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: ['Inter', '"Plus Jakarta Sans"', '"Noto Sans"', 'system-ui', '-apple-system', 'sans-serif'],
         serif: ['"PT Serif"', 'Georgia', 'serif'],
       },
       borderRadius: {

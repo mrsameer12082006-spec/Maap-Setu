@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Award, QrCode, Download, Eye, Calendar, ShieldCheck, Printer, ExternalLink } from 'lucide-react';
+import { Award, QrCode, Download, Eye, Calendar, ShieldCheck, Printer, ExternalLink, ArrowLeft } from 'lucide-react';
 import { useData } from '../../context/DataContext';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
@@ -14,11 +14,19 @@ export const MyCertificatesPage = () => {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-neutral-900">Digital Verification Certificates</h1>
-        <p className="text-xs text-neutral-600">
-          Official digital certificates and stamped verification records issued under the Legal Metrology Act, 2009.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-neutral-900">Digital Verification Certificates</h1>
+          <p className="text-xs text-neutral-600">
+            Official digital certificates and stamped verification records issued under the Legal Metrology Act, 2009.
+          </p>
+        </div>
+
+        <Link to="/business">
+          <Button variant="secondary" size="sm" icon={ArrowLeft} className="font-bold border-[#003943]/20 shadow-xs">
+            Back to Dashboard
+          </Button>
+        </Link>
       </div>
 
       {certificates.length === 0 ? (

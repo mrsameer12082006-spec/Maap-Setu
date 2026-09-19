@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Eye, Filter, Calendar, MapPin, FileText, CheckCircle2, Clock, Award, ExternalLink, Download, QrCode, ShieldCheck } from 'lucide-react';
+import { Search, Eye, Filter, Calendar, MapPin, FileText, CheckCircle2, Clock, Award, ExternalLink, Download, QrCode, ShieldCheck, ArrowLeft, LayoutDashboard } from 'lucide-react';
 import { useData } from '../../context/DataContext';
 import { useAuth } from '../../context/AuthContext';
 import { Card } from '../../components/common/Card';
@@ -61,7 +61,7 @@ export const MyApplicationsPage = () => {
       header: 'Assigned Inspector',
       key: 'assignedOfficerName',
       render: (row) => (
-        <span className="text-xs font-medium text-neutral-900">
+        <span className="text-xs font-semibold text-neutral-800">
           {row.assignedOfficerName || <span className="text-neutral-600 italic">Unassigned</span>}
         </span>
       )
@@ -70,8 +70,8 @@ export const MyApplicationsPage = () => {
       header: 'Scheduled Date',
       key: 'scheduledInspectionDate',
       render: (row) => (
-        <span className="text-xs font-medium text-neutral-900">
-          {row.scheduledInspectionDate || <span className="text-neutral-600 italic">-</span>}
+        <span className="text-xs font-mono font-semibold text-neutral-800">
+          {row.scheduledInspectionDate || '-'}
         </span>
       )
     },
@@ -79,7 +79,7 @@ export const MyApplicationsPage = () => {
       header: 'Status',
       key: 'status',
       render: (row) => {
-        const cert = certificates?.find(c => c.applicationId === row.id) || row.certificate;
+        const cert = certificates?.find(c => c.applicationId === row.id || c.instrumentId === row.instrumentId) || row.certificate;
         return (
           <div className="flex flex-col items-start gap-1">
             <Badge status={row.status}>{row.status}</Badge>
@@ -96,10 +96,15 @@ export const MyApplicationsPage = () => {
       header: 'Action',
       key: 'action',
       render: (row) => {
-        const cert = certificates?.find(c => c.applicationId === row.id) || row.certificate;
+        const cert = certificates?.find(c => c.applicationId === row.id || c.instrumentId === row.instrumentId) || row.certificate;
         return (
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" icon={Eye} onClick={() => setSelectedApp(row)}>
+            <Button
+              variant="secondary"
+              size="sm"
+              icon={Eye}
+              onClick={() => setSelectedApp(row)}
+            >
               Details
             </Button>
             {cert && (
@@ -121,9 +126,17 @@ export const MyApplicationsPage = () => {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-neutral-900">My Verification Applications</h1>
-        <p className="text-xs text-neutral-600">Track and monitor all verification and re-verification requests submitted to Legal Metrology.</p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-neutral-900">My Verification Applications</h1>
+          <p className="text-xs text-neutral-600">Track and monitor all verification and re-verification requests submitted to Legal Metrology.</p>
+        </div>
+
+        <Link to="/business">
+          <Button variant="secondary" size="sm" icon={ArrowLeft} className="font-bold border-[#003943]/20 shadow-xs">
+            Back to Dashboard
+          </Button>
+        </Link>
       </div>
 
       {/* Filter bar */}

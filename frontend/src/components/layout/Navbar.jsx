@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Scale, ArrowLeft, LogOut, User, Sparkles } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { usePortalExit } from '../../hooks/usePortalExit';
 
 export const Navbar = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [profileOpen, setProfileOpen] = useState(false);
+  const { handlePortalExit, Modal: PortalExitModal } = usePortalExit();
 
   const getInitials = (name) => {
     if (!name) return 'VM';
@@ -15,18 +17,18 @@ export const Navbar = () => {
     return name.substring(0, 2).toUpperCase();
   };
 
-  const handleLogout = () => {
-    logout();
+  const handleDropdownExit = () => {
     setProfileOpen(false);
-    navigate('/login');
+    handlePortalExit();
   };
 
   return (
     <header className="bg-[#FDF9F6] text-[#003943] relative z-40 border-b border-[#003943]/10 shadow-sm">
+      <PortalExitModal />
       {/* Main Bar */}
       <div className="w-full px-4 h-20 flex items-center justify-between gap-6">
         {/* Brand Logo */}
-        <Link to="/" className="flex items-center gap-3.5 group shrink-0">
+        <button onClick={handlePortalExit} className="flex items-center gap-3.5 group shrink-0">
           <div className="w-11 h-11 rounded-2xl bg-[#003943] text-[#02B7BF] flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
             <Scale className="w-6 h-6 text-[#02B7BF]" />
           </div>
@@ -34,7 +36,7 @@ export const Navbar = () => {
             <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#003943] font-serif">Maap</span>
             <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#00959C] font-serif italic">Setu</span>
           </div>
-        </Link>
+        </button>
 
         {/* Right Side Action Area */}
         <div className="flex items-center gap-3">
@@ -89,18 +91,17 @@ export const Navbar = () => {
                     </Link>
                   )}
 
-                  <Link
-                    to="/"
-                    onClick={() => setProfileOpen(false)}
+                  <button
+                    onClick={handleDropdownExit}
                     className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-[#003943] hover:bg-[#E0F5F6] transition-colors"
                   >
                     <ArrowLeft className="w-4 h-4 text-[#00959C]" />
                     <span>Return to Homepage</span>
-                  </Link>
+                  </button>
 
                   <button
                     type="button"
-                    onClick={handleLogout}
+                    onClick={handleDropdownExit}
                     className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-red-600 hover:bg-red-50 transition-colors"
                   >
                     <LogOut className="w-4 h-4 text-red-500" />
@@ -112,13 +113,13 @@ export const Navbar = () => {
           </div>
 
           {/* Return to Homepage Button */}
-          <Link
-            to="/"
+          <button
+            onClick={handlePortalExit}
             className="hidden sm:inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-[#003943] hover:bg-[#002B33] text-white border border-[#00959C]/40 font-bold text-xs sm:text-sm transition-all shadow-md shrink-0 group"
           >
             <ArrowLeft className="w-4 h-4 text-[#02B7BF] group-hover:-translate-x-1 transition-transform" />
             <span>Return to MaapSetu Homepage</span>
-          </Link>
+          </button>
         </div>
       </div>
     </header>

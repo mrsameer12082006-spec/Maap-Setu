@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link, } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import {
   FileText,
   CheckCircle,
@@ -8,7 +8,8 @@ import {
   Info,
   Building2,
   ShieldCheck,
-  Scale
+  Scale,
+  ArrowLeft
 } from 'lucide-react';
 import { useData } from '../../context/DataContext';
 
@@ -119,6 +120,10 @@ export const RegisterInstrumentPage = () => {
     <div className="w-full max-w-4xl mx-auto space-y-7 pb-20 text-[#003943]">
       <div className="space-y-8 animate-in fade-in duration-150">
         <div className="space-y-1">
+          <Link to="/business" className="inline-flex items-center gap-1 text-xs text-[#003943]/60 hover:text-[#003943] transition-colors mb-1">
+            <ArrowLeft className="w-3.5 h-3.5" /> Back to Dashboard
+          </Link>
+          <div className="block pt-1"></div>
           <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#00959C]">
             INSTRUMENT REGISTRATION
           </span>
@@ -617,5 +622,7 @@ export const RegisterInstrumentPage = () => {
     </div>
   );
 };
+
+
 
 

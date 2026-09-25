@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Search, FileCheck, UserCheck, Eye, Check, X, MapPin, FileText, AlertCircle, Award, CheckSquare, ShieldCheck, Building2, Filter } from 'lucide-react';
+import { Search, FileCheck, UserCheck, ArrowLeft, Eye, Check, X, MapPin, FileText, AlertCircle, Award, CheckSquare, ShieldCheck, Building2, Filter } from 'lucide-react';
 import { useData } from '../../context/DataContext';
 import { Card } from '../../components/common/Card';
 import { Table } from '../../components/common/Table';
@@ -219,6 +219,9 @@ export const ReviewApplicationsPage = () => {
   return (
     <div className="space-y-6">
       <div>
+        <Link to="/lmd" className="inline-flex items-center gap-1 text-xs text-neutral-600 hover:text-neutral-900 mb-1">
+          <ArrowLeft className="w-3.5 h-3.5" /> Back to Dashboard
+        </Link>
         <h1 className="text-2xl font-bold text-neutral-900">Review Incoming Verification Applications</h1>
         <p className="text-xs text-neutral-600">
           Inspect submitted calibration certificates, model approvals, and owner credentials prior to assigning an inspector.
@@ -984,6 +987,7 @@ export const ReviewApplicationsPage = () => {
     </div>
   );
 };
+
 
 
 

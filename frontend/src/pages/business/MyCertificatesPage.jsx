@@ -15,6 +15,9 @@ export const MyCertificatesPage = () => {
   return (
     <div className="space-y-6">
       <div>
+        <Link to="/business" className="inline-flex items-center gap-1 text-xs text-neutral-600 hover:text-neutral-900 mb-1">
+          <ArrowLeft className="w-3.5 h-3.5" /> Back to Dashboard
+        </Link>
         <h1 className="text-2xl font-bold text-neutral-900">Digital Verification Certificates</h1>
         <p className="text-xs text-neutral-600">
           Official digital certificates and stamped verification records issued under the Legal Metrology Act, 2009.
@@ -123,3 +126,6 @@ export const MyCertificatesPage = () => {
     </div>
   );
 };
+
+
+

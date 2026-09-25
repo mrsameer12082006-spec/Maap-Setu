@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { Search, Filter, Eye } from 'lucide-react';
+import { useSearchParams, Link } from 'react-router-dom';
+import { Search, Filter, Eye, ArrowLeft } from 'lucide-react';
 import { useData } from '../../context/DataContext';
 import { Card } from '../../components/common/Card';
 import { Table } from '../../components/common/Table';
@@ -114,6 +114,9 @@ export const AllApplicationsPage = () => {
   return (
     <div className="space-y-6">
       <div>
+        <Link to="/lmd" className="inline-flex items-center gap-1 text-xs text-neutral-600 hover:text-neutral-900 mb-1">
+          <ArrowLeft className="w-3.5 h-3.5" /> Back to Dashboard
+        </Link>
         <h1 className="text-2xl font-bold text-neutral-900">Master Verification Registry</h1>
         <p className="text-xs text-neutral-600">Filter and search across all submitted, in-progress, passed, and failed verification records statewide.</p>
       </div>
@@ -202,3 +205,5 @@ export const AllApplicationsPage = () => {
     </div>
   );
 };
+
+

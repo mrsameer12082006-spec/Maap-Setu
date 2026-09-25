@@ -122,6 +122,9 @@ export const MyApplicationsPage = () => {
   return (
     <div className="space-y-6">
       <div>
+        <Link to="/business" className="inline-flex items-center gap-1 text-xs text-neutral-600 hover:text-neutral-900 mb-1">
+          <ArrowLeft className="w-3.5 h-3.5" /> Back to Dashboard
+        </Link>
         <h1 className="text-2xl font-bold text-neutral-900">My Verification Applications</h1>
         <p className="text-xs text-neutral-600">Track and monitor all verification and re-verification requests submitted to Legal Metrology.</p>
       </div>
@@ -434,6 +437,9 @@ export const MyApplicationsPage = () => {
     </div>
   );
 };
+
+
+
 
 
 

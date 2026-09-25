@@ -52,7 +52,7 @@ export const LandingPage = () => {
     },
     {
       q: "How can the public or inspectors verify a digital certificate?",
-      a: "Every digital certificate issued on MaapSetu features a unique QR code and Certificate ID. Anyone can scan the QR code using any smartphone or enter the Certificate ID on the public verification portal to inspect real-time certificate validity.",
+      a: "Every digital certificate issued on Metrika features a unique QR code and Certificate ID. Anyone can scan the QR code using any smartphone or enter the Certificate ID on the public verification portal to inspect real-time certificate validity.",
     },
   ];
 
@@ -74,7 +74,7 @@ export const LandingPage = () => {
           </h1>
 
           <p className="text-base text-neutral-600 leading-relaxed">
-            MaapSetu streamlines the end-to-end verification lifecycle under
+            Metrika streamlines the end-to-end verification lifecycle under
             India's Legal Metrology Act, 2009. Connect instrument owners, LMD
             administrators, and verification officers seamlessly with digital
             applications, and cryptographically verifiable QR certificates.

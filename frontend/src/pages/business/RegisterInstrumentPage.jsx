@@ -8,9 +8,44 @@ import {
   Info,
   Building2,
   ShieldCheck,
-  Scale
+  Scale,
+  Sparkles
 } from 'lucide-react';
 import { useData } from '../../context/DataContext';
+
+// 6 Legal Metrology Instrument Categories & Verification Test Standards (from Legal Metrology Rules 2011)
+const INSTRUMENT_TEST_SPECS = {
+  'Heavy Electronic Weighbridge': {
+    checks: 'Accuracy, zero, repeatability, load indication',
+    howItWorks: 'Place known certified test weights/loads at specified positions (corner eccentricity, half load 30T, max capacity 60T) and compare displayed weight with reference standard.',
+    standardRule: 'Rule 11 MPE Tolerance (±1.5 kg per 60T)'
+  },
+  'Retail Digital Counter Scale': {
+    checks: 'Zero, accuracy, repeatability, display/division',
+    howItWorks: 'Apply standard weights across relevant points of the weighing range (tare check, zero check, max load) and compare readings with calibrated Class III commercial masses.',
+    standardRule: 'Class III Commercial Scale MPE (±1.5g per 30kg)'
+  },
+  'Fuel Dispensing Meter (Multi-Product)': {
+    checks: 'Volume delivered, indication, seals/settings',
+    howItWorks: 'Dispense a measured quantity (20L standard volumetric measure) into an approved reference container and compare dispenser digital reading with reference measure.',
+    standardRule: 'Volumetric Meter MPE (±0.20% maximum error)'
+  },
+  'Industrial Automatic Liquid Flowmeter': {
+    checks: 'Measured volume/flow against reference',
+    howItWorks: 'Pass liquid through the meter under specified flow conditions and compare its digital indication with a calibrated reference prover loop.',
+    standardRule: 'Mass Flowmeter Line MPE (±0.15% allowable error)'
+  },
+  'Pre-packaged Quantity Check Scale': {
+    checks: 'Actual quantity versus declared quantity',
+    howItWorks: 'Weigh sample packages using a verified reference procedure and determine whether net package weight quantity is within MPD legal requirements.',
+    standardRule: 'Legal Metrology Package Rule MPE Bounds'
+  },
+  'Precision Laboratory Analytical Balance': {
+    checks: 'Accuracy, repeatability, zero/tare',
+    howItWorks: 'Use calibrated Class I standard weights (0.0001g sensitivity) and compare balance indication at 50g, 100g, and 200g test points.',
+    standardRule: 'Class I High-Precision MPE (±0.0005g tolerance)'
+  }
+};
 
 export const RegisterInstrumentPage = () => {
   const navigate = useNavigate();
@@ -49,11 +84,12 @@ export const RegisterInstrumentPage = () => {
     modelApprovalNo: 'IND/09/2021/442'
   });
 
+  const selectedSpec = INSTRUMENT_TEST_SPECS[formData.type] || INSTRUMENT_TEST_SPECS['Heavy Electronic Weighbridge'];
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  
   const handleAddFile = (e) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -326,6 +362,45 @@ export const RegisterInstrumentPage = () => {
                   </select>
                 </div>
               </div>
+
+              {/* Dynamic Live Test Standards Preview Box for Selected Instrument */}
+              {selectedSpec && (
+                <div className="p-4 sm:p-5 bg-[#E0F5F6] border border-[#00959C]/40 rounded-2xl space-y-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#003943] text-[#02B7BF] text-[11px] font-bold uppercase tracking-wider">
+                      <Sparkles className="w-3.5 h-3.5" /> LMO Field Verification Test Suite Mapped
+                    </span>
+                    <span className="text-xs font-bold text-[#00959C] bg-white px-2.5 py-1 rounded-lg border border-[#00959C]/20">
+                      {selectedSpec.standardRule}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
+                    <div className="p-3 bg-white/80 rounded-xl border border-[#003943]/10 space-y-1">
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#00959C] block">
+                        What LMO Checks On-Site
+                      </span>
+                      <p className="font-bold text-[#003943]">
+                        {selectedSpec.checks}
+                      </p>
+                    </div>
+
+                    <div className="p-3 bg-white/80 rounded-xl border border-[#003943]/10 space-y-1">
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#00959C] block">
+                        How The On-Site Testing Procedure Works
+                      </span>
+                      <p className="font-medium text-[#003943]/90 leading-relaxed">
+                        {selectedSpec.howItWorks}
+                      </p>
+                    </div>
+                  </div>
+
+                  <p className="text-[11px] text-[#003943]/70 italic flex items-center gap-1">
+                    <Info className="w-3.5 h-3.5 text-[#00959C] shrink-0" />
+                    This dynamic test suite will automatically be sent to LMD Admin for review and loaded into Inspector Sharma's Field Workspace.
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* SECTION 2: PREMISES & INSTALLATION LOCATION DETAILS */}

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowUpRight,
+  ArrowLeft,
   ChevronDown,
   ChevronUp,
   ShieldCheck,
@@ -32,6 +33,82 @@ import {
 } from "lucide-react";
 import { useData } from "../context/DataContext";
 import { useAuth, USER_ROLES } from "../context/AuthContext";
+
+// 12 Verified & Responsive State/UT Online Legal Metrology Portals
+const statePortalsList = [
+  {
+    state: "Andhra Pradesh",
+    url: "https://pramaan.ap.gov.in/",
+    bg: "bg-[#0052CC]",
+    desc: "Let's delve into the application process for certificates.",
+  },
+  {
+    state: "Maharashtra",
+    url: "https://www.vaidhmapan.maharashtra.gov.in/",
+    bg: "bg-[#FF6B00]",
+    desc: "Let's delve into the application process for certificates.",
+  },
+  {
+    state: "Uttar Pradesh",
+    url: "https://legalmetrology-up.gov.in/metrology/index.php",
+    bg: "bg-[#00A3FF]",
+    desc: "Let's delve into the application process for certificates.",
+  },
+  {
+    state: "Odisha",
+    url: "https://dlm.pdsodisha.gov.in/",
+    bg: "bg-[#7000FF]",
+    desc: "Let's delve into the application process for certificates.",
+  },
+  {
+    state: "Rajasthan",
+    url: "https://legalmetrology.rajasthan.gov.in/",
+    bg: "bg-[#F59E0B]",
+    desc: "Let's delve into the application process for certificates.",
+  },
+  {
+    state: "Chandigarh",
+    url: "https://etula.chdfood.gov.in/",
+    bg: "bg-[#10B981]",
+    desc: "Let's delve into the application process for certificates.",
+  },
+  {
+    state: "Karnataka",
+    url: "https://emapan.karnataka.gov.in/",
+    bg: "bg-[#2563EB]",
+    desc: "Let's delve into the application process for certificates.",
+  },
+  {
+    state: "Tamil Nadu",
+    url: "https://labour.tn.gov.in/",
+    bg: "bg-[#0D9488]",
+    desc: "Let's delve into the application process for certificates.",
+  },
+  {
+    state: "Jharkhand",
+    url: "https://elegalmetrology.jharkhand.gov.in/japnet/ConsumersAppliedReport.aspx",
+    bg: "bg-[#003943]",
+    desc: "Let's delve into the application process for certificates.",
+  },
+  {
+    state: "Chhattisgarh",
+    url: "https://legalmetrology.cg.nic.in/",
+    bg: "bg-[#1D4ED8]",
+    desc: "Let's delve into the application process for certificates.",
+  },
+  {
+    state: "Haryana",
+    url: "https://lm.haryanafood.gov.in/",
+    bg: "bg-[#EA580C]",
+    desc: "Let's delve into the application process for certificates.",
+  },
+  {
+    state: "Gujarat",
+    url: "https://lmdca.gujarat.gov.in/",
+    bg: "bg-[#0284C7]",
+    desc: "Let's delve into the application process for certificates.",
+  },
+];
 
 export const ComplexLawHomePage = () => {
   const navigate = useNavigate();
@@ -205,7 +282,7 @@ KEY SECTIONS & STATUTORY PROVISIONS:
     });
 
     textContent += `--------------------------------------------------------------------
-Verified & Certified by MaapSetu Legal Metrology Platform (SIH 26036)
+Verified & Certified by Metrika Legal Metrology Platform (SIH 26036)
 Central Registry Reference: ${doc.id}
 --------------------------------------------------------------------`;
 
@@ -222,7 +299,7 @@ Central Registry Reference: ${doc.id}
 
   const faqs = [
     {
-      q: "Which weighing and measuring instruments require mandatory verification on MaapSetu?",
+      q: "Which weighing and measuring instruments require mandatory verification on Metrika?",
       a: "Under the Legal Metrology Act, 2009 and Rules 2011, all commercial weighing instruments (retail scales, weighbridges, warehouse platform scales) and measuring devices (petrol pumps, flowmeters, tank measures) used in trade or transaction require mandatory initial verification and annual re-verification.",
     },
     {
@@ -231,7 +308,7 @@ Central Registry Reference: ${doc.id}
     },
     {
       q: "How can anyone verify a digital verification certificate using the QR code?",
-      a: "Every digital certificate issued on MaapSetu features a unique QR code and Certificate ID. Anyone can scan the QR code using any smartphone or enter the Certificate ID on the public verification portal to inspect real-time certificate validity.",
+      a: "Every digital certificate issued on Metrika features a unique QR code and Certificate ID. Anyone can scan the QR code using any smartphone or enter the Certificate ID on the public verification portal to inspect real-time certificate validity.",
     },
     {
       q: "What are the penalties for operating an unverified or expired instrument?",
@@ -251,10 +328,10 @@ Central Registry Reference: ${doc.id}
             </div>
             <div className="flex items-baseline">
               <span className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#003943] font-serif">
-                Maap
+                Metri
               </span>
               <span className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#00959C] font-serif italic">
-                Setu
+                ka
               </span>
             </div>
           </Link>
@@ -628,7 +705,7 @@ Central Registry Reference: ${doc.id}
           <div className="w-full bg-white rounded-3xl p-4 sm:p-8 shadow-xl border border-[#003943]/15 relative overflow-hidden">
             <img
               src="/maapsetu_hero_workflow.png"
-              alt="MaapSetu End-to-End Legal Metrology Verification Workflow"
+              alt="Metrika End-to-End Legal Metrology Verification Workflow"
               className="w-full h-auto object-cover rounded-2xl shadow-sm"
             />
           </div>
@@ -687,7 +764,7 @@ Central Registry Reference: ${doc.id}
             <em className="italic text-[#00959C]">tailored to your role</em>
           </h2>
           <p className="text-base sm:text-lg text-[#003943]/80 leading-relaxed">
-            MaapSetu connects all stakeholders in the Legal Metrology ecosystem
+            Metrika connects all stakeholders in the Legal Metrology ecosystem
             — Business Owners, LMD Authorities, and LMO/GATC Inspection
             Officers.
           </p>
@@ -757,7 +834,6 @@ Central Registry Reference: ${doc.id}
               <p className="text-sm sm:text-base text-[#003943]/80 leading-relaxed">
                 Access field inspection queue, record visual lead seal
                 intactness, test Maximum Permissible Error (MPE) tolerances,
-                upload photo evidence, and submit PASS/FAIL outcomes.
               </p>
             </div>
             <div className="pt-8">
@@ -768,6 +844,84 @@ Central Registry Reference: ${doc.id}
                 Access Officer Queue <ArrowUpRight className="w-5 h-5" />
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* STATE PORTALS CAROUSEL SECTION */}
+      <section className="w-full py-20 px-4 sm:px-8 lg:px-12 bg-[#FDF9F6] border-y border-[#003943]/10 relative">
+        <div className="w-full space-y-8">
+          <div className="text-center space-y-3 max-w-4xl mx-auto">
+            <h2 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-bold text-[#003943]">
+              Select State and Submit Your Request
+            </h2>
+            <p className="text-sm sm:text-base text-[#003943]/70">
+              Direct access to official State & UT Legal Metrology portals officially onboarded into eMaap.
+            </p>
+          </div>
+
+          {/* Carousel Slider occupying 100% full screen width */}
+          <div className="relative w-full">
+            <button
+              type="button"
+              onClick={() => {
+                document.getElementById('state-carousel')?.scrollBy({ left: -340, behavior: 'smooth' });
+              }}
+              className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-black text-white flex items-center justify-center shadow-2xl hover:bg-[#00959C] transition-all"
+              aria-label="Previous State"
+            >
+              <ArrowLeft className="w-6 h-6" />
+            </button>
+
+            <div
+              id="state-carousel"
+              className="w-full flex items-center gap-6 overflow-x-auto py-6 px-4 snap-x snap-mandatory scroll-smooth scrollbar-none"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              {statePortalsList.map((st, idx) => (
+                <a
+                  key={idx}
+                  href={st.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`snap-start shrink-0 w-[270px] sm:w-[310px] h-[330px] rounded-3xl p-7 text-white shadow-xl ${st.bg} flex flex-col justify-between relative overflow-hidden group hover:scale-[1.03] transition-all duration-300 border border-white/10`}
+                >
+                  <div className="relative z-10 space-y-3">
+                    <h3 className="text-2xl sm:text-3xl font-bold tracking-tight">
+                      {st.state}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-white/90 leading-relaxed font-medium">
+                      {st.desc}
+                    </p>
+                  </div>
+
+                  <div className="relative z-10 flex items-center justify-between">
+                    <div className="w-10 h-10 rounded-full bg-white text-[#003943] flex items-center justify-center font-bold shadow-md group-hover:bg-[#003943] group-hover:text-white transition-all">
+                      <ArrowUpRight className="w-5 h-5" />
+                    </div>
+                    <span className="text-[11px] font-bold text-white/90 bg-black/25 px-2.5 py-1 rounded-full backdrop-blur-xs">
+                      Official Portal ↗
+                    </span>
+                  </div>
+
+                  {/* Decorative Silhouette Icon */}
+                  <div className="absolute right-[-25px] bottom-[-25px] opacity-15 pointer-events-none transform rotate-12 scale-125">
+                    <Building2 className="w-48 h-48 text-white" />
+                  </div>
+                </a>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                document.getElementById('state-carousel')?.scrollBy({ left: 340, behavior: 'smooth' });
+              }}
+              className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-black text-white flex items-center justify-center shadow-2xl hover:bg-[#00959C] transition-all"
+              aria-label="Next State"
+            >
+              <ArrowRight className="w-6 h-6" />
+            </button>
           </div>
         </div>
       </section>
@@ -985,7 +1139,7 @@ Central Registry Reference: ${doc.id}
             </h2>
             <p className="text-base sm:text-xl text-[#003943]/70 font-normal">
               Everything you need to know about Legal Metrology rules and
-              MaapSetu verification.
+              Metrika verification.
             </p>
           </div>
 
@@ -1150,7 +1304,7 @@ Central Registry Reference: ${doc.id}
             {/* Modal Footer Controls */}
             <div className="p-5 bg-[#F4F8F9] border-t border-[#003943]/10 flex flex-wrap items-center justify-between gap-4 shrink-0">
               <span className="text-xs text-[#003943]/60 font-mono">
-                MaapSetu Digital Registry • Ref #{viewingDoc.id}
+                Metrika Digital Registry • Ref #{viewingDoc.id}
               </span>
 
               <div className="flex items-center gap-3">

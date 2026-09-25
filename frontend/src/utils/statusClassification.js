@@ -1,5 +1,5 @@
 /**
- * Centralized Status Classification & Metrics Derivation Engine for MaapSetu
+ * Centralized Status Classification & Metrics Derivation Engine for Metrika
  *
  * Maps canonical database applications.status values to standard dashboard categories:
  * - NEW: newly submitted applications awaiting LMD review/action ('submitted')

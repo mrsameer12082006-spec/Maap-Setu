@@ -229,7 +229,7 @@ export const INITIAL_CERTIFICATES = [
     expiryDate: '2027-01-19',
     status: 'VERIFIED', // VERIFIED | EXPIRED | SUSPENDED
     sealNumber: 'LMD-MH-NGP-2026-7781',
-    qrCodeData: 'https://maapsetu.gov.in/verify/CERT-2026-8891',
+    qrCodeData: 'https://metrika.gov.in/verify/CERT-2026-8891',
     remarks: 'Instrument tested against 20T standard dead weights. Error within Maximum Permissible Error (MPE) limits (+/- 5kg at 20,000kg). Verification lead seal attached.',
     issuedAt: '2026-01-20 16:45 IST'
   },
@@ -251,7 +251,7 @@ export const INITIAL_CERTIFICATES = [
     expiryDate: '2027-03-04',
     status: 'VERIFIED',
     sealNumber: 'LMD-MH-JNPT-2026-1092',
-    qrCodeData: 'https://maapsetu.gov.in/verify/CERT-2026-9012',
+    qrCodeData: 'https://metrika.gov.in/verify/CERT-2026-9012',
     remarks: 'Prover loop volumetric test completed. Repeatability standard deviation < 0.05%. Certificate issued under Rule 14.',
     issuedAt: '2026-03-05 17:00 IST'
   },
@@ -273,7 +273,7 @@ export const INITIAL_CERTIFICATES = [
     expiryDate: '2026-08-04',
     status: 'EXPIRED',
     sealNumber: 'LMD-HR-AMB-2025-4421',
-    qrCodeData: 'https://maapsetu.gov.in/verify/CERT-2025-3310',
+    qrCodeData: 'https://metrika.gov.in/verify/CERT-2025-3310',
     remarks: 'Certificate expired on 2026-08-04. Instrument requires mandatory re-verification before commercial operations.',
     issuedAt: '2025-08-05 14:20 IST'
   }

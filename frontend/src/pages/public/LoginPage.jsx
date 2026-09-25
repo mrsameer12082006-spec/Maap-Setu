@@ -35,13 +35,13 @@ export const LoginPage = () => {
   };
   const [username, setUsername] = useState(
     defaultRole === USER_ROLES.LMD_ADMIN
-      ? 'lmd01@maapsetu.demo'
+      ? 'lmd01@metrika.demo'
       : defaultRole === USER_ROLES.OFFICER
-      ? 'lmo01@maapsetu.demo'
+      ? 'lmo01@metrika.demo'
       : ''
   );
   const [password, setPassword] = useState(
-    defaultRole === USER_ROLES.BUSINESS ? '' : 'MaapSetu@2026'
+    defaultRole === USER_ROLES.BUSINESS ? '' : 'Metrika@2026'
   );
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -129,11 +129,11 @@ export const LoginPage = () => {
       setUsername('');
       setPassword('');
     } else if (roleKey === USER_ROLES.LMD_ADMIN) {
-      setUsername('lmd01@maapsetu.demo');
-      setPassword('MaapSetu@2026');
+      setUsername('lmd01@metrika.demo');
+      setPassword('Metrika@2026');
     } else if (roleKey === USER_ROLES.OFFICER) {
-      setUsername('lmo01@maapsetu.demo');
-      setPassword('MaapSetu@2026');
+      setUsername('lmo01@metrika.demo');
+      setPassword('Metrika@2026');
     }
   };
 
@@ -150,8 +150,8 @@ export const LoginPage = () => {
               <Scale className="w-8 h-8 text-[#02B7BF]" />
             </div>
             <div className="flex items-baseline text-left">
-              <span className="text-3xl font-extrabold tracking-tight text-[#003943] font-serif">Maap</span>
-              <span className="text-3xl font-extrabold tracking-tight text-[#00959C] font-serif italic">Setu</span>
+              <span className="text-3xl font-extrabold tracking-tight text-[#003943] font-serif">Metri</span>
+              <span className="text-3xl font-extrabold tracking-tight text-[#00959C] font-serif italic">ka</span>
             </div>
           </Link>
 
@@ -389,8 +389,8 @@ export const LoginPage = () => {
                   <button
                     type="button"
                     onClick={() => {
-                      setUsername('business.demo@maapsetu.demo');
-                      setPassword('MaapSetu@2026');
+                      setUsername('business.demo@metrika.demo');
+                      setPassword('Metrika@2026');
                     }}
                     className="text-[11px] font-bold text-[#00959C] hover:underline"
                   >
@@ -406,8 +406,8 @@ export const LoginPage = () => {
                   selectedRole === USER_ROLES.BUSINESS
                     ? 'e.g. v.mehta@apexlogistics.in or +91 98765 43210'
                     : selectedRole === USER_ROLES.LMD_ADMIN
-                    ? 'e.g. admin.ngp@maapsetu.gov.in or EMP-LMD-9041'
-                    : 'e.g. r.sharma.lmo@maapsetu.gov.in or OFFICER-NGP-442'
+                    ? 'e.g. admin.ngp@metrika.gov.in or EMP-LMD-9041'
+                    : 'e.g. r.sharma.lmo@metrika.gov.in or OFFICER-NGP-442'
                 }
                 required
                 className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-sm font-semibold text-[#003943] focus:outline-none focus:border-[#00959C] focus:ring-2 focus:ring-[#00959C]/20 transition-all"

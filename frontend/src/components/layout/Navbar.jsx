@@ -31,8 +31,8 @@ export const Navbar = () => {
             <Scale className="w-6 h-6 text-[#02B7BF]" />
           </div>
           <div className="flex items-baseline">
-            <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#003943] font-serif">Maap</span>
-            <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#00959C] font-serif italic">Setu</span>
+            <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#003943] font-serif">Metri</span>
+            <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#00959C] font-serif italic">ka</span>
           </div>
         </Link>
 
@@ -117,7 +117,7 @@ export const Navbar = () => {
             className="hidden sm:inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-[#003943] hover:bg-[#002B33] text-white border border-[#00959C]/40 font-bold text-xs sm:text-sm transition-all shadow-md shrink-0 group"
           >
             <ArrowLeft className="w-4 h-4 text-[#02B7BF] group-hover:-translate-x-1 transition-transform" />
-            <span>Return to MaapSetu Homepage</span>
+            <span>Return to Metrika Homepage</span>
           </Link>
         </div>
       </div>

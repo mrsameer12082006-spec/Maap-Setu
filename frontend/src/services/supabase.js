@@ -7,7 +7,7 @@ const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta
 
 if (!supabaseKey) {
   console.warn(
-    '[MaapSetu] Supabase API key is missing. Ensure frontend/.env.local contains VITE_SUPABASE_PUBLISHABLE_KEY (see frontend/.env.example).'
+    '[Metrika] Supabase API key is missing. Ensure frontend/.env.local contains VITE_SUPABASE_PUBLISHABLE_KEY (see frontend/.env.example).'
   );
 }
 

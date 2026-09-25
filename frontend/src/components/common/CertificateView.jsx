@@ -132,7 +132,7 @@ export const CertificateView = ({ certificate, showActions = true }) => {
             </div>
             <div>
               <p className="text-xs font-semibold text-neutral-900">Digital Authenticity Verification</p>
-              <p className="text-xs text-neutral-600">Scan QR or visit maapsetu.gov.in/verify/{certificate.id}</p>
+              <p className="text-xs text-neutral-600">Scan QR or visit metrika.gov.in/verify/{certificate.id}</p>
               <p className="text-[10px] text-neutral-600 mt-0.5">Cryptographically signed digital record</p>
             </div>
           </div>

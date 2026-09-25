@@ -16,32 +16,86 @@ import { useData } from '../../context/DataContext';
 // 6 Legal Metrology Instrument Categories & Verification Test Standards (from Legal Metrology Rules 2011)
 const INSTRUMENT_TEST_SPECS = {
   'Heavy Electronic Weighbridge': {
-    checks: 'Accuracy, zero, repeatability, load indication',
+    unitOfMeasurement: 'kg',
+    accuracyClass: 'Class III (Medium Commercial)',
+    scaleInterval: '10 g',
+    maxCapacityPlaceholder: 'e.g. 60,000',
+    minCapacityPlaceholder: 'e.g. 400',
+    manufacturerPlaceholder: 'e.g. Avery India Ltd / Essae-Teraoka',
+    modelPlaceholder: 'e.g. WB-60T-PRO',
+    serialPlaceholder: 'e.g. AV-984210-IN',
+    approvalPlaceholder: 'e.g. IND/09/2021/442',
+    checks: 'Corner eccentricity, 30T half-load check, 60T full-load accuracy, zero repeatability',
     howItWorks: 'Place known certified test weights/loads at specified positions (corner eccentricity, half load 30T, max capacity 60T) and compare displayed weight with reference standard.',
     standardRule: 'Rule 11 MPE Tolerance (±1.5 kg per 60T)'
   },
   'Retail Digital Counter Scale': {
-    checks: 'Zero, accuracy, repeatability, display/division',
+    unitOfMeasurement: 'kg',
+    accuracyClass: 'Class III (Medium Commercial)',
+    scaleInterval: '1 g',
+    maxCapacityPlaceholder: 'e.g. 30',
+    minCapacityPlaceholder: 'e.g. 100',
+    manufacturerPlaceholder: 'e.g. Essae-Teraoka Ltd / CAS Corp',
+    modelPlaceholder: 'e.g. DS-252 Digital Scale',
+    serialPlaceholder: 'e.g. ES-774129',
+    approvalPlaceholder: 'e.g. IND/09/2022/108',
+    checks: 'Zero, tare balance, corner load eccentricity, half-capacity & max-capacity accuracy',
     howItWorks: 'Apply standard weights across relevant points of the weighing range (tare check, zero check, max load) and compare readings with calibrated Class III commercial masses.',
     standardRule: 'Class III Commercial Scale MPE (±1.5g per 30kg)'
   },
   'Fuel Dispensing Meter (Multi-Product)': {
-    checks: 'Volume delivered, indication, seals/settings',
+    unitOfMeasurement: 'L/min',
+    accuracyClass: 'Class 0.5 (Fuel/Liquids)',
+    scaleInterval: '0.01 L',
+    maxCapacityPlaceholder: 'e.g. 80',
+    minCapacityPlaceholder: 'e.g. 5',
+    manufacturerPlaceholder: 'e.g. Gilbarco Veeder-Root / Tokheim',
+    modelPlaceholder: 'e.g. Horizon-5000 Dispenser',
+    serialPlaceholder: 'e.g. GV-330198-F',
+    approvalPlaceholder: 'e.g. IND/09/2020/512',
+    checks: 'Preset volumetric accuracy, totalizer indication, anti-fraud lead seals, zero reset latch',
     howItWorks: 'Dispense a measured quantity (20L standard volumetric measure) into an approved reference container and compare dispenser digital reading with reference measure.',
     standardRule: 'Volumetric Meter MPE (±0.20% maximum error)'
   },
   'Industrial Automatic Liquid Flowmeter': {
-    checks: 'Measured volume/flow against reference',
+    unitOfMeasurement: 'L/min',
+    accuracyClass: 'Class 0.5 (Fuel/Liquids)',
+    scaleInterval: '0.1 L',
+    maxCapacityPlaceholder: 'e.g. 500',
+    minCapacityPlaceholder: 'e.g. 20',
+    manufacturerPlaceholder: 'e.g. Emerson Process / Endress+Hauser',
+    modelPlaceholder: 'e.g. Micro Motion Elite CMF',
+    serialPlaceholder: 'e.g. EM-551042-X',
+    approvalPlaceholder: 'e.g. IND/09/2023/781',
+    checks: 'Mass/volumetric flow accuracy, prover loop differential pressure, zero stability, pulse transmitter',
     howItWorks: 'Pass liquid through the meter under specified flow conditions and compare its digital indication with a calibrated reference prover loop.',
     standardRule: 'Mass Flowmeter Line MPE (±0.15% allowable error)'
   },
   'Pre-packaged Quantity Check Scale': {
-    checks: 'Actual quantity versus declared quantity',
+    unitOfMeasurement: 'g',
+    accuracyClass: 'Class II (High Accuracy)',
+    scaleInterval: '0.1 g',
+    maxCapacityPlaceholder: 'e.g. 6,000',
+    minCapacityPlaceholder: 'e.g. 10',
+    manufacturerPlaceholder: 'e.g. Mettler Toledo / Ishida',
+    modelPlaceholder: 'e.g. BC-60 Package Scale',
+    serialPlaceholder: 'e.g. MT-882019',
+    approvalPlaceholder: 'e.g. IND/09/2021/309',
+    checks: 'Net package mass verification, tare subtraction, maximum permissible deficiency (MPD) check',
     howItWorks: 'Weigh sample packages using a verified reference procedure and determine whether net package weight quantity is within MPD legal requirements.',
     standardRule: 'Legal Metrology Package Rule MPE Bounds'
   },
   'Precision Laboratory Analytical Balance': {
-    checks: 'Accuracy, repeatability, zero/tare',
+    unitOfMeasurement: 'g',
+    accuracyClass: 'Class I (Special Precision)',
+    scaleInterval: '0.0001 g',
+    maxCapacityPlaceholder: 'e.g. 220',
+    minCapacityPlaceholder: 'e.g. 0.01',
+    manufacturerPlaceholder: 'e.g. Sartorius AG / Shimadzu',
+    modelPlaceholder: 'e.g. Secura 224-1S Analytical Balance',
+    serialPlaceholder: 'e.g. SA-104928',
+    approvalPlaceholder: 'e.g. IND/09/2024/991',
+    checks: 'Internal calibration motor, draft shield seal, repeatability at 100g, linearity across 0-220g range',
     howItWorks: 'Use calibrated Class I standard weights (0.0001g sensitivity) and compare balance indication at 50g, 100g, and 200g test points.',
     standardRule: 'Class I High-Precision MPE (±0.0005g tolerance)'
   }
@@ -87,7 +141,19 @@ export const RegisterInstrumentPage = () => {
   const selectedSpec = INSTRUMENT_TEST_SPECS[formData.type] || INSTRUMENT_TEST_SPECS['Heavy Electronic Weighbridge'];
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    if (name === 'type') {
+      const spec = INSTRUMENT_TEST_SPECS[value] || INSTRUMENT_TEST_SPECS['Heavy Electronic Weighbridge'];
+      setFormData(prev => ({
+        ...prev,
+        type: value,
+        unitOfMeasurement: spec.unitOfMeasurement,
+        accuracyClass: spec.accuracyClass,
+        scaleInterval: spec.scaleInterval
+      }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleAddFile = (e) => {
@@ -223,7 +289,7 @@ export const RegisterInstrumentPage = () => {
                     name="manufacturer"
                     value={formData.manufacturer}
                     onChange={handleChange}
-                    placeholder="e.g. Avery India Ltd / Essae-Teraoka"
+                    placeholder={selectedSpec?.manufacturerPlaceholder || "e.g. Avery India Ltd / Essae-Teraoka"}
                     required
                     className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-xs sm:text-sm font-semibold text-[#003943] focus:outline-none focus:border-[#00959C]"
                   />
@@ -238,7 +304,7 @@ export const RegisterInstrumentPage = () => {
                     name="model"
                     value={formData.model}
                     onChange={handleChange}
-                    placeholder="e.g. WB-60T-PRO"
+                    placeholder={selectedSpec?.modelPlaceholder || "e.g. WB-60T-PRO"}
                     required
                     className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-xs sm:text-sm font-semibold text-[#003943] focus:outline-none focus:border-[#00959C]"
                   />
@@ -254,7 +320,7 @@ export const RegisterInstrumentPage = () => {
                     name="serialNumber"
                     value={formData.serialNumber}
                     onChange={handleChange}
-                    placeholder="e.g. AV-984210-IN"
+                    placeholder={selectedSpec?.serialPlaceholder || "e.g. AV-984210-IN"}
                     required
                     className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-xs sm:text-sm font-mono font-bold text-[#003943] focus:outline-none focus:border-[#00959C]"
                   />
@@ -269,7 +335,7 @@ export const RegisterInstrumentPage = () => {
                     name="modelApprovalNo"
                     value={formData.modelApprovalNo}
                     onChange={handleChange}
-                    placeholder="e.g. IND/09/2021/442"
+                    placeholder={selectedSpec?.approvalPlaceholder || "IND/09/2021/442"}
                     className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-xs sm:text-sm font-mono font-bold text-[#003943] focus:outline-none focus:border-[#00959C]"
                   />
                 </div>
@@ -284,7 +350,7 @@ export const RegisterInstrumentPage = () => {
                     name="maxCapacity"
                     value={formData.maxCapacity}
                     onChange={handleChange}
-                    placeholder="e.g. 60,000"
+                    placeholder={selectedSpec?.maxCapacityPlaceholder || "e.g. 60,000"}
                     required
                     className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-xs sm:text-sm font-semibold text-[#003943] focus:outline-none focus:border-[#00959C]"
                   />
@@ -299,7 +365,7 @@ export const RegisterInstrumentPage = () => {
                     name="minCapacity"
                     value={formData.minCapacity}
                     onChange={handleChange}
-                    placeholder="e.g. 100"
+                    placeholder={selectedSpec?.minCapacityPlaceholder || "e.g. 100"}
                     className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-xs sm:text-sm font-semibold text-[#003943] focus:outline-none focus:border-[#00959C]"
                   />
                 </div>

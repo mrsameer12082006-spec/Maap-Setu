@@ -107,12 +107,12 @@ export const LoginPage = () => {
     } else {
       try {
         const authRes = await loginAsRole(username, password);
-        const effectiveRole = authRes?.profile?.role || currentRole || selectedRole;
+        const effectiveRole = authRes?.profile?.role;
 
         setLoginSuccess(true);
         navigate(safeDest(effectiveRole), { replace: true });
       } catch (error) {
-        setErrorMsg('Invalid login credentials. ' + (error.message || ''));
+        if (error.message === 'Email not confirmed' || error.code === 'email_not_confirmed') { setErrorMsg('Please confirm your email before signing in.'); } else { setErrorMsg(error.message || 'Login failed. Please try again.'); }
       } finally {
         setLoading(false);
       }

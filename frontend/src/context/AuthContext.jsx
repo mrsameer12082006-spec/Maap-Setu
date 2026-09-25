@@ -37,8 +37,11 @@ export const AuthProvider = ({ children }) => {
 
       if (!error && profile) return profile;
 
+      if (error && error.code !== 'PGRST116') {
+        throw new Error('Account created, but Business profile setup is incomplete.');
+      }
+
       if (error?.code === 'PGRST116' || !profile) {
-        // Profile row is missing. Auto-create it from auth user metadata.
         const meta = authUser.user_metadata || {};
         const role = meta.role || 'business';
 
@@ -59,19 +62,19 @@ export const AuthProvider = ({ children }) => {
           .single();
 
         if (upsertError) {
-          console.warn('Profile auto-create failed (using in-memory fallback):', upsertError);
-          return profilePayload;
+          throw new Error('Account created, but Business profile setup is incomplete.');
         }
 
         console.info('Profile auto-created successfully for:', authUser.email);
         return newProfile;
       }
 
-      console.error('Error fetching profile:', error);
-      return null;
+      throw new Error('Account created, but Business profile setup is incomplete.');
     } catch (err) {
-      console.error('Unexpected error loading profile:', err);
-      return null;
+      if (err.message === 'Account created, but Business profile setup is incomplete.') {
+        throw err;
+      }
+      throw new Error('Account created, but Business profile setup is incomplete.');
     }
   };
 
@@ -288,3 +291,4 @@ export const useAuth = () => {
   if (!context) throw new Error('useAuth must be used within an AuthProvider');
   return context;
 };
+

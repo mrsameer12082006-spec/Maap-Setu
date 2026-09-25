@@ -156,7 +156,22 @@ export const AuthProvider = ({ children }) => {
   const loginAsRole = async (email, password) => {
     try {
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) throw error;
+      
+      if (error) {
+        // If metrika.demo failed, try legacy maapsetu.demo account in Supabase
+        if (email.includes('@metrika.demo')) {
+          const legacyEmail = email.replace('@metrika.demo', '@maapsetu.demo');
+          const { data: legacyData, error: legacyError } = await supabase.auth.signInWithPassword({ email: legacyEmail, password });
+          if (!legacyError && legacyData?.session) {
+            setSession(legacyData.session);
+            let profile = await loadUserProfile(legacyData.user);
+            applyProfile(legacyData.user, profile);
+            resolvedUserIdRef.current = legacyData.user.id;
+            return { ...legacyData, profile };
+          }
+        }
+        throw error;
+      }
 
       setSession(data.session);
       let profile = null;

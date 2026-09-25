@@ -1,4 +1,4 @@
-# MaapSetu
+# Metrika
 
 ### Digital Verification & Certification Platform for Weighing and Measuring Instruments
 
@@ -9,13 +9,13 @@
 
 ## 📌 About the Project
 
-**MaapSetu** is a secure digital platform designed to streamline and manage the verification and re-verification lifecycle of weighing and measuring instruments under the Legal Metrology framework.
+**Metrika** is a secure digital platform designed to streamline and manage the verification and re-verification lifecycle of weighing and measuring instruments under the Legal Metrology framework.
 
 The platform connects **instrument owners, Legal Metrology Departments (LMDs), Legal Metrology Officers (LMOs), and Government Approved Test Centres (GATCs)** through a unified digital workflow.
 
-Instead of relying heavily on fragmented/manual processes for applications, scheduling, verification records, certificates, and expiry tracking, VeriMaap provides a centralized digital system for managing these activities.
+Instead of relying heavily on fragmented/manual processes for applications, scheduling, verification records, certificates, and expiry tracking, Metrika provides a centralized digital system for managing these activities.
 
-> **Physical verification remains the responsibility of authorized officers/GATCs. VeriMaap digitizes the workflow, records, evidence, certification and lifecycle management surrounding that verification.**
+> **Physical verification remains the responsibility of authorized officers/GATCs. Metrika digitizes the workflow, records, evidence, certification and lifecycle management surrounding that verification.**
 
 ---
 
@@ -39,13 +39,13 @@ Existing processes can involve:
 * Difficulty tracking expiry and re-verification
 * Fragmented records and systems
 
-The objective of MaapSetu is to bring these workflows into a unified digital platform.
+The objective of Metrika is to bring these workflows into a unified digital platform.
 
 ---
 
 # 🚀 Our Solution
 
-MaapSetu provides an end-to-end digital workflow:
+Metrika provides an end-to-end digital workflow:
 
 ```text
 Instrument Owner
@@ -140,7 +140,7 @@ The verification officer/test centre can:
 
 # 🤖 AI-Assisted Features
 
-MaapSetu is designed to use AI where it provides practical value rather than adding AI unnecessarily.
+Metrika is designed to use AI where it provides practical value rather than adding AI unnecessarily.
 
 
 
@@ -188,7 +188,7 @@ AI acts as **decision support**, not as a replacement for authorized Legal Metro
 
 # 📜 Digital Verification Certificate
 
-After a successful verification, MaapSetu can generate a digital verification certificate containing information such as:
+After a successful verification, Metrika can generate a digital verification certificate containing information such as:
 
 * Certificate ID
 * Instrument ID
@@ -263,12 +263,12 @@ This allows authorities to monitor verification activities and pending work from
 
 # 🔐 Security & Access Control
 
-MaapSetu follows a role-based approach.
+Metrika follows a role-based approach.
 
 Different users have access to different functionalities:
 
 ```text
-                MaapSetu
+                Metrika
                    │
        ┌───────────┼───────────┐
        │           │           │
@@ -380,14 +380,12 @@ AI
 
 # 🧑‍💻 Team Delmora
 
-| Member     | Role                             |
-| ---------- | -------------------------------- |
-| **Sameer** | Team Lead & Frontend Lead        |
-| **Ayesh**  | Backend Lead                     |
-| **Kartik** | Database Lead                    |
-| **Manik**  | AI/ML Lead                       |
-| **Aarav**  | System Integration & Domain Lead |
-| **Yukti**  | UI/UX & Design Lead              |
+| Member     | Role                      |
+| ---------- | ------------------------- |
+| **Sameer** | Team Lead & Frontend Lead |
+| **Ayesh**  | Backend Lead              |
+| **Kartik** | Database Lead             |
+| **Manik**  | AI/ML Lead                |
 
 ---
 
@@ -503,7 +501,7 @@ Show updated verification status and validity.
 
 Our goal is not simply to create another government portal.
 
-The long-term vision of **MaapSetu** is to create a unified digital lifecycle for regulated weighing and measuring instruments:
+The long-term vision of **Metrika** is to create a unified digital lifecycle for regulated weighing and measuring instruments:
 
 ```text
 REGISTER
@@ -537,7 +535,7 @@ This creates greater transparency, easier compliance, better record management a
 
 **Team:** Delmora
 
-**Project:** MaapSetu
+**Project:** Metrika
 
 ---
 

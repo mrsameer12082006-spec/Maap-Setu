@@ -1,47 +1,65 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { mockApiService } from '../services/api';
 import { useAuth, USER_ROLES } from './AuthContext';
+import {
+  INITIAL_INSTRUMENTS,
+  INITIAL_APPLICATIONS,
+  INITIAL_CERTIFICATES,
+  MOCK_OFFICERS
+} from '../data/initialData';
 
 const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
   const { currentRole, session, user } = useAuth();
-  const [instruments, setInstruments] = useState([]);
-  const [applications, setApplications] = useState([]);
-  const [certificates, setCertificates] = useState([]);
-  const [officers, setOfficers] = useState([]);
+  const [instruments, setInstruments] = useState(INITIAL_INSTRUMENTS);
+  const [applications, setApplications] = useState(INITIAL_APPLICATIONS);
+  const [certificates, setCertificates] = useState(INITIAL_CERTIFICATES);
+  const [officers, setOfficers] = useState(MOCK_OFFICERS);
   const [activityLogs, setActivityLogs] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   // Load Data from Supabase
   const loadData = async () => {
     if (!session) {
-      setInstruments([]);
-      setApplications([]);
-      setCertificates([]);
-      setOfficers([]);
+      setInstruments(INITIAL_INSTRUMENTS);
+      setApplications(INITIAL_APPLICATIONS);
+      setCertificates(INITIAL_CERTIFICATES);
+      setOfficers(MOCK_OFFICERS);
       setLoading(false);
       return;
     }
 
-    setLoading(true);
     try {
       const [insts, apps, certs, offs] = await Promise.all([
-        mockApiService.getInstruments(),
-        mockApiService.getApplications(),
-        mockApiService.getCertificates(),
-        mockApiService.getOfficers()
+        mockApiService.getInstruments().catch(() => []),
+        mockApiService.getApplications().catch(() => []),
+        mockApiService.getCertificates().catch(() => []),
+        mockApiService.getOfficers().catch(() => [])
       ]);
-      const appsWithCerts = apps.map(app => {
-        const cert = certs.find(c => c.applicationId === app.id);
+
+      const appsWithCerts = (apps || []).map(app => {
+        const cert = (certs || []).find(c => c.applicationId === app.id);
         return cert ? { ...app, certificate: cert, certificateId: cert.id } : app;
       });
-      setInstruments(insts);
-      setApplications(appsWithCerts);
-      setCertificates(certs);
-      setOfficers(offs);
+
+      const isDemoUser = session?.user?.email?.includes('demo') || session?.user?.id?.startsWith('demo-user');
+
+      const finalInsts = (!isDemoUser && insts && insts.length > 0) ? insts : INITIAL_INSTRUMENTS;
+      const finalApps = (!isDemoUser && appsWithCerts && appsWithCerts.length > 0) ? appsWithCerts : INITIAL_APPLICATIONS;
+      const finalCerts = (!isDemoUser && certs && certs.length > 0) ? certs : INITIAL_CERTIFICATES;
+      const finalOffs = (!isDemoUser && offs && offs.length > 0) ? offs : MOCK_OFFICERS;
+
+      setInstruments(finalInsts);
+      setApplications(finalApps);
+      setCertificates(finalCerts);
+      setOfficers(finalOffs);
     } catch (error) {
-      console.error('Error loading data:', error);
+      console.warn('Error loading remote data, defaulting to demo dataset:', error);
+      setInstruments(INITIAL_INSTRUMENTS);
+      setApplications(INITIAL_APPLICATIONS);
+      setCertificates(INITIAL_CERTIFICATES);
+      setOfficers(MOCK_OFFICERS);
     } finally {
       setLoading(false);
     }

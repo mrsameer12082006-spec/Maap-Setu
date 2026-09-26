@@ -290,7 +290,7 @@ export const mockApiService = {
       expiryDate: cert.expiry_date,
       status: cert.status, // VERIFIED, EXPIRED, REVOKED
       sealNumber: cert.seal_number,
-      qrCodeData: cert.id, // Or token
+      qrToken: cert.qr_code_token,
       remarks: cert.remarks,
       issuedAt: cert.issued_at
     }));
@@ -329,7 +329,7 @@ export const mockApiService = {
         expiryDate: data.expiry_date,
         status: data.status,
         sealNumber: data.seal_number,
-        qrCodeData: data.id,
+        qrToken: data.qr_code_token,
         remarks: data.remarks,
         issuedAt: data.issued_at
       }

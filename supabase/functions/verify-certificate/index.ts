@@ -60,7 +60,25 @@ serve(async (req) => {
     }
 
     if (!logs || logs.length === 0) {
-      return new Response(JSON.stringify({ verification_status: 'NOT_VERIFIED' }), {
+      // Certificate exists but has no issuance log (pre-signing legacy cert).
+      // Return full cert data so the frontend can still display the certificate document.
+      return new Response(JSON.stringify({
+        verification_status: 'NOT_VERIFIED',
+        certificate_number: cert.certificate_number,
+        expiry_date: cert.expiry_date,
+        verification_date: cert.verification_date,
+        owner_name: cert.owner_name,
+        owner_address: cert.owner_address,
+        instrument_type: cert.instrument_type,
+        manufacturer: cert.manufacturer,
+        model: cert.model,
+        capacity: cert.capacity,
+        accuracy_class: cert.accuracy_class,
+        serial_number: cert.serial_number,
+        verification_authority: cert.verification_authority,
+        seal_number: cert.seal_number,
+        qr_code_token: cert.qr_code_token,
+      }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 200,
       })
@@ -149,7 +167,8 @@ serve(async (req) => {
       accuracy_class: cert.accuracy_class,
       serial_number: cert.serial_number,
       verification_authority: cert.verification_authority,
-      seal_number: cert.seal_number
+      seal_number: cert.seal_number,
+      qr_code_token: cert.qr_code_token,
     }
 
     return new Response(JSON.stringify(safeDTO), {

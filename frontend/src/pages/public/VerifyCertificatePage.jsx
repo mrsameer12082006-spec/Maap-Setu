@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Search, ShieldAlert, ArrowLeft, Loader2, AlertTriangle, CheckCircle2, ShieldClose, QrCode } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { supabase } from '../../services/supabase';
 import { CertificateView } from '../../components/common/CertificateView';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
@@ -34,14 +33,19 @@ export const VerifyCertificatePage = () => {
     try {
       // Determine if we are querying by UUID (QR token) or Cert Number
       const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(targetId);
-      const queryParams = isUUID ? { qr_token: targetId } : { cert_number: targetId };
+      const paramKey = isUUID ? 'qr_token' : 'cert_number';
 
-      const { data, error } = await supabase.functions.invoke('verify-certificate', {
-        method: 'GET',
-        query: queryParams
-      });
+      // Use direct fetch — supabase.functions.invoke with method:'GET' + query does not
+      // reliably serialize query params into the URL in all SDK versions.
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://yrzhtrzelayycrnvmcup.supabase.co';
+      const fnUrl = `${supabaseUrl}/functions/v1/verify-certificate?${paramKey}=${encodeURIComponent(targetId)}`;
 
-      if (error) throw error;
+      const res = await fetch(fnUrl, { method: 'GET' });
+      if (!res.ok && res.status !== 200) {
+        const errBody = await res.json().catch(() => ({}));
+        throw new Error(errBody.error || `HTTP ${res.status}`);
+      }
+      const data = await res.json();
       setResult(data);
     } catch (err) {
       console.error(err);
@@ -130,15 +134,7 @@ export const VerifyCertificatePage = () => {
             </Card>
           )}
 
-          {result.verification_status === 'NOT_VERIFIED' && (
-            <Card className="text-center py-12 border-warning/30 bg-warning/5">
-              <ShieldAlert className="w-12 h-12 text-warning mx-auto mb-3" />
-              <h3 className="text-lg font-bold text-neutral-900">Legacy / Unsigned Certificate</h3>
-              <p className="text-sm text-neutral-600 mt-1">
-                This certificate exists but predates the cryptographic signature system (no issuance log found).
-              </p>
-            </Card>
-          )}
+          
 
           {result.verification_status === 'MISMATCH' && (
              <Card className="text-center py-12 border-danger/50 bg-danger/10">
@@ -150,7 +146,7 @@ export const VerifyCertificatePage = () => {
              </Card>
           )}
 
-          {['VERIFIED', 'EXPIRED', 'REVOKED'].includes(result.verification_status) && (
+          {['VERIFIED', 'EXPIRED', 'REVOKED', 'NOT_VERIFIED'].includes(result.verification_status) && (
             <div>
               {result.verification_status === 'VERIFIED' && (
                 <div className="p-4 mb-4 bg-success/10 border border-success/30 rounded-lg flex items-center gap-3 text-success text-sm font-semibold">
@@ -164,14 +160,20 @@ export const VerifyCertificatePage = () => {
                   <span>EXPIRED: This certificate's signature is authentic, but the validity period has expired.</span>
                 </div>
               )}
-              {result.verification_status === 'REVOKED' && (
+                                          {result.verification_status === 'REVOKED' && (
                 <div className="p-4 mb-4 bg-danger/10 border border-danger/30 rounded-lg flex items-center gap-3 text-danger text-sm font-semibold">
                   <ShieldAlert className="w-5 h-5 shrink-0" />
                   <span>REVOKED: This certificate's signature is authentic, but it has been officially REVOKED by the Legal Metrology Department.</span>
                 </div>
               )}
+              {result.verification_status === 'NOT_VERIFIED' && (
+                <div className="p-4 mb-4 bg-warning/10 border border-warning/30 rounded-lg flex items-center gap-3 text-warning-dark text-sm font-semibold">
+                  <AlertTriangle className="w-5 h-5 shrink-0" />
+                  <span>LEGACY CERTIFICATE: This certificate predates the cryptographic signature system. Document data is shown as recorded. No tamper-evidence guarantee.</span>
+                </div>
+              )}
               
-              {/* Translate safe DTO to old CertificateView expected keys */}
+              {/* Translate safe DTO to CertificateView expected keys */}
               <CertificateView 
                 certificate={{
                   certificateNumber: result.certificate_number,
@@ -188,7 +190,7 @@ export const VerifyCertificatePage = () => {
                   expiryDate: result.expiry_date,
                   sealNumber: result.seal_number,
                   status: result.verification_status,
-                  // the public endpoint doesn't return qr_token anymore, so QR code rendering inside CertificateView shouldn't rely on it (or we can just show static or no QR for this view)
+                  qrToken: result.qr_code_token,
                 }} 
                 showActions={true} 
               />

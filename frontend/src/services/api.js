@@ -37,10 +37,24 @@ export const mockApiService = {
     const { data: userData } = await supabase.auth.getUser();
     if (!userData.user) throw new Error('Not authenticated');
 
+    const categoryMap = {
+      'Heavy Electronic Weighbridge': 'weighbridge',
+      'Retail Digital Counter Scale': 'retail_scale',
+      'Fuel Dispensing Meter (Multi-Product)': 'fuel_dispenser',
+      'Industrial Automatic Liquid Flowmeter': 'flowmeter',
+      'Pre-packaged Quantity Check Scale': 'package_scale',
+      'Precision Laboratory Analytical Balance': 'lab_balance'
+    };
+
+    const mappedCategory = categoryMap[instrumentData.type];
+    if (!mappedCategory) {
+      throw new Error(`Invalid instrument category: ${instrumentData.type}`);
+    }
+
     const dbPayload = {
       owner_id: userData.user.id,
       instrument_name: `${instrumentData.type} - ${instrumentData.model}`,
-      category: instrumentData.type.toLowerCase().includes('weigh') ? 'weighbridge' : 'retail_scale', // Fallback mapping
+      category: mappedCategory,
       serial_number: instrumentData.serialNumber,
       model_number: instrumentData.model,
       manufacturer: instrumentData.manufacturer,
@@ -184,6 +198,10 @@ export const mockApiService = {
     const { data: userData } = await supabase.auth.getUser();
     if (!userData.user) throw new Error('Not authenticated');
 
+    if (!applicationData.businessPremiseId) {
+        throw new Error('A business premise must be selected for the application.');
+    }
+
     const payload = {
       applicant_id: userData.user.id,
       instrument_id: applicationData.instrumentId,
@@ -191,6 +209,7 @@ export const mockApiService = {
       status: 'submitted',
       preferred_date: applicationData.preferredDate,
       inspection_location: applicationData.inspectionLocation || 'Facility',
+      business_premise_id: applicationData.businessPremiseId,
       notes: applicationData.notes,
       documents: applicationData.documents || [],
     };
@@ -375,5 +394,145 @@ export const mockApiService = {
       message: t.message,
       createdAt: t.created_at
     }));
+  },
+
+  // --- Premise & Geography Services ---
+  async getStates() {
+    const { data, error } = await supabase.from('geo_states').select('*').order('name');
+    if (error) throw error;
+    return data;
+  },
+  
+  async getDistricts(stateId) {
+    const { data, error } = await supabase.from('geo_districts').select('*').eq('state_id', stateId).order('name');
+    if (error) throw error;
+    return data;
+  },
+
+  async getSubdistricts(stateId, districtId) {
+    const { data, error } = await supabase.from('geo_subdistricts')
+      .select('*')
+      .eq('state_id', stateId)
+      .eq('district_id', districtId)
+      .order('name');
+    if (error) throw error;
+    return data;
+  },
+
+  async getMyPremises() {
+    const { data, error } = await supabase.from('business_premises').select('*').order('premises_name');
+    if (error) throw error;
+    return data;
+  },
+
+  async getMyActivePremisesWithGeo() {
+    const { data: premises, error } = await supabase
+      .from('business_premises')
+      .select('*')
+      .eq('is_active', true)
+      .order('premises_name');
+    if (error) throw new Error("Failed to load premises: " + error.message);
+    if (!premises || premises.length === 0) return [];
+    
+    // Fetch unique geography items required
+    const stateIds = [...new Set(premises.map(p => p.state_id))];
+    
+    const [statesRes, districtsRes, subdistrictsRes] = await Promise.all([
+      supabase.from('geo_states').select('*').in('state_id', stateIds),
+      supabase.from('geo_districts').select('*').in('state_id', stateIds),
+      supabase.from('geo_subdistricts').select('*').in('state_id', stateIds)
+    ]);
+
+    if (statesRes.error) throw new Error("Failed to load state geography: " + statesRes.error.message);
+    if (districtsRes.error) throw new Error("Failed to load district geography: " + districtsRes.error.message);
+    if (subdistrictsRes.error) throw new Error("Failed to load subdistrict geography: " + subdistrictsRes.error.message);
+
+    const statesMap = {};
+    statesRes.data?.forEach(s => { statesMap[s.id] = s; });
+
+    const districtsMap = {};
+    districtsRes.data?.forEach(d => { districtsMap[`${d.state_id}:${d.district_id}`] = d; });
+
+    const subdistrictsMap = {};
+    subdistrictsRes.data?.forEach(sd => { subdistrictsMap[`${sd.state_id}:${sd.district_id}:${sd.subdistrict_id}`] = sd; });
+
+    return premises.map(p => {
+      const state = statesMap[p.state_id];
+      const district = districtsMap[`${p.state_id}:${p.district_id}`];
+      const subdistrict = p.subdistrict_id ? subdistrictsMap[`${p.state_id}:${p.district_id}:${p.subdistrict_id}`] : null;
+
+      if (!state) throw new Error(`Data Integrity Error: State ID ${p.state_id} missing for premise ${p.id}`);
+      if (!district) throw new Error(`Data Integrity Error: District ID ${p.district_id} missing for premise ${p.id}`);
+      if (p.subdistrict_id && !subdistrict) throw new Error(`Data Integrity Error: Subdistrict ID ${p.subdistrict_id} missing for premise ${p.id}`);
+
+      return {
+        ...p,
+        state,
+        district,
+        subdistrict
+      };
+    });
+  },
+
+  async createPremise(premiseData) {
+    const { data: userData } = await supabase.auth.getUser();
+    if (!userData.user) throw new Error('Not authenticated');
+    
+    const payload = {
+      business_id: userData.user.id,
+      premises_type: premiseData.premisesType,
+      premises_name: premiseData.premisesName,
+      address_line_1: premiseData.addressLine1,
+      address_line_2: premiseData.addressLine2 || null,
+      state_id: premiseData.stateId,
+      district_id: premiseData.districtId,
+      subdistrict_id: premiseData.subdistrictId || null,
+      locality: premiseData.locality || null,
+      pincode: premiseData.pincode,
+      is_primary: premiseData.isPrimary || false,
+      is_active: true
+    };
+    
+    const { data, error } = await supabase.from('business_premises').insert([payload]).select().single();
+    if (error) throw error;
+    return data;
+  },
+
+  async getPremiseById(premiseId) {
+    const { data, error } = await supabase.from('business_premises').select('*').eq('id', premiseId).single();
+    if (error) throw new Error("Failed to load premise: " + error.message);
+    return data;
+  },
+
+  async updatePremise(premiseId, premiseData) {
+    const payload = {
+      premises_type: premiseData.premisesType,
+      premises_name: premiseData.premisesName,
+      address_line_1: premiseData.addressLine1,
+      address_line_2: premiseData.addressLine2 || null,
+      state_id: premiseData.stateId,
+      district_id: premiseData.districtId,
+      subdistrict_id: premiseData.subdistrictId || null,
+      locality: premiseData.locality || null,
+      pincode: premiseData.pincode,
+      is_primary: premiseData.isPrimary || false
+    };
+    
+    const { data, error } = await supabase
+      .from('business_premises')
+      .update(payload)
+      .eq('id', premiseId)
+      .select().single();
+    if (error) throw new Error("Failed to update premise: " + error.message);
+    return data;
+  },
+
+  async updatePremiseStatus(premiseId, isActive) {
+    const { data, error } = await supabase.from('business_premises')
+      .update({ is_active: isActive })
+      .eq('id', premiseId)
+      .select().single();
+    if (error) throw error;
+    return data;
   }
 };

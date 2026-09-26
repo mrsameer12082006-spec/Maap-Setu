@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { mockApiService as api } from '../../services/api';
 import { useNavigate, Link } from 'react-router-dom';
 import {
   FileText,
   CheckCircle,
-  Upload,
-  Trash2,
   Info,
   Building2,
   ShieldCheck,
@@ -17,14 +16,33 @@ export const RegisterInstrumentPage = () => {
   const navigate = useNavigate();
   const { registerInstrument, submitApplication } = useData();
   const [submitLoading, setSubmitLoading] = useState(false);
+
+  const [premises, setPremises] = useState([]);
+  const [loadingPremises, setLoadingPremises] = useState(true);
+  const [selectedPremiseId, setSelectedPremiseId] = useState('');
+
+  useEffect(() => {
+    async function fetchPremises() {
+      try {
+        const data = await api.getMyActivePremisesWithGeo();
+        setPremises(data || []);
+      } catch (error) {
+        console.error("Failed to fetch premises", error);
+      } finally {
+        setLoadingPremises(false);
+      }
+    }
+    fetchPremises();
+  }, []);
+
   
   // Verification Application State
   const [appType, setAppType] = useState('Initial Verification (New Instrument)');
   const [preferredDate, setPreferredDate] = useState('');
   const [notes, setNotes] = useState('');
-  const [files, setFiles] = useState([]);
 
   // 17 Complete Form Fields as requested
+  const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
     // 1. Technical Specifications
     type: 'Heavy Electronic Weighbridge',
@@ -39,10 +57,6 @@ export const RegisterInstrumentPage = () => {
     quantity: '1',
 
     // 2. Premises & Location Details
-    premisesName: 'Apex Logistics Warehouse Hub #4',
-    installationAddress: 'Plot 45, MIDC Industrial Area, Chakan',
-    state: 'Maharashtra',
-    district: 'Pune',
 
     // 3. Verification & Approval Details
     verificationType: 'Initial Verification',
@@ -51,41 +65,136 @@ export const RegisterInstrumentPage = () => {
   });
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  
-  const handleAddFile = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setFiles([...files, { name: file.name, size: `${(file.size / (1024 * 1024)).toFixed(1)} MB` }]);
+    let { name, value } = e.target;
+    // We only uppercase these three fields. We DO NOT strip any characters here.
+    if (name === 'serialNumber' || name === 'modelApprovalNo' || name === 'previousCertificateNo') {
+      value = value.toUpperCase();
+    }
+    setFormData({ ...formData, [name]: value });
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: '' });
     }
   };
 
-  const handleRemoveFile = (index) => {
-    setFiles(files.filter((_, idx) => idx !== index));
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Quantity: must be a positive integer >= 1. No decimals, no negative, no letters.
+    const qtyStr = String(formData.quantity).trim();
+    if (!/^\d+$/.test(qtyStr) || parseInt(qtyStr, 10) < 1) {
+      newErrors.quantity = 'Quantity must be a positive integer.';
+    }
+
+    // Max Capacity: positive decimal/integer
+    const maxStr = String(formData.maxCapacity).trim();
+    if (!/^\d+(\.\d+)?$/.test(maxStr) || parseFloat(maxStr) <= 0) {
+      newErrors.maxCapacity = 'Max capacity must be a positive number.';
+    }
+
+    // Min Capacity: positive decimal/integer, min <= max
+    const minStr = String(formData.minCapacity || '').trim();
+    if (minStr) {
+      if (!/^\d+(\.\d+)?$/.test(minStr) || parseFloat(minStr) <= 0) {
+        newErrors.minCapacity = 'Min capacity must be a positive number.';
+      } else if (!newErrors.maxCapacity && parseFloat(minStr) > parseFloat(maxStr)) {
+        newErrors.minCapacity = 'Min capacity cannot exceed Max capacity.';
+      }
+    }
+
+    // Serial Number: ^[A-Z0-9-]+$
+    const serialStr = String(formData.serialNumber).trim();
+    if (!serialStr) {
+      newErrors.serialNumber = 'Serial Number is required.';
+    } else if (!/^[A-Z0-9-]+$/.test(serialStr)) {
+      newErrors.serialNumber = 'Invalid Serial Number. Only letters, numbers, and hyphens are allowed.';
+    }
+
+    // Model Approval No: ^[A-Z0-9/-]+$
+    const modelApprStr = String(formData.modelApprovalNo || '').trim();
+    if (modelApprStr && !/^[A-Z0-9/-]+$/.test(modelApprStr)) {
+      newErrors.modelApprovalNo = 'Invalid Model Approval No. Only letters, numbers, hyphens, and slashes are allowed.';
+    }
+
+    if (!selectedPremiseId) newErrors.premise = 'Please select a registered premise.';
+
+    if (!preferredDate) {
+      newErrors.preferredDate = 'Preferred Inspection Date is required.';
+    } else {
+      const today = new Date();
+      // local time YYYY-MM-DD
+      const offset = today.getTimezoneOffset();
+      const localDate = new Date(today.getTime() - (offset*60*1000));
+      const todayStr = localDate.toISOString().split('T')[0];
+      if (preferredDate < todayStr) {
+        newErrors.preferredDate = 'Inspection date cannot be in the past.';
+      }
+    }
+
+    if (formData.verificationType === 'Re-verification') {
+      const certStr = String(formData.previousCertificateNo || '').trim();
+      if (!certStr) {
+        newErrors.previousCertificateNo = 'Previous Certificate Number is required.';
+      } else if (!/^CERT-\d{4}-\d{4}$/.test(certStr)) {
+        newErrors.previousCertificateNo = 'Must match format CERT-YYYY-XXXX.';
+      }
+    }
+
+    if (!formData.manufacturer.trim()) newErrors.manufacturer = 'Manufacturer is required.';
+    if (!formData.model.trim()) newErrors.model = 'Model is required.';
+    if (!formData.scaleInterval.trim()) newErrors.scaleInterval = 'Scale interval is required.';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+        return;
+    }
     setSubmitLoading(true);
     try {
       // 1. Create the instrument
-      const newInst = await registerInstrument({
-        ...formData,
-        capacity: `${formData.maxCapacity} ${formData.unitOfMeasurement}`,
-        location: `${formData.premisesName}, ${formData.installationAddress}, ${formData.district}, ${formData.state}`
-      });
+      
+        if (!selectedPremiseId) {
+            alert("Please select a registered premise.");
+            setSubmitLoading(false);
+            return;
+        }
+        
+        
+            const latestPremises = await api.getMyActivePremisesWithGeo();
+            const latestPremise = latestPremises.find(p => p.id === selectedPremiseId);
+            
+            if (!latestPremise) {
+                alert("The selected premise is no longer active or available. Please select another premise.");
+                setSubmitLoading(false);
+                return;
+            }
 
-      // 2. Create the application automatically mapped to the new instrument
-      await submitApplication({
-        instrumentId: newInst.id,
-        applicationType: appType,
-        preferredDate,
-        inspectionLocation: `${formData.premisesName}, ${formData.installationAddress}, ${formData.district}, ${formData.state}`,
-        documents: files.map((f) => ({ name: f.name, size: f.size, url: '#' })),
-        notes
-      });
+            // Preserve backward compatibility for instrument record
+            const legacyLocationString = `${latestPremise.premises_name}, ${latestPremise.address_line_1}, ${latestPremise.subdistrict?.name ? latestPremise.subdistrict.name + ', ' : ''}${latestPremise.district?.name || ''}, ${latestPremise.state?.name || ''} - ${latestPremise.pincode || ''}`;
+
+            const newInst = await registerInstrument({
+              ...formData,
+              premisesName: latestPremise.premises_name,
+              installationAddress: latestPremise.address_line_1,
+              state: latestPremise.state?.name || '',
+              district: latestPremise.district?.name || '',
+              capacity: `${formData.maxCapacity} ${formData.unitOfMeasurement}`,
+              location: legacyLocationString
+            });
+  
+        // 2. Create the application automatically mapped to the new instrument
+        await submitApplication({
+          instrumentId: newInst.id,
+          applicationType: appType,
+          preferredDate,
+          inspectionLocation: legacyLocationString,
+          businessPremiseId: selectedPremiseId,
+          notes
+        });
 
       // Workflow successfully completed, return to applications
       navigate('/business/applications');
@@ -97,24 +206,6 @@ export const RegisterInstrumentPage = () => {
     }
   };
 
-  const indianStates = [
-    'Maharashtra',
-    'Gujarat',
-    'Delhi',
-    'Karnataka',
-    'Tamil Nadu',
-    'West Bengal',
-    'Uttar Pradesh',
-    'Telangana',
-    'Rajasthan',
-    'Madhya Pradesh',
-    'Haryana',
-    'Punjab',
-    'Kerala',
-    'Andhra Pradesh',
-    'Odisha',
-    'Bihar'
-  ];
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-7 pb-20 text-[#003943]">
@@ -180,6 +271,7 @@ export const RegisterInstrumentPage = () => {
                     required
                     className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-xs sm:text-sm font-semibold text-[#003943] focus:outline-none focus:border-[#00959C]"
                   />
+                  {errors.quantity && <p className="text-red-500 text-[10px] mt-1">{errors.quantity}</p>}
                 </div>
 
                 {/* Row 2: Manufacturer & Model */}
@@ -196,6 +288,7 @@ export const RegisterInstrumentPage = () => {
                     required
                     className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-xs sm:text-sm font-semibold text-[#003943] focus:outline-none focus:border-[#00959C]"
                   />
+                  {errors.manufacturer && <p className="text-red-500 text-[10px] mt-1">{errors.manufacturer}</p>}
                 </div>
 
                 <div className="space-y-1.5">
@@ -211,6 +304,7 @@ export const RegisterInstrumentPage = () => {
                     required
                     className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-xs sm:text-sm font-semibold text-[#003943] focus:outline-none focus:border-[#00959C]"
                   />
+                  {errors.model && <p className="text-red-500 text-[10px] mt-1">{errors.model}</p>}
                 </div>
 
                 {/* Row 3: Serial Number & Model Approval No */}
@@ -227,6 +321,7 @@ export const RegisterInstrumentPage = () => {
                     required
                     className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-xs sm:text-sm font-mono font-bold text-[#003943] focus:outline-none focus:border-[#00959C]"
                   />
+                  {errors.serialNumber && <p className="text-red-500 text-[10px] mt-1">{errors.serialNumber}</p>}
                 </div>
 
                 <div className="space-y-1.5">
@@ -241,6 +336,7 @@ export const RegisterInstrumentPage = () => {
                     placeholder="e.g. IND/09/2021/442"
                     className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-xs sm:text-sm font-mono font-bold text-[#003943] focus:outline-none focus:border-[#00959C]"
                   />
+                  {errors.modelApprovalNo && <p className="text-red-500 text-[10px] mt-1">{errors.modelApprovalNo}</p>}
                 </div>
 
                 {/* Row 4: Max Capacity & Min Capacity */}
@@ -257,6 +353,7 @@ export const RegisterInstrumentPage = () => {
                     required
                     className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-xs sm:text-sm font-semibold text-[#003943] focus:outline-none focus:border-[#00959C]"
                   />
+                  {errors.maxCapacity && <p className="text-red-500 text-[10px] mt-1">{errors.maxCapacity}</p>}
                 </div>
 
                 <div className="space-y-1.5">
@@ -271,6 +368,7 @@ export const RegisterInstrumentPage = () => {
                     placeholder="e.g. 100"
                     className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-xs sm:text-sm font-semibold text-[#003943] focus:outline-none focus:border-[#00959C]"
                   />
+                  {errors.minCapacity && <p className="text-red-500 text-[10px] mt-1">{errors.minCapacity}</p>}
                 </div>
 
                 {/* Row 5: Unit of Measurement & Scale Interval */}
@@ -307,6 +405,7 @@ export const RegisterInstrumentPage = () => {
                     placeholder="e.g. 1 g, 10 g, 0.5 g, 10 kg"
                     className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-xs sm:text-sm font-semibold text-[#003943] focus:outline-none focus:border-[#00959C]"
                   />
+                  {errors.scaleInterval && <p className="text-red-500 text-[10px] mt-1">{errors.scaleInterval}</p>}
                   <p className="text-[11px] text-[#003943]/60">
                     Required under OIML R76 & Legal Metrology Rules, 2011 to calculate Maximum Permissible Error (MPE).
                   </p>
@@ -333,7 +432,7 @@ export const RegisterInstrumentPage = () => {
               </div>
             </div>
 
-            {/* SECTION 2: PREMISES & INSTALLATION LOCATION DETAILS */}
+                        {/* SECTION 2: PREMISES & INSTALLATION LOCATION DETAILS */}
             <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#003943]/15 shadow-md space-y-6">
               <div className="pb-3 border-b border-[#003943]/10 flex items-center gap-2.5">
                 <Building2 className="w-5 h-5 text-[#00959C]" />
@@ -341,74 +440,54 @@ export const RegisterInstrumentPage = () => {
                   2. Premises & Installation Details
                 </h3>
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[#003943]/80">
-                    Premises / Installation Name
-                  </label>
-                  <input
-                    type="text"
-                    name="premisesName"
-                    value={formData.premisesName}
-                    onChange={handleChange}
-                    placeholder="e.g. Apex Logistics Warehouse Depot 4"
-                    className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-xs sm:text-sm font-semibold text-[#003943] focus:outline-none focus:border-[#00959C]"
-                  />
+              
+              {loadingPremises ? (
+                <div className="text-sm text-[#003943]/70">Loading your premises...</div>
+              ) : premises.length === 0 ? (
+                <div className="bg-orange-50 text-orange-800 p-5 rounded-xl text-sm font-semibold border border-orange-200">
+                  <p className="mb-3">You have no active premises registered.</p>
+                  <Link to="/business/premises" className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors inline-block">
+                    Register a Premise
+                  </Link>
                 </div>
-
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[#003943]/80">
-                    Installation Address <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="installationAddress"
-                    value={formData.installationAddress}
-                    onChange={handleChange}
-                    placeholder="e.g. Plot 45, MIDC Industrial Area, Chakan"
-                    required
-                    className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-xs sm:text-sm font-semibold text-[#003943] focus:outline-none focus:border-[#00959C]"
-                  />
+              ) : (
+                <div className="space-y-4">
+                  <div className="space-y-1.5 md:col-span-2">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-[#003943]/80">
+                      Select Installation Premise <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      value={selectedPremiseId}
+                      onChange={(e) => { setSelectedPremiseId(e.target.value); if (errors.premise) setErrors({...errors, premise: ''}); }}
+                      required
+                      className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-sm font-semibold text-[#003943] focus:outline-none focus:border-[#00959C]"
+                    >
+                      <option value="">-- Choose an active premise --</option>
+                      {premises.map(p => (
+                        <option key={p.id} value={p.id}>
+                          {p.premises_name} - {p.address_line_1}, {p.district?.name}, {p.state?.name}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.premise && <p className="text-red-500 text-[10px] mt-1">{errors.premise}</p>}
+                  </div>
+                  
+                  {selectedPremiseId && (
+                    <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
+                      <h4 className="font-bold text-[#003943] mb-1">
+                        {premises.find(p => p.id === selectedPremiseId)?.premises_name}
+                      </h4>
+                      <p className="text-sm text-gray-600">
+                        {premises.find(p => p.id === selectedPremiseId)?.address_line_1}<br/>
+                        {premises.find(p => p.id === selectedPremiseId)?.district?.name}, {premises.find(p => p.id === selectedPremiseId)?.state?.name} {premises.find(p => p.id === selectedPremiseId)?.pincode}
+                      </p>
+                    </div>
+                  )}
                 </div>
-
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[#003943]/80">
-                    State <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    name="state"
-                    value={formData.state}
-                    onChange={handleChange}
-                    required
-                    className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-xs sm:text-sm font-semibold text-[#003943] focus:outline-none focus:border-[#00959C]"
-                  >
-                    {indianStates.map((st) => (
-                      <option key={st} value={st}>
-                        {st}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-bold uppercase tracking-wider text-[#003943]/80">
-                    District <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    name="district"
-                    value={formData.district}
-                    onChange={handleChange}
-                    placeholder="e.g. Pune / Thane / Nagpur"
-                    required
-                    className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-xs sm:text-sm font-semibold text-[#003943] focus:outline-none focus:border-[#00959C]"
-                  />
-                </div>
-              </div>
+              )}
             </div>
 
-            {/* SECTION 3: VERIFICATION TYPE & LEGAL APPROVAL DETAILS */}
+              {/* SECTION 3: VERIFICATION TYPE & LEGAL APPROVAL DETAILS */}
             <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#003943]/15 shadow-md space-y-6">
               <div className="pb-3 border-b border-[#003943]/10 flex items-center gap-2.5">
                 <ShieldCheck className="w-5 h-5 text-[#00959C]" />
@@ -475,6 +554,7 @@ export const RegisterInstrumentPage = () => {
                       required
                       className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-xs sm:text-sm font-mono font-bold text-[#003943] focus:outline-none focus:border-[#00959C]"
                     />
+                  {errors.previousCertificateNo && <p className="text-red-500 text-[10px] mt-1">{errors.previousCertificateNo}</p>}
                   </div>
                 ) : (
                   <div className="space-y-1.5 opacity-50 select-none">
@@ -526,7 +606,7 @@ export const RegisterInstrumentPage = () => {
                     <input
                       type="date"
                       value={preferredDate}
-                      onChange={(e) => setPreferredDate(e.target.value)}
+                      onChange={(e) => { setPreferredDate(e.target.value); if (errors.preferredDate) setErrors({...errors, preferredDate: ''}); }}
                       required
                       className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-xs sm:text-sm font-bold text-[#003943] focus:outline-none focus:border-[#00959C]"
                     />
@@ -544,51 +624,6 @@ export const RegisterInstrumentPage = () => {
                       className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-xs sm:text-sm font-bold text-[#003943] focus:outline-none focus:border-[#00959C]"
                     />
                   </div>
-                </div>
-
-                {/* Supporting Documents section */}
-                <div className="mt-6 space-y-4">
-                  <div className="flex items-center gap-2">
-                    <FileText className="w-5 h-5 text-[#00959C]" />
-                    <h3 className="text-sm font-bold text-[#003943]">Supporting Documents</h3>
-                  </div>
-                  
-                  <div className="border-2 border-dashed border-[#003943]/20 hover:border-[#00959C] rounded-2xl p-6 bg-[#FDF9F6]/50 text-center relative transition-colors cursor-pointer">
-                    <Upload className="w-8 h-8 text-[#00959C] mx-auto mb-2" />
-                    <p className="text-sm font-bold text-[#003943]">Drag & Drop files or click to upload</p>
-                    <p className="text-xs text-[#003943]/70 mt-1">Accepted: PDF, JPG, PNG (Max 10MB per file)</p>
-                    <input
-                      type="file"
-                      onChange={handleAddFile}
-                      className="absolute inset-0 opacity-0 cursor-pointer"
-                    />
-                  </div>
-
-                  {files.length > 0 && (
-                    <div className="space-y-2 pt-2">
-                      <p className="text-xs font-bold uppercase tracking-wider text-[#003943]/70">Attached Documents ({files.length})</p>
-                      {files.map((file, idx) => (
-                        <div key={idx} className="flex items-center justify-between p-3 bg-white rounded-xl border border-[#003943]/15 shadow-sm text-xs group">
-                          <div className="flex items-center gap-2.5">
-                            <div className="p-1.5 bg-[#E0F5F6] rounded-lg">
-                              <FileText className="w-4 h-4 text-[#00959C]" />
-                            </div>
-                            <div>
-                              <p className="font-bold text-[#003943]">{file.name}</p>
-                              <p className="text-[10px] text-[#003943]/60">{file.size}</p>
-                            </div>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveFile(idx)}
-                            className="text-[#003943]/40 hover:text-red-500 p-1.5 rounded-lg hover:bg-red-50 transition-colors"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
                 </div>
               </div>
 

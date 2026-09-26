@@ -49,8 +49,16 @@ export const OfficerDashboard = () => {
   const [photosUploaded, setPhotosUploaded] = useState(true);
   const [remarks, setRemarks] = useState('All 6 physical inspection criteria passed. Lead seal affixed & QR code digital stamp generated.');
   const [outcome, setOutcome] = useState('PASS'); // 'PASS' or 'FAIL'
-  const [failReason, setFailReason] = useState('MPE exceeded');
+  const [selectedFailReasons, setSelectedFailReasons] = useState([]);
   const [customOtherReason, setCustomOtherReason] = useState('');
+
+  const toggleFailReason = (reason) => {
+    setSelectedFailReasons(prev => {
+      const removing = prev.includes(reason);
+      if (removing && reason === 'Other') setCustomOtherReason('');
+      return removing ? prev.filter(r => r !== reason) : [...prev, reason];
+    });
+  };
   const [submitting, setSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
@@ -80,9 +88,12 @@ export const OfficerDashboard = () => {
     if (!activeApp) return;
 
     if (outcome === 'FAIL') {
-      const reasonToSubmit = failReason === 'Other' ? customOtherReason.trim() : failReason;
-      if (!reasonToSubmit || reasonToSubmit === 'Other') {
-        alert("Please provide the specific reason for failure when 'Other' is selected.");
+      if (selectedFailReasons.length === 0) {
+        alert('Please select at least one reason for failure.');
+        return;
+      }
+      if (selectedFailReasons.includes('Other') && !customOtherReason.trim()) {
+        alert("Please provide the specific explanation when 'Other' is selected.");
         return;
       }
     }
@@ -91,7 +102,7 @@ export const OfficerDashboard = () => {
 
     try {
       const rejectionReasonVal = outcome === 'FAIL'
-        ? (failReason === 'Other' ? customOtherReason.trim() : failReason)
+        ? selectedFailReasons.map(r => r === 'Other' ? `Other: ${customOtherReason.trim()}` : r).join(', ')
         : null;
 
       await submitVerificationResult({
@@ -460,22 +471,16 @@ export const OfficerDashboard = () => {
                         <label
                           key={reason}
                           className={`p-3 rounded-xl border flex items-center gap-2.5 cursor-pointer font-bold transition-all ${
-                            failReason === reason
+                            selectedFailReasons.includes(reason)
                               ? 'bg-red-700 text-white border-red-800 shadow-xs'
                               : 'bg-white text-red-900 border-red-200 hover:bg-red-100/60'
                           }`}
                         >
                           <input
-                            type="radio"
-                            name="failReason"
+                            type="checkbox"
                             value={reason}
-                            checked={failReason === reason}
-                            onChange={(e) => {
-                              setFailReason(e.target.value);
-                              if (e.target.value !== 'Other') {
-                                setCustomOtherReason('');
-                              }
-                            }}
+                            checked={selectedFailReasons.includes(reason)}
+                            onChange={() => toggleFailReason(reason)}
                             className="w-4 h-4 accent-red-700"
                           />
                           <span>{reason}</span>
@@ -483,7 +488,7 @@ export const OfficerDashboard = () => {
                       ))}
                     </div>
 
-                    {failReason === 'Other' && (
+                    {selectedFailReasons.includes('Other') && (
                       <div className="pt-2">
                         <label className="block font-bold text-xs uppercase tracking-wider text-red-900 mb-1.5">
                           OTHER REASON FOR FAILURE <span className="text-red-600">*</span>

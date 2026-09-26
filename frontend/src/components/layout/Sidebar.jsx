@@ -46,6 +46,7 @@ export const Sidebar = () => {
     navItems = [
       { to: '/business', label: 'Business Dashboard', icon: LayoutDashboard, end: true },
       { to: '/business/register', label: 'Register Instrument', icon: PlusCircle },
+      { to: '/business/premises', label: 'My Premises', icon: Building2 },
       { to: '/business/applications', label: 'My Applications', icon: ClipboardList },
       { to: '/business/certificates', label: 'My Certificates', icon: Award }
     ];

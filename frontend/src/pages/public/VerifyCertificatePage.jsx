@@ -2,14 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Search, ShieldAlert, ArrowLeft, Loader2, CheckCircle2, AlertTriangle, QrCode } from 'lucide-react';
 import { useData } from '../../context/DataContext';
+import { useAuth } from '../../context/AuthContext';
 import { mockApiService } from '../../services/api';
 import { CertificateView } from '../../components/common/CertificateView';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 
+const ROLE_BACK_NAV = {
+  business: { to: '/business', label: '← Back to Dashboard' },
+  lmd:      { to: '/lmd',      label: '← Back to Dashboard' },
+  officer:  { to: '/officer',  label: '← Back to Dashboard' },
+};
+const GUEST_BACK_NAV = { to: '/', label: '← Back to Home' };
+
 export const VerifyCertificatePage = () => {
   const { certId } = useParams();
   const { certificates } = useData();
+  const { currentRole } = useAuth();
+
+  // Derive back nav from authenticated role; falls back to guest for public/unknown
+  const backNav = ROLE_BACK_NAV[currentRole] ?? GUEST_BACK_NAV;
 
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState(null);
@@ -45,8 +57,8 @@ export const VerifyCertificatePage = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <Link to="/" className="inline-flex items-center gap-1 text-xs text-neutral-600 hover:text-neutral-900 mb-1">
-            <ArrowLeft className="w-3.5 h-3.5" /> Back to Home
+          <Link to={backNav.to} className="inline-flex items-center gap-1 text-xs text-neutral-600 hover:text-neutral-900 mb-1">
+            <ArrowLeft className="w-3.5 h-3.5" /> {backNav.label}
           </Link>
           <h1 className="text-2xl font-bold text-neutral-900">Public Certificate Verification</h1>
           <p className="text-xs text-neutral-600">Scan QR code or verify certificate authenticity using official Legal Metrology registry.</p>

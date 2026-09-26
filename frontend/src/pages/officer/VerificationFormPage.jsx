@@ -29,8 +29,16 @@ export const VerificationFormPage = () => {
 
   // Outcome & Remarks State
   const [resultOutcome, setResultOutcome] = useState('PASS'); // PASS | FAIL
-  const [failReason, setFailReason] = useState('MPE exceeded');
+  const [selectedFailReasons, setSelectedFailReasons] = useState([]);
   const [customOtherReason, setCustomOtherReason] = useState('');
+
+  const toggleFailReason = (reason) => {
+    setSelectedFailReasons(prev => {
+      const removing = prev.includes(reason);
+      if (removing && reason === 'Other') setCustomOtherReason('');
+      return removing ? prev.filter(r => r !== reason) : [...prev, reason];
+    });
+  };
   const [inspectorNotes, setInspectorNotes] = useState(
     'Visual seal check completed. Maximum Permissible Error (MPE) verified against standard deadweights. All physical checklist criteria inspected on site.'
   );
@@ -98,9 +106,12 @@ export const VerificationFormPage = () => {
     if (!currentApp) return;
 
     if (resultOutcome === 'FAIL') {
-      const reasonToSubmit = failReason === 'Other' ? customOtherReason.trim() : failReason;
-      if (!reasonToSubmit || reasonToSubmit === 'Other') {
-        alert('Please provide the specific explanation for verification failure when "Other" is selected.');
+      if (selectedFailReasons.length === 0) {
+        alert('Please select at least one reason for failure.');
+        return;
+      }
+      if (selectedFailReasons.includes('Other') && !customOtherReason.trim()) {
+        alert('Please provide the specific explanation when "Other" is selected.');
         return;
       }
     }
@@ -133,9 +144,7 @@ export const VerificationFormPage = () => {
       // 2. Format payload adhering strictly to database schema & check constraints
       const rejectionReasonVal =
         resultOutcome === 'FAIL'
-          ? failReason === 'Other'
-            ? customOtherReason.trim()
-            : failReason
+          ? selectedFailReasons.map(r => r === 'Other' ? `Other: ${customOtherReason.trim()}` : r).join(', ')
           : null;
 
       if (dynamicTechData?.mpeCompliance === 'PENDING') {
@@ -539,20 +548,16 @@ export const VerificationFormPage = () => {
                   <label
                     key={reason}
                     className={`p-3 rounded-xl border flex items-center gap-2.5 cursor-pointer font-bold transition-all ${
-                      failReason === reason
+                      selectedFailReasons.includes(reason)
                         ? 'bg-red-700 text-white border-red-800 shadow-2xs'
                         : 'bg-white text-red-900 border-red-200 hover:bg-red-100/60'
                     }`}
                   >
                     <input
-                      type="radio"
-                      name="failReason"
+                      type="checkbox"
                       value={reason}
-                      checked={failReason === reason}
-                      onChange={(e) => {
-                        setFailReason(e.target.value);
-                        if (e.target.value !== 'Other') setCustomOtherReason('');
-                      }}
+                      checked={selectedFailReasons.includes(reason)}
+                      onChange={() => toggleFailReason(reason)}
                       className="w-4 h-4 accent-red-700"
                     />
                     <span>{reason}</span>
@@ -560,7 +565,7 @@ export const VerificationFormPage = () => {
                 ))}
               </div>
 
-              {failReason === 'Other' && (
+              {selectedFailReasons.includes('Other') && (
                 <div className="pt-2">
                   <label className="block font-bold text-xs uppercase tracking-wider text-red-900 mb-1.5">
                     Specific Reason for Failure <span className="text-red-600">*</span>

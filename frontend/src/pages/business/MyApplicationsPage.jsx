@@ -19,7 +19,10 @@ export const MyApplicationsPage = () => {
   const [selectedCert, setSelectedCert] = useState(null);
 
   const myApplications = applications.filter(app => !user || app.applicantId === user.id);
-  const sortedApps = [...myApplications].sort((a, b) => new Date(b.submissionDate) - new Date(a.submissionDate) || a.id.localeCompare(b.id));
+  const sortedApps = [...myApplications].sort((a, b) => {
+    const diff = new Date(b.submissionDate || 0) - new Date(a.submissionDate || 0);
+    return (diff !== 0 && !isNaN(diff)) ? diff : String(a.id || '').localeCompare(String(b.id || ''));
+  });
   const searchedApps = sortedApps.filter((app) => {
     const search = searchTerm.trim().toLowerCase();
     if (!search) return true;
@@ -379,7 +382,7 @@ export const MyApplicationsPage = () => {
                 Workflow Progress History
               </h4>
               <div className="space-y-3 pl-2 border-l-2 border-primary/30 ml-2">
-                {selectedApp.timeline.map((step, idx) => (
+                {(selectedApp.timeline || []).map((step, idx) => (
                   <div key={idx} className="relative pl-4">
                     <div className="w-2.5 h-2.5 rounded-full bg-primary absolute -left-[19px] top-1 border-2 border-white" />
                     <p className="text-xs font-semibold text-neutral-900">{step.step}</p>
@@ -394,10 +397,10 @@ export const MyApplicationsPage = () => {
             {/* Documents */}
             <div>
               <h4 className="text-xs font-semibold uppercase tracking-wider text-neutral-600 border-b border-neutral-300 pb-1 mb-2">
-                Attached Documents ({selectedApp.documents.length})
+                Attached Documents ({(selectedApp.documents || []).length})
               </h4>
               <div className="space-y-2">
-                {selectedApp.documents.map((doc, idx) => (
+                {(selectedApp.documents || []).map((doc, idx) => (
                   <div key={idx} className="flex items-center justify-between p-2.5 bg-neutral-100 rounded border border-neutral-300 text-xs">
                     <span className="font-medium text-neutral-900 flex items-center gap-2">
                       <FileText className="w-4 h-4 text-primary" /> {doc.name}

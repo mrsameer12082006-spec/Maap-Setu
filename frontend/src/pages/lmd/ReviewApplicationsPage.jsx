@@ -16,11 +16,9 @@ import {
 
 const STATUS_TABS = [
   { key: 'all', label: 'All Applications' },
-  { key: 'new', label: 'New', category: STATUS_CATEGORIES.NEW },
-  { key: 'in_progress', label: 'In Progress', category: STATUS_CATEGORIES.IN_PROGRESS },
-  { key: 'awaiting_assignment', label: 'Awaiting Assign', category: STATUS_CATEGORIES.AWAITING_ASSIGN },
-  { key: 'verification', label: 'Verification', category: STATUS_CATEGORIES.VERIFICATION },
-  { key: 'completed', label: 'Completed', category: STATUS_CATEGORIES.COMPLETED }
+  { key: 'new', label: 'New', categories: [STATUS_CATEGORIES.NEW] },
+  { key: 'in_progress', label: 'In Progress', categories: [STATUS_CATEGORIES.IN_PROGRESS, STATUS_CATEGORIES.AWAITING_ASSIGN, STATUS_CATEGORIES.VERIFICATION] },
+  { key: 'completed', label: 'Completed', categories: [STATUS_CATEGORIES.COMPLETED] }
 ];
 
 export const ReviewApplicationsPage = () => {
@@ -38,8 +36,16 @@ export const ReviewApplicationsPage = () => {
   const [assignLoading, setAssignLoading] = useState(false);
   const [inspectLoading, setInspectLoading] = useState(false);
   const [inspectionOutcome, setInspectionOutcome] = useState('PASS');
-  const [failReason, setFailReason] = useState('MPE exceeded');
+  const [selectedFailReasons, setSelectedFailReasons] = useState([]);
   const [customOtherReason, setCustomOtherReason] = useState('');
+
+  const toggleFailReason = (reason) => {
+    setSelectedFailReasons(prev => {
+      const removing = prev.includes(reason);
+      if (removing && reason === 'Other') setCustomOtherReason('');
+      return removing ? prev.filter(r => r !== reason) : [...prev, reason];
+    });
+  };
   const [inspectionRemarks, setInspectionRemarks] = useState('Physical field verification completed. All MPE tolerance checks within Rule 11 bounds.');
 
   // Guarantee the selectedOfficerId snaps to a real UUID when data loads
@@ -55,11 +61,9 @@ export const ReviewApplicationsPage = () => {
     const counts = calculateLmdDashboardCounts(applications);
     return {
       all: applications.length,
-      new: counts[STATUS_CATEGORIES.NEW],
-      in_progress: counts[STATUS_CATEGORIES.IN_PROGRESS],
-      awaiting_assignment: counts[STATUS_CATEGORIES.AWAITING_ASSIGN],
-      verification: counts[STATUS_CATEGORIES.VERIFICATION],
-      completed: counts[STATUS_CATEGORIES.COMPLETED]
+      new: counts[STATUS_CATEGORIES.NEW] || 0,
+      in_progress: (counts[STATUS_CATEGORIES.IN_PROGRESS] || 0) + (counts[STATUS_CATEGORIES.AWAITING_ASSIGN] || 0) + (counts[STATUS_CATEGORIES.VERIFICATION] || 0),
+      completed: counts[STATUS_CATEGORIES.COMPLETED] || 0
     };
   }, [applications]);
 
@@ -73,8 +77,8 @@ export const ReviewApplicationsPage = () => {
       if (activeStatusFilter !== 'all') {
         const appCategory = getApplicationStatusCategory(app);
         const matchingTab = STATUS_TABS.find(t => t.key === activeStatusFilter);
-        if (matchingTab && matchingTab.category) {
-          if (appCategory !== matchingTab.category) return false;
+        if (matchingTab && matchingTab.categories) {
+          if (!matchingTab.categories.includes(appCategory)) return false;
         } else if (String(app.status).toLowerCase() !== activeStatusFilter) {
           return false;
         }
@@ -340,15 +344,6 @@ export const ReviewApplicationsPage = () => {
               ) : (
                 <div className="flex items-center gap-2">
                   <Button
-                    variant="danger"
-                    onClick={() => {
-                      alert(`Application ${selectedApp.id} marked for document clarification.`);
-                      setSelectedApp(null);
-                    }}
-                  >
-                    Request Clarification
-                  </Button>
-                  <Button
                     variant="primary"
                     icon={UserCheck}
                     onClick={() => {
@@ -524,19 +519,6 @@ export const ReviewApplicationsPage = () => {
                       <div className="p-2 bg-emerald-50 rounded-lg text-emerald-800 font-bold">✓ Capacity Checked</div>
                       <div className="p-2 bg-emerald-50 rounded-lg text-emerald-800 font-bold">✓ Lead Seal Affixed</div>
                     </div>
-                  </div>
-
-                  <div>
-                    <span className="text-[#003943]/60 text-[10px] font-bold block uppercase mb-1">
-                      Technical Verification & Rule MPE Test Results
-                    </span>
-                    <DynamicTechnicalVerification
-                      instrumentName={selectedApp.instrumentName}
-                      applicationType={selectedApp.applicationType}
-                      accuracyClass={selectedApp.instrument?.accuracyClass || selectedApp.instrument?.accuracy_class || selectedApp.accuracyClass}
-                      scaleInterval={selectedApp.instrument?.scaleInterval || selectedApp.instrument?.scale_interval}
-                      maxCapacity={selectedApp.instrument?.maxCapacity}
-                    />
                   </div>
 
                   <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
@@ -898,17 +880,16 @@ export const ReviewApplicationsPage = () => {
                       <label
                         key={reason}
                         className={`p-2.5 rounded-xl border flex items-center gap-2 cursor-pointer font-bold transition-all ${
-                          failReason === reason
+                          selectedFailReasons.includes(reason)
                             ? 'bg-red-700 text-white border-red-800 shadow-xs'
                             : 'bg-white text-red-900 border-red-200 hover:bg-red-100/60'
                         }`}
                       >
                         <input
-                          type="radio"
-                          name="reviewFailReason"
+                          type="checkbox"
                           value={reason}
-                          checked={failReason === reason}
-                          onChange={(e) => setFailReason(e.target.value)}
+                          checked={selectedFailReasons.includes(reason)}
+                          onChange={() => toggleFailReason(reason)}
                           className="w-3.5 h-3.5 accent-red-700"
                         />
                         <span>{reason}</span>
@@ -916,7 +897,7 @@ export const ReviewApplicationsPage = () => {
                     ))}
                   </div>
 
-                  {failReason === 'Other' && (
+                  {selectedFailReasons.includes('Other') && (
                     <div className="mt-2.5 space-y-1">
                       <label className="block text-[11px] font-bold text-red-900">
                         Specify Custom Reason for Failure <span className="text-red-600">*</span>
@@ -955,14 +936,17 @@ export const ReviewApplicationsPage = () => {
                 loading={inspectLoading}
                 onClick={async () => {
                   if (inspectionOutcome === 'FAIL') {
-                    const reasonToSubmit = failReason === 'Other' ? customOtherReason.trim() : failReason;
-                    if (!reasonToSubmit || reasonToSubmit === 'Other') {
-                      alert("Please provide the specific explanation for failure when 'Other' is selected.");
+                    if (selectedFailReasons.length === 0) {
+                      alert('Please select at least one reason for failure.');
+                      return;
+                    }
+                    if (selectedFailReasons.includes('Other') && !customOtherReason.trim()) {
+                      alert("Please provide the specific explanation when 'Other' is selected.");
                       return;
                     }
                   }
                   setInspectLoading(true);
-                  const finalReason = failReason === 'Other' ? customOtherReason.trim() : failReason;
+                  const finalReason = selectedFailReasons.map(r => r === 'Other' ? `Other: ${customOtherReason.trim()}` : r).join(', ');
                   const finalObs = inspectionOutcome === 'FAIL'
                     ? `[Rejection Reason: ${finalReason}] ${inspectionRemarks}`
                     : inspectionRemarks;

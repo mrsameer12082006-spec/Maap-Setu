@@ -1,0 +1,29 @@
+{
+  "database": {
+    "state_count": 3,
+    "district_count": 8,
+    "subdistrict_count": 4
+  },
+  "incoming": {
+    "state_count": 36,
+    "district_count": 784,
+    "subdistrict_count": 7092
+  },
+  "delta": {
+    "match_count": 14,
+    "new_count": 7897,
+    "name_change_count": 1,
+    "parent_change_count": 0,
+    "conflict_count": 0
+  },
+  "uuid": {
+    "preserved": 15,
+    "creation_required": 7897
+  },
+  "hierarchy": {
+    "orphan_count": 0,
+    "duplicate_count": 0,
+    "parent_conflict_count": 0
+  },
+  "status": "READY FOR IMPORT"
+}

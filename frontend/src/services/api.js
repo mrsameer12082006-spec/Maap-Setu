@@ -447,7 +447,7 @@ export const mockApiService = {
     if (subdistrictsRes.error) throw new Error("Failed to load subdistrict geography: " + subdistrictsRes.error.message);
 
     const statesMap = {};
-    statesRes.data?.forEach(s => { statesMap[s.id] = s; });
+    statesRes.data?.forEach(s => { statesMap[s.state_id] = s; });
 
     const districtsMap = {};
     districtsRes.data?.forEach(d => { districtsMap[`${d.state_id}:${d.district_id}`] = d; });

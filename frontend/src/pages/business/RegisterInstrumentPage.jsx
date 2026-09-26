@@ -19,7 +19,7 @@ export const RegisterInstrumentPage = () => {
 
   const [premises, setPremises] = useState([]);
   const [loadingPremises, setLoadingPremises] = useState(true);
-  const [selectedPremiseId, setSelectedPremiseId] = useState('');
+  const [selectedPremiseId, setSelectedPremiseId] = useState(() => sessionStorage.getItem('reg_selectedPremiseId') || '');
 
   useEffect(() => {
     async function fetchPremises() {
@@ -35,34 +35,56 @@ export const RegisterInstrumentPage = () => {
     fetchPremises();
   }, []);
 
+
+
+
   
   // Verification Application State
-  const [appType, setAppType] = useState('Initial Verification (New Instrument)');
-  const [preferredDate, setPreferredDate] = useState('');
-  const [notes, setNotes] = useState('');
+  const [appType, setAppType] = useState(() => sessionStorage.getItem('reg_appType') || 'Initial Verification (New Instrument)');
+  const [preferredDate, setPreferredDate] = useState(() => sessionStorage.getItem('reg_preferredDate') || '');
+  const [notes, setNotes] = useState(() => sessionStorage.getItem('reg_notes') || '');
 
   // 17 Complete Form Fields as requested
   const [errors, setErrors] = useState({});
-  const [formData, setFormData] = useState({
-    // 1. Technical Specifications
-    type: 'Heavy Electronic Weighbridge',
-    manufacturer: '',
-    model: '',
-    serialNumber: '',
-    maxCapacity: '',
-    minCapacity: '',
-    unitOfMeasurement: 'kg',
-    accuracyClass: 'Class III (Medium Commercial)',
-    scaleInterval: '10 g',
-    quantity: '1',
+  const [formData, setFormData] = useState(() => {
+    const saved = sessionStorage.getItem('reg_formData');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === 'object') return parsed;
+      } catch (e) {
+        console.error('Failed to parse reg_formData:', e);
+      }
+    }
+    return {
+      // 1. Technical Specifications
+      type: 'Heavy Electronic Weighbridge',
+      manufacturer: '',
+      model: '',
+      serialNumber: '',
+      maxCapacity: '',
+      minCapacity: '',
+      unitOfMeasurement: 'kg',
+      accuracyClass: 'Class III (Medium Commercial)',
+      scaleInterval: '10 g',
+      quantity: '1',
 
-    // 2. Premises & Location Details
+      // 2. Premises & Location Details
 
-    // 3. Verification & Approval Details
-    verificationType: 'Initial Verification',
-    previousCertificateNo: '',
-    modelApprovalNo: 'IND/09/2021/442'
+      // 3. Verification & Approval Details
+      verificationType: 'Initial Verification',
+      previousCertificateNo: '',
+      modelApprovalNo: 'IND/09/2021/442'
+    };
   });
+
+  useEffect(() => {
+    sessionStorage.setItem('reg_selectedPremiseId', selectedPremiseId);
+    sessionStorage.setItem('reg_appType', appType);
+    sessionStorage.setItem('reg_preferredDate', preferredDate);
+    sessionStorage.setItem('reg_notes', notes);
+    sessionStorage.setItem('reg_formData', JSON.stringify(formData));
+  }, [selectedPremiseId, appType, preferredDate, notes, formData]);
 
   const handleChange = (e) => {
     let { name, value } = e.target;
@@ -453,9 +475,20 @@ export const RegisterInstrumentPage = () => {
               ) : (
                 <div className="space-y-4">
                   <div className="space-y-1.5 md:col-span-2">
-                    <label className="block text-xs font-bold uppercase tracking-wider text-[#003943]/80">
-                      Select Installation Premise <span className="text-red-500">*</span>
-                    </label>
+                    
+                      <div className="flex items-center justify-between">
+                        <label className="block text-xs font-bold uppercase tracking-wider text-[#003943]/80">
+                          Select Installation Premise <span className="text-red-500">*</span>
+                        </label>
+                        <Link 
+                          to="/business/premises"
+                          state={{ returnTo: '/business/register' }}
+                          className="text-xs text-[#00959C] font-semibold hover:underline bg-[#00959C]/10 px-2 py-1 rounded"
+                        >
+                          + Create a Premise
+                        </Link>
+                      </div>
+
                     <select
                       value={selectedPremiseId}
                       onChange={(e) => { setSelectedPremiseId(e.target.value); if (errors.premise) setErrors({...errors, premise: ''}); }}

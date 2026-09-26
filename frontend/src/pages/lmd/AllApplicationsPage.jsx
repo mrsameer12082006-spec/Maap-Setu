@@ -9,7 +9,7 @@ import { Modal } from '../../components/common/Modal';
 import { Button } from '../../components/common/Button';
 
 export const AllApplicationsPage = () => {
-  const { applications } = useData();
+  const { applications, certificates, generateCertificate } = useData();
   const [searchParams, setSearchParams] = useSearchParams();
   const initialStatus = searchParams.get('status') || 'all';
   const [searchTerm, setSearchTerm] = useState('');

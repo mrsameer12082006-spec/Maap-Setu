@@ -4,8 +4,8 @@
 
 DO $$
 DECLARE
-  biz_uid UUID := '11111111-1111-1111-1111-111111111111';
-  lmo1_id UUID := '22222222-2222-2222-2222-222222222222';
+  biz_uid UUID := '43e8a4d1-a30b-4174-b4e1-e0c8790e0f66';  -- business.demo@maapsetu.demo (Vikramaditya Mehta)
+  lmo1_id UUID := 'b1b1b1b1-0001-0001-0001-000000000001';  -- officers.id for lmo01@maapsetu.demo
 
   -- New Instrument 9 (Expiring 1)
   inst9_id UUID := 'd9999999-0001-0001-0001-000000000009';
@@ -44,13 +44,13 @@ BEGIN
     id, application_id, instrument_id, certificate_number, instrument_type, serial_number, 
     manufacturer, model, capacity, accuracy_class, owner_name, owner_address, 
     verification_authority, verification_officer, verification_date, expiry_date, status, 
-    seal_number, qr_code_data
+    seal_number, qr_code_token
   )
   VALUES (
     cert9_id, app9_id, inst9_id, 'CERT-2026-4401', 'fuel_dispenser', 'GV-994120-F',
     'Gilbarco Veeder-Root', 'Horizon-5000', '80 L/min', 'Class 0.5 (Fuel Dispenser)', 'Apex Logistics & Freight Corp', 'BPCL Petrol Outlet, Station Hub #2, Pune',
     'Legal Metrology Department, Govt of Maharashtra', 'Inspector Rajesh V. Sharma (Badge #LMO-NGP-442)',
-    '2025-10-11', '2026-10-10', 'VERIFIED', 'LMD-MH-PUN-2025-1011', 'https://maapsetu.gov.in/verify/CERT-2026-4401'
+    '2025-10-11', '2026-10-10', 'VERIFIED', 'LMD-MH-PUN-2025-1011', 'f9999999-0001-0001-0001-000000000009'
   ) ON CONFLICT (id) DO NOTHING;
 
 
@@ -81,13 +81,13 @@ BEGIN
     id, application_id, instrument_id, certificate_number, instrument_type, serial_number, 
     manufacturer, model, capacity, accuracy_class, owner_name, owner_address, 
     verification_authority, verification_officer, verification_date, expiry_date, status, 
-    seal_number, qr_code_data
+    seal_number, qr_code_token
   )
   VALUES (
     cert10_id, app10_id, inst10_id, 'CERT-2026-7812', 'retail_scale', 'ES-331092',
     'Essae-Teraoka', 'DS-252', '30 kg', 'Class II (High Accuracy)', 'Apex Logistics & Freight Corp', 'Apex Logistics Central Store, Sector 17',
     'Legal Metrology Department, Govt of Maharashtra', 'Inspector Rajesh V. Sharma (Badge #LMO-NGP-442)',
-    '2025-10-19', '2026-10-18', 'VERIFIED', 'LMD-MH-PUN-2025-1019', 'https://maapsetu.gov.in/verify/CERT-2026-7812'
+    '2025-10-19', '2026-10-18', 'VERIFIED', 'LMD-MH-PUN-2025-1019', 'f0000000-0002-0001-0001-000000000010'
   ) ON CONFLICT (id) DO NOTHING;
 
 END $$;

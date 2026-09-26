@@ -302,7 +302,6 @@ export const LmdDashboard = () => {
                 </div>
                 <div className="text-xs text-[#003943]/70 pt-2 border-t border-[#003943]/5">
                   <p>Zone: <span className="font-semibold">{officer.zone || 'Unassigned'}</span></p>
-                  <p>Rating: <span className="font-semibold">{officer.rating || 'N/A'}</span></p>
                 </div>
               </div>
             ))}

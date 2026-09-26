@@ -289,7 +289,6 @@ export const MOCK_OFFICERS = [
     phone: '+91 98230 11244',
     email: 'r.sharma@lmd.gov.in',
     activeCount: 4,
-    rating: 4.9,
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80'
   },
   {
@@ -301,7 +300,6 @@ export const MOCK_OFFICERS = [
     phone: '+91 98112 44321',
     email: 'suresh.gatc@ambalatesting.org',
     activeCount: 2,
-    rating: 4.8,
     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80'
   },
   {
@@ -313,7 +311,6 @@ export const MOCK_OFFICERS = [
     phone: '+91 97401 88902',
     email: 'm.sundaram@lmd.gov.in',
     activeCount: 1,
-    rating: 5.0,
     avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80'
   },
   {
@@ -325,7 +322,6 @@ export const MOCK_OFFICERS = [
     phone: '+91 94221 00981',
     email: 'a.deshmukh@gatc-india.gov.in',
     activeCount: 3,
-    rating: 4.7,
     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80'
   }
 ];

@@ -141,7 +141,6 @@ export const AssignOfficerPage = () => {
                   <span className="inline-block bg-white px-2.5 py-1 rounded font-bold text-primary border border-neutral-300">
                     Active Load: {currentOfficer.activeCount} verifications
                   </span>
-                  <p className="text-emerald-700 font-semibold mt-1">★ {currentOfficer.rating} Inspector Rating</p>
                 </div>
               </div>
             )}

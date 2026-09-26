@@ -345,7 +345,6 @@ export const mockApiService = {
       name: o.profiles ? o.profiles.name : (o.designation || 'Unknown Verifier'),
       role: o.designation,
       zone: o.zone,
-      rating: o.rating,
       activeCount: o.active_assignments_count,
       officerType: o.officer_type,   // 'LMO' | 'GATC'
       employeeCode: o.employee_code,

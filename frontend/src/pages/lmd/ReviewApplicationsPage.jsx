@@ -669,9 +669,6 @@ export const ReviewApplicationsPage = () => {
                     <h4 className="font-serif font-bold text-[#003943] text-base">{assignModalApp.assignedOfficerName}</h4>
                     <p className="text-xs text-[#00959C] font-semibold">State LMO Officer</p>
                   </div>
-                  <span className="text-xs font-extrabold text-emerald-800 bg-white px-3 py-1 rounded-full border border-emerald-300 shadow-xs">
-                    ★ 4.9 Rating
-                  </span>
                 </div>
                 <div className="pt-2 border-t border-emerald-200/80 flex items-center justify-between text-xs">
                   <span className="text-[#003943]/70 font-medium">Scheduled Inspection Date:</span>
@@ -743,7 +740,7 @@ export const ReviewApplicationsPage = () => {
                     .filter((off) => (off.officerType || 'LMO') === verifierType)
                     .map((off) => (
                       <option key={off.id} value={off.id}>
-                        {off.name} ({off.role} — ★ {off.rating})
+                        {off.name} ({off.role})
                       </option>
                     ))}
                 </select>

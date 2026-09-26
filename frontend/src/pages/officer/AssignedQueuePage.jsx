@@ -156,7 +156,7 @@ export const AssignedQueuePage = () => {
           {(searchTerm || statusFilter !== 'all') && (
             <button
               onClick={() => { setSearchTerm(''); setStatusFilter('all'); }}
-              className="text-xs font-semibold text-[#00959C] hover:underline"
+              className="text-xs font-semibold text-[#B85D19] hover:underline"
             >
               Clear filters
             </button>

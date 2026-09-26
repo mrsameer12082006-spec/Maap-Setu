@@ -189,58 +189,58 @@ export const VerificationFormPage = () => {
   }
 
   return (
-    <div className="w-full max-w-5xl mx-auto space-y-6 pb-20 text-[#003943]">
+    <div className="w-full max-w-5xl mx-auto space-y-6 pb-20 text-[#102A43]">
       <div>
         <Link
           to={`/officer/record/${currentApp.id}`}
-          className="inline-flex items-center gap-1 text-xs text-[#003943]/70 hover:text-[#003943] transition-colors mb-2"
+          className="inline-flex items-center gap-1 text-xs text-[#102A43]/70 hover:text-[#102A43] transition-colors mb-2"
         >
           <ArrowLeft className="w-3.5 h-3.5" /> Back to Case Record Workspace
         </Link>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-serif font-bold text-[#003943]">
+            <h1 className="text-2xl sm:text-3xl font-serif font-bold text-[#102A43]">
               Physical Inspection & Field Verification
             </h1>
-            <p className="text-xs text-[#003943]/70 mt-0.5">
+            <p className="text-xs text-[#102A43]/70 mt-0.5">
               Record physical checklist observations, technical MPE tests, and inspection evidence under Legal Metrology Rules, 2011.
             </p>
           </div>
-          <span className="font-mono text-xs font-extrabold text-[#00959C] bg-[#E0F5F6] px-3 py-1 rounded-full self-start sm:self-auto">
+          <span className="font-mono text-xs font-extrabold text-[#B85D19] bg-[#FDF3EC] px-3 py-1 rounded-full self-start sm:self-auto">
             App ID: {currentApp.applicationNumber || currentApp.id}
           </span>
         </div>
       </div>
 
       {/* 1. CASE REFERENCE (READ-ONLY) */}
-      <div className="p-5 rounded-2xl bg-[#FDF9F6] border border-[#003943]/15 space-y-4 text-xs">
-        <div className="flex items-center justify-between border-b border-[#003943]/10 pb-2">
-          <span className="font-bold uppercase tracking-wider text-[10px] text-[#00959C]">
+      <div className="p-5 rounded-2xl bg-[#FBF9F5] border border-[#102A43]/15 space-y-4 text-xs">
+        <div className="flex items-center justify-between border-b border-[#102A43]/10 pb-2">
+          <span className="font-bold uppercase tracking-wider text-[10px] text-[#B85D19]">
             Case Reference Information
           </span>
-          <span className="px-2.5 py-0.5 rounded-full bg-[#003943]/10 text-[#003943] font-bold text-[10px] uppercase">
+          <span className="px-2.5 py-0.5 rounded-full bg-[#102A43]/10 text-[#102A43] font-bold text-[10px] uppercase">
             {currentApp.applicationType}
           </span>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div>
-            <span className="text-[#003943]/60 text-[10px] uppercase font-bold block">Business / Applicant</span>
-            <span className="font-bold text-[#003943] text-sm block">{currentApp.applicantName}</span>
+            <span className="text-[#102A43]/60 text-[10px] uppercase font-bold block">Business / Applicant</span>
+            <span className="font-bold text-[#102A43] text-sm block">{currentApp.applicantName}</span>
           </div>
           <div>
-            <span className="text-[#003943]/60 text-[10px] uppercase font-bold block">Instrument Type</span>
-            <span className="font-semibold text-[#003943] block">{currentApp.instrument?.name || currentApp.instrumentName}</span>
+            <span className="text-[#102A43]/60 text-[10px] uppercase font-bold block">Instrument Type</span>
+            <span className="font-semibold text-[#102A43] block">{currentApp.instrument?.name || currentApp.instrumentName}</span>
           </div>
           <div>
-            <span className="text-[#003943]/60 text-[10px] uppercase font-bold block">Manufacturer & Serial</span>
-            <span className="font-mono font-semibold text-[#003943] block">
+            <span className="text-[#102A43]/60 text-[10px] uppercase font-bold block">Manufacturer & Serial</span>
+            <span className="font-mono font-semibold text-[#102A43] block">
               {currentApp.instrument?.manufacturer || 'N/A'} · S/N: {currentApp.instrument?.serialNumber || 'N/A'}
             </span>
           </div>
           <div>
-            <span className="text-[#003943]/60 text-[10px] uppercase font-bold block">Scheduled Inspection Date</span>
-            <span className="font-bold text-[#00959C] block">
+            <span className="text-[#102A43]/60 text-[10px] uppercase font-bold block">Scheduled Inspection Date</span>
+            <span className="font-bold text-[#B85D19] block">
               {currentApp.scheduledInspectionDate || 'Today'}
             </span>
           </div>
@@ -249,10 +249,10 @@ export const VerificationFormPage = () => {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* 2. MANDATORY PHYSICAL CHECKLIST */}
-        <div className="bg-white rounded-3xl p-6 border border-[#003943]/15 shadow-sm space-y-4">
-          <div className="flex items-center gap-2 pb-2 border-b border-[#003943]/10">
-            <CheckSquare className="w-5 h-5 text-[#00959C]" />
-            <h3 className="font-serif font-bold text-lg text-[#003943]">
+        <div className="bg-white rounded-3xl p-6 border border-[#102A43]/15 shadow-sm space-y-4">
+          <div className="flex items-center gap-2 pb-2 border-b border-[#102A43]/10">
+            <CheckSquare className="w-5 h-5 text-[#B85D19]" />
+            <h3 className="font-serif font-bold text-lg text-[#102A43]">
               1. Mandatory Physical Requirements Checklist
             </h3>
           </div>
@@ -268,38 +268,38 @@ export const VerificationFormPage = () => {
             ].map(({ key, label }) => (
               <label
                 key={key}
-                className="p-3.5 bg-[#FDF9F6] rounded-xl border border-[#003943]/15 flex items-center gap-3 cursor-pointer hover:border-[#00959C] transition-colors"
+                className="p-3.5 bg-[#FBF9F5] rounded-xl border border-[#102A43]/15 flex items-center gap-3 cursor-pointer hover:border-[#B85D19] transition-colors"
               >
                 <input
                   type="checkbox"
                   checked={checklist[key]}
                   onChange={() => handleToggleChecklist(key)}
-                  className="w-4 h-4 text-[#00959C] rounded accent-[#00959C]"
+                  className="w-4 h-4 text-[#B85D19] rounded accent-[#B85D19]"
                 />
-                <span className="font-semibold text-[#003943]">{label}</span>
+                <span className="font-semibold text-[#102A43]">{label}</span>
               </label>
             ))}
           </div>
         </div>
 
         {/* 3. TECHNICAL OBSERVATIONS & MPE TESTS */}
-        <div className="bg-white rounded-3xl p-6 border border-[#003943]/15 shadow-sm space-y-4">
-          <div className="flex items-center gap-2 pb-2 border-b border-[#003943]/10">
-            <Award className="w-5 h-5 text-[#00959C]" />
-            <h3 className="font-serif font-bold text-lg text-[#003943]">
+        <div className="bg-white rounded-3xl p-6 border border-[#102A43]/15 shadow-sm space-y-4">
+          <div className="flex items-center gap-2 pb-2 border-b border-[#102A43]/10">
+            <Award className="w-5 h-5 text-[#B85D19]" />
+            <h3 className="font-serif font-bold text-lg text-[#102A43]">
               2. Technical Observations & MPE Tolerances
             </h3>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-bold text-[#003943] mb-1.5">
+              <label className="block text-xs font-bold text-[#102A43] mb-1.5">
                 Visual Lead Seal Intactness
               </label>
               <select
                 value={sealIntact}
                 onChange={(e) => setSealIntact(e.target.value)}
-                className="w-full rounded-xl border border-[#003943]/20 text-xs font-semibold p-3 bg-[#FDF9F6] text-[#003943]"
+                className="w-full rounded-xl border border-[#102A43]/20 text-xs font-semibold p-3 bg-[#FBF9F5] text-[#102A43]"
               >
                 <option value="YES">YES — Intact & Unbroken</option>
                 <option value="NO">NO — Seal Broken or Tampered</option>
@@ -308,13 +308,13 @@ export const VerificationFormPage = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#003943] mb-1.5">
+              <label className="block text-xs font-bold text-[#102A43] mb-1.5">
                 MPE Error Test Outcome
               </label>
               <select
                 value={mpeCheck}
                 onChange={(e) => setMpeCheck(e.target.value)}
-                className="w-full rounded-xl border border-[#003943]/20 text-xs font-semibold p-3 bg-[#FDF9F6] text-[#003943]"
+                className="w-full rounded-xl border border-[#102A43]/20 text-xs font-semibold p-3 bg-[#FBF9F5] text-[#102A43]"
               >
                 <option value="PASSED">PASSED — Error Within MPE Limit</option>
                 <option value="FAILED">FAILED — Error Exceeds Tolerance</option>
@@ -322,13 +322,13 @@ export const VerificationFormPage = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-[#003943] mb-1.5">
+              <label className="block text-xs font-bold text-[#102A43] mb-1.5">
                 Zero Load Repeatability Test
               </label>
               <select
                 value={zeroLoadTest}
                 onChange={(e) => setZeroLoadTest(e.target.value)}
-                className="w-full rounded-xl border border-[#003943]/20 text-xs font-semibold p-3 bg-[#FDF9F6] text-[#003943]"
+                className="w-full rounded-xl border border-[#102A43]/20 text-xs font-semibold p-3 bg-[#FBF9F5] text-[#102A43]"
               >
                 <option value="PASSED">PASSED — Returns to Zero</option>
                 <option value="FAILED">FAILED — Hysteresis Error</option>
@@ -357,18 +357,18 @@ export const VerificationFormPage = () => {
         </div>
 
         {/* 4. INSPECTION EVIDENCE (PHOTO UPLOAD / CAMERA) */}
-        <div className="bg-white rounded-3xl p-6 border border-[#003943]/15 shadow-sm space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-[#003943]/10">
+        <div className="bg-white rounded-3xl p-6 border border-[#102A43]/15 shadow-sm space-y-4">
+          <div className="flex items-center justify-between pb-2 border-b border-[#102A43]/10">
             <div className="flex items-center gap-2">
-              <Camera className="w-5 h-5 text-[#00959C]" />
-              <h3 className="font-serif font-bold text-lg text-[#003943]">
+              <Camera className="w-5 h-5 text-[#B85D19]" />
+              <h3 className="font-serif font-bold text-lg text-[#102A43]">
                 3. Inspection Evidence Photographs
               </h3>
             </div>
-            <span className="text-xs font-bold text-[#00959C]">{photos.length} Captured</span>
+            <span className="text-xs font-bold text-[#B85D19]">{photos.length} Captured</span>
           </div>
 
-          <p className="text-xs text-[#003943]/70">
+          <p className="text-xs text-[#102A43]/70">
             Attach official photographs showing lead seal, instrument reading, or nameplate. Evidence is stored securely in private storage.
           </p>
 
@@ -378,8 +378,8 @@ export const VerificationFormPage = () => {
                 key={key}
                 className={`p-3 rounded-xl border text-xs font-bold cursor-pointer transition-all flex items-center gap-2.5 ${
                   photoCategory === key
-                    ? 'bg-[#003943] text-white border-[#003943]'
-                    : 'bg-[#FDF9F6] text-[#003943] border-[#003943]/15 hover:border-[#00959C]'
+                    ? 'bg-[#102A43] text-white border-[#102A43]'
+                    : 'bg-[#FBF9F5] text-[#102A43] border-[#102A43]/15 hover:border-[#B85D19]'
                 }`}
               >
                 <input
@@ -388,7 +388,7 @@ export const VerificationFormPage = () => {
                   value={key}
                   checked={photoCategory === key}
                   onChange={(e) => setPhotoCategory(e.target.value)}
-                  className="w-3.5 h-3.5 accent-[#02B7BF]"
+                  className="w-3.5 h-3.5 accent-[#C2672B]"
                 />
                 <span>{label}</span>
               </label>
@@ -397,10 +397,10 @@ export const VerificationFormPage = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {/* Upload File Button */}
-            <div className="border-2 border-dashed border-[#003943]/20 rounded-2xl p-5 bg-[#FDF9F6] text-center relative hover:border-[#00959C] transition-colors">
-              <UploadCloud className="w-7 h-7 text-[#00959C] mx-auto mb-1.5" />
-              <p className="text-xs font-bold text-[#003943]">Upload Evidence Image</p>
-              <p className="text-[10px] text-[#003943]/60 mt-0.5">Select photo file ({photoCategoryLabels[photoCategory]})</p>
+            <div className="border-2 border-dashed border-[#102A43]/20 rounded-2xl p-5 bg-[#FBF9F5] text-center relative hover:border-[#B85D19] transition-colors">
+              <UploadCloud className="w-7 h-7 text-[#B85D19] mx-auto mb-1.5" />
+              <p className="text-xs font-bold text-[#102A43]">Upload Evidence Image</p>
+              <p className="text-[10px] text-[#102A43]/60 mt-0.5">Select photo file ({photoCategoryLabels[photoCategory]})</p>
               <input
                 type="file"
                 accept="image/*"
@@ -411,10 +411,10 @@ export const VerificationFormPage = () => {
             </div>
 
             {/* Take Photo with Camera */}
-            <div className="border-2 border-dashed border-[#003943]/20 rounded-2xl p-5 bg-[#FDF9F6] text-center relative hover:border-[#00959C] transition-colors">
-              <Camera className="w-7 h-7 text-[#00959C] mx-auto mb-1.5" />
-              <p className="text-xs font-bold text-[#003943]">Take Photo (Camera)</p>
-              <p className="text-[10px] text-[#003943]/60 mt-0.5">Capture live image using device camera</p>
+            <div className="border-2 border-dashed border-[#102A43]/20 rounded-2xl p-5 bg-[#FBF9F5] text-center relative hover:border-[#B85D19] transition-colors">
+              <Camera className="w-7 h-7 text-[#B85D19] mx-auto mb-1.5" />
+              <p className="text-xs font-bold text-[#102A43]">Take Photo (Camera)</p>
+              <p className="text-[10px] text-[#102A43]/60 mt-0.5">Capture live image using device camera</p>
               <input
                 type="file"
                 accept="image/*"
@@ -431,7 +431,7 @@ export const VerificationFormPage = () => {
               {photos.map((item) => (
                 <div
                   key={item.id}
-                  className="rounded-xl overflow-hidden border border-[#003943]/15 bg-white shadow-2xs relative group"
+                  className="rounded-xl overflow-hidden border border-[#102A43]/15 bg-white shadow-2xs relative group"
                 >
                   <img
                     src={item.previewUrl}
@@ -439,11 +439,11 @@ export const VerificationFormPage = () => {
                     className="w-full h-28 object-cover"
                   />
                   <div className="p-2 text-xs">
-                    <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-[#E0F5F6] text-[#00959C] inline-block mb-1">
+                    <span className="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-[#FDF3EC] text-[#B85D19] inline-block mb-1">
                       {photoCategoryLabels[item.category] || item.category}
                     </span>
-                    <p className="font-semibold text-[#003943] truncate text-[11px]">{item.name}</p>
-                    <p className="text-[10px] text-[#003943]/50">{item.size}</p>
+                    <p className="font-semibold text-[#102A43] truncate text-[11px]">{item.name}</p>
+                    <p className="text-[10px] text-[#102A43]/50">{item.size}</p>
                   </div>
                   <button
                     type="button"
@@ -460,8 +460,8 @@ export const VerificationFormPage = () => {
         </div>
 
         {/* 5. OFFICER REMARKS */}
-        <div className="bg-white rounded-3xl p-6 border border-[#003943]/15 shadow-sm space-y-3">
-          <label className="block font-bold text-xs uppercase tracking-wider text-[#003943]/80">
+        <div className="bg-white rounded-3xl p-6 border border-[#102A43]/15 shadow-sm space-y-3">
+          <label className="block font-bold text-xs uppercase tracking-wider text-[#102A43]/80">
             Official Inspector Verification Remarks <span className="text-red-500">*</span>
           </label>
           <textarea
@@ -470,13 +470,13 @@ export const VerificationFormPage = () => {
             onChange={(e) => setInspectorNotes(e.target.value)}
             required
             placeholder="Enter technical findings, lead seal numbers affixed, deadweight IDs, or recommendations..."
-            className="w-full rounded-2xl border border-[#003943]/20 text-xs font-semibold text-[#003943] bg-[#FDF9F6] p-3.5 focus:outline-none focus:ring-2 focus:ring-[#00959C]"
+            className="w-full rounded-2xl border border-[#102A43]/20 text-xs font-semibold text-[#102A43] bg-[#FBF9F5] p-3.5 focus:outline-none focus:ring-2 focus:ring-[#B85D19]"
           />
         </div>
 
         {/* 6. FINAL OUTCOME DECISION */}
-        <div className="bg-white rounded-3xl p-6 border-2 border-[#003943]/20 shadow-md space-y-4">
-          <label className="block font-bold text-xs uppercase tracking-wider text-[#003943]/80">
+        <div className="bg-white rounded-3xl p-6 border-2 border-[#102A43]/20 shadow-md space-y-4">
+          <label className="block font-bold text-xs uppercase tracking-wider text-[#102A43]/80">
             Select Inspection Final Outcome Decision <span className="text-red-500">*</span>
           </label>
           <div className="grid grid-cols-2 gap-4">
@@ -489,13 +489,13 @@ export const VerificationFormPage = () => {
               className={`p-5 rounded-2xl border-2 text-center transition-all flex flex-col items-center gap-2 ${
                 resultOutcome === 'PASS'
                   ? 'border-emerald-600 bg-emerald-50 text-emerald-900 font-extrabold ring-2 ring-emerald-500/20 shadow-sm'
-                  : 'border-[#003943]/15 bg-white text-[#003943]/70 hover:bg-[#FDF9F6]'
+                  : 'border-[#102A43]/15 bg-white text-[#102A43]/70 hover:bg-[#FBF9F5]'
               }`}
             >
               <CheckCircle2 className="w-8 h-8 text-emerald-600" />
               <div>
                 <span className="text-base block font-bold">[ PASS / STAMP ]</span>
-                <span className="text-[11px] font-normal text-[#003943]/60 block mt-0.5">
+                <span className="text-[11px] font-normal text-[#102A43]/60 block mt-0.5">
                   Instrument satisfies statutory tolerances; submitted for LMD certificate generation
                 </span>
               </div>
@@ -507,13 +507,13 @@ export const VerificationFormPage = () => {
               className={`p-5 rounded-2xl border-2 text-center transition-all flex flex-col items-center gap-2 ${
                 resultOutcome === 'FAIL'
                   ? 'border-red-600 bg-red-50 text-red-900 font-extrabold ring-2 ring-red-500/20 shadow-sm'
-                  : 'border-[#003943]/15 bg-white text-[#003943]/70 hover:bg-[#FDF9F6]'
+                  : 'border-[#102A43]/15 bg-white text-[#102A43]/70 hover:bg-[#FBF9F5]'
               }`}
             >
               <XCircle className="w-8 h-8 text-red-600" />
               <div>
                 <span className="text-base block font-bold">[ FAIL / REJECT ]</span>
-                <span className="text-[11px] font-normal text-[#003943]/60 block mt-0.5">
+                <span className="text-[11px] font-normal text-[#102A43]/60 block mt-0.5">
                   Rejection notice issued; instrument requires rework, adjustment & re-verification
                 </span>
               </div>
@@ -579,7 +579,7 @@ export const VerificationFormPage = () => {
         </div>
 
         {uploadStatus && (
-          <p className="text-xs text-center font-bold text-[#00959C] animate-pulse">
+          <p className="text-xs text-center font-bold text-[#B85D19] animate-pulse">
             {uploadStatus}
           </p>
         )}

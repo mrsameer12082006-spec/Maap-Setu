@@ -133,7 +133,7 @@ export const MyApplicationsPage = () => {
         </div>
 
         <Link to="/business">
-          <Button variant="secondary" size="sm" icon={ArrowLeft} className="font-bold border-[#003943]/20 shadow-xs">
+          <Button variant="secondary" size="sm" icon={ArrowLeft} className="font-bold border-[#102A43]/20 shadow-xs">
             Back to Dashboard
           </Button>
         </Link>

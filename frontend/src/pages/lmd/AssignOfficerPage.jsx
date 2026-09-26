@@ -66,29 +66,29 @@ export const AssignOfficerPage = () => {
           />
 
           {currentApp && (
-            <div className="mt-4 p-5 bg-[#FDF9F6] rounded-2xl border border-[#003943]/15 text-xs space-y-3">
-              <div className="flex items-center justify-between border-b border-[#003943]/10 pb-2">
-                <span className="font-mono font-bold text-[#00959C]">{currentApp.id}</span>
+            <div className="mt-4 p-5 bg-[#FBF9F5] rounded-2xl border border-[#102A43]/15 text-xs space-y-3">
+              <div className="flex items-center justify-between border-b border-[#102A43]/10 pb-2">
+                <span className="font-mono font-bold text-[#B85D19]">{currentApp.id}</span>
                 <Badge status={currentApp.status}>{currentApp.status}</Badge>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white p-3.5 rounded-xl border border-[#003943]/10">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white p-3.5 rounded-xl border border-[#102A43]/10">
                 <div>
-                  <span className="text-[#003943]/60 text-[10px] font-bold block uppercase">Vendor Business Name</span>
-                  <p className="font-serif font-bold text-[#003943] text-sm">{currentApp.applicantName}</p>
+                  <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Vendor Business Name</span>
+                  <p className="font-serif font-bold text-[#102A43] text-sm">{currentApp.applicantName}</p>
                 </div>
                 <div>
-                  <span className="text-[#003943]/60 text-[10px] font-bold block uppercase">Machine / Instrument</span>
-                  <p className="font-bold text-[#003943]">{currentApp.instrumentName}</p>
+                  <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Machine / Instrument</span>
+                  <p className="font-bold text-[#102A43]">{currentApp.instrumentName}</p>
                 </div>
                 <div>
-                  <span className="text-[#003943]/60 text-[10px] font-bold block uppercase">Verification Type</span>
-                  <p className="font-semibold text-[#003943]">{currentApp.applicationType}</p>
+                  <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Verification Type</span>
+                  <p className="font-semibold text-[#102A43]">{currentApp.applicationType}</p>
                 </div>
                 <div>
-                  <span className="text-[#003943]/60 text-[10px] font-bold block uppercase">Installation Location</span>
-                  <p className="font-semibold text-[#003943] flex items-center gap-1">
-                    <MapPin className="w-3.5 h-3.5 text-[#00959C] shrink-0" /> {currentApp.inspectionLocation}
+                  <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Installation Location</span>
+                  <p className="font-semibold text-[#102A43] flex items-center gap-1">
+                    <MapPin className="w-3.5 h-3.5 text-[#B85D19] shrink-0" /> {currentApp.inspectionLocation}
                   </p>
                 </div>
               </div>
@@ -98,8 +98,8 @@ export const AssignOfficerPage = () => {
                   <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700 block">
                     Currently Assigned Verifier for Vendor
                   </span>
-                  <p className="font-serif font-bold text-[#003943] text-sm">{currentApp.assignedOfficerName}</p>
-                  <p className="text-[11px] text-[#003943]/70">
+                  <p className="font-serif font-bold text-[#102A43] text-sm">{currentApp.assignedOfficerName}</p>
+                  <p className="text-[11px] text-[#102A43]/70">
                     Scheduled Field Inspection: <span className="font-semibold">{currentApp.scheduledInspectionDate || 'Pending Date'}</span>
                   </p>
                 </div>

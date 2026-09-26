@@ -19,8 +19,8 @@ export const CertificateView = ({ certificate, showActions = true }) => {
       <div className="bg-primary text-white p-6 relative overflow-hidden">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative z-10">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
-              <ShieldCheck className="w-7 h-7 text-white" />
+            <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center border border-white/20 p-1 overflow-hidden shadow-xs shrink-0">
+              <img src="/maapsetu_icon.png" alt="MaapSetu Logo" className="w-full h-full object-contain" />
             </div>
             <div>
               <p className="text-xs text-primary-light uppercase tracking-wider font-semibold">Government of India</p>
@@ -136,8 +136,8 @@ export const CertificateView = ({ certificate, showActions = true }) => {
               <p className="text-[10px] text-neutral-600 mt-0.5">Cryptographically signed digital record</p>
             </div>
           </div>
-          <div className="text-right">
-            <Award className="w-10 h-10 text-primary opacity-80 inline-block mb-1" />
+          <div className="text-right flex flex-col items-end">
+            <img src="/maapsetu_icon.png" alt="Department Seal" className="w-10 h-10 object-contain inline-block mb-1 rounded-full border border-primary/20 bg-white p-0.5 shadow-xs" />
             <p className="text-[10px] text-neutral-600">Department Seal</p>
           </div>
         </div>

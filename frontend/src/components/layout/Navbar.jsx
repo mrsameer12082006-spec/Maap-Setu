@@ -22,28 +22,28 @@ export const Navbar = () => {
   };
 
   return (
-    <header className="bg-[#FDF9F6] text-[#003943] relative z-40 border-b border-[#003943]/10 shadow-sm">
+    <header className="bg-white text-slate-800 relative z-40 border-b border-slate-200">
       {/* Main Bar */}
-      <div className="w-full px-4 h-20 flex items-center justify-between gap-6">
+      <div className="w-full max-w-7xl mx-auto px-6 h-16 flex items-center justify-between gap-6">
         {/* Brand Logo */}
-        <Link to="/" className="flex items-center gap-3.5 group shrink-0">
-          <div className="w-11 h-11 rounded-2xl bg-[#003943] text-[#02B7BF] flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
-            <Scale className="w-6 h-6 text-[#02B7BF]" />
+        <Link to="/" className="flex items-center gap-3 group shrink-0">
+          <div className="w-9 h-9 rounded-md bg-white flex items-center justify-center border border-slate-200 overflow-hidden p-1">
+            <img src="/maapsetu_icon.png" alt="MaapSetu Logo" className="w-full h-full object-contain" />
           </div>
           <div className="flex items-baseline">
-            <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#003943] font-serif">Maap</span>
-            <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#00959C] font-serif italic">Setu</span>
+            <span className="text-xl font-bold tracking-tight text-[#0B315B]">Maap</span>
+            <span className="text-xl font-bold tracking-tight text-[#C87541] italic">Setu</span>
           </div>
         </Link>
 
         {/* Right Side Action Area */}
         <div className="flex items-center gap-3">
-          {/* User Profile Avatar Pill / Circle Button */}
+          {/* User Profile Avatar */}
           <div className="relative">
             <button
               type="button"
               onClick={() => setProfileOpen(!profileOpen)}
-              className="w-11 h-11 rounded-full bg-[#003943] hover:bg-[#002B33] text-white font-extrabold text-sm flex items-center justify-center shadow-md border-2 border-[#00959C]/40 transition-transform active:scale-95"
+              className="w-9 h-9 rounded-md bg-[#0B315B] hover:bg-blue-900 text-white font-semibold text-xs flex items-center justify-center transition-colors focus:ring-2 focus:ring-[#0B315B]/30"
               title="User Account Menu"
             >
               <span>{user ? getInitials(user.name) : 'VM'}</span>
@@ -51,10 +51,10 @@ export const Navbar = () => {
 
             {/* Profile Dropdown Menu */}
             {profileOpen && (
-              <div className="absolute top-full right-0 mt-3 w-64 bg-white border border-[#003943]/20 rounded-2xl shadow-2xl p-4 z-50 space-y-3 animate-in fade-in duration-150">
-                <div className="pb-3 border-b border-[#003943]/10 space-y-0.5">
-                  <p className="font-serif font-bold text-[#003943] text-sm">{user ? user.name : 'Vikramaditya Mehta'}</p>
-                  <span className="inline-block mt-1 px-2 py-0.5 rounded bg-[#E0F5F6] text-[#003943] text-[10px] font-bold uppercase">
+              <div className="absolute top-full right-0 mt-2 w-64 bg-white border border-slate-200 rounded-md shadow-lg p-4 z-50 space-y-3 animate-in fade-in duration-100 text-left">
+                <div className="pb-3 border-b border-slate-200 space-y-0.5">
+                  <p className="font-semibold text-slate-800 text-sm">{user ? user.name : 'Vikramaditya Mehta'}</p>
+                  <span className="inline-block mt-1 px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-[10px] font-medium uppercase tracking-wide">
                     {user ? user.roleTitle : 'Business Owner'}
                   </span>
                 </div>
@@ -64,27 +64,27 @@ export const Navbar = () => {
                     <Link
                       to="/lmd"
                       onClick={() => setProfileOpen(false)}
-                      className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-[#003943] hover:bg-[#E0F5F6] transition-colors"
+                      className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-[#102A43] hover:bg-[#FDF3EC] transition-colors"
                     >
-                      <User className="w-4 h-4 text-[#00959C]" />
+                      <User className="w-4 h-4 text-[#B85D19]" />
                       <span>LMD Admin Control</span>
                     </Link>
                   ) : user?.role === 'officer' ? (
                     <Link
                       to="/officer"
                       onClick={() => setProfileOpen(false)}
-                      className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-[#003943] hover:bg-[#E0F5F6] transition-colors"
+                      className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-[#102A43] hover:bg-[#FDF3EC] transition-colors"
                     >
-                      <User className="w-4 h-4 text-[#00959C]" />
+                      <User className="w-4 h-4 text-[#B85D19]" />
                       <span>LMO / GATC Inspection Queue</span>
                     </Link>
                   ) : (
                     <Link
                       to="/business"
                       onClick={() => setProfileOpen(false)}
-                      className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-[#003943] hover:bg-[#E0F5F6] transition-colors"
+                      className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-[#102A43] hover:bg-[#FDF3EC] transition-colors"
                     >
-                      <User className="w-4 h-4 text-[#00959C]" />
+                      <User className="w-4 h-4 text-[#B85D19]" />
                       <span>Business Dashboard</span>
                     </Link>
                   )}
@@ -92,9 +92,9 @@ export const Navbar = () => {
                   <Link
                     to="/"
                     onClick={() => setProfileOpen(false)}
-                    className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-[#003943] hover:bg-[#E0F5F6] transition-colors"
+                    className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-[#102A43] hover:bg-[#FDF3EC] transition-colors"
                   >
-                    <ArrowLeft className="w-4 h-4 text-[#00959C]" />
+                    <ArrowLeft className="w-4 h-4 text-[#B85D19]" />
                     <span>Return to Homepage</span>
                   </Link>
 
@@ -114,9 +114,9 @@ export const Navbar = () => {
           {/* Return to Homepage Button */}
           <Link
             to="/"
-            className="hidden sm:inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-[#003943] hover:bg-[#002B33] text-white border border-[#00959C]/40 font-bold text-xs sm:text-sm transition-all shadow-md shrink-0 group"
+            className="hidden sm:inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-[#102A43] hover:bg-[#0A1C2E] text-white border border-[#B85D19]/40 font-bold text-xs sm:text-sm transition-all shadow-md shrink-0 group"
           >
-            <ArrowLeft className="w-4 h-4 text-[#02B7BF] group-hover:-translate-x-1 transition-transform" />
+            <ArrowLeft className="w-4 h-4 text-[#C2672B] group-hover:-translate-x-1 transition-transform" />
             <span>Return to MaapSetu Homepage</span>
           </Link>
         </div>

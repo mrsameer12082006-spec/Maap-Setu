@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
-import { Scale, Building2, UserCheck, ShieldCheck, ArrowRight, Lock, Sparkles, ArrowUpRight, ChevronDown, CheckCircle2, UserPlus, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { Building2, UserCheck, ShieldCheck, CheckCircle2, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { useAuth, USER_ROLES } from '../../context/AuthContext';
 import { supabase } from '../../services/supabase';
 
@@ -138,168 +138,153 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="w-full min-h-[85vh] bg-[#FDF9F6] text-[#003943] flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-lg bg-white rounded-3xl p-8 sm:p-12 shadow-2xl border border-[#003943]/15 space-y-7 relative overflow-hidden">
-        {/* Top Decorative Accent Line */}
-        <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-[#003943] via-[#00959C] to-[#02B7BF]" />
-
-        {/* Card Header */}
-        <div className="text-center space-y-3">
-          <Link to="/" className="inline-flex items-center gap-3 group">
-            <div className="w-14 h-14 rounded-2xl bg-[#003943] text-[#02B7BF] flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-              <Scale className="w-8 h-8 text-[#02B7BF]" />
-            </div>
-            <div className="flex items-baseline text-left">
-              <span className="text-3xl font-extrabold tracking-tight text-[#003943] font-serif">Maap</span>
-              <span className="text-3xl font-extrabold tracking-tight text-[#00959C] font-serif italic">Setu</span>
+    <div className="w-full min-h-[85vh] bg-[#FBF9F5] text-[#102A43] flex items-center justify-center px-4 py-12">
+      <div className="w-full max-w-md bg-white rounded-2xl p-8 sm:p-10 border border-[#E5E0D6] shadow-sm space-y-6">
+        {/* Brand & Header */}
+        <div className="space-y-4">
+          <Link to="/" className="inline-flex items-center gap-2.5 group">
+            <img src="/maapsetu_icon.png" alt="MaapSetu Logo" className="w-9 h-9 object-contain rounded-lg border border-[#E5E0D6]" />
+            <div className="flex items-baseline">
+              <span className="text-xl font-bold tracking-tight text-[#102A43] font-serif">Maap</span>
+              <span className="text-xl font-bold tracking-tight text-[#B85D19] font-serif italic">Setu</span>
             </div>
           </Link>
 
-          <div className="pt-2">
-            <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#E0F5F6] border border-[#00959C]/30 text-[#00959C] text-xs font-bold uppercase tracking-wider">
-              {isSignUp ? <UserPlus className="w-3.5 h-3.5 text-[#00959C]" /> : <Lock className="w-3.5 h-3.5 text-[#00959C]" />}
-              <span>{isSignUp ? 'Business Account Registration' : 'Official Login Portal'}</span>
-            </span>
+          <div>
+            <h1 className="text-2xl font-bold text-[#102A43] tracking-tight">
+              {isSignUp ? 'Create an account' : 'Sign in to MaapSetu'}
+            </h1>
+            <p className="text-sm text-[#102A43]/70 mt-1">
+              {isSignUp
+                ? 'Register your business to submit verification applications.'
+                : 'Enter your credentials to access your dashboard.'}
+            </p>
           </div>
-
-          <h2 className="text-3xl sm:text-4xl font-serif font-bold text-[#003943] tracking-tight pt-1">
-            {isSignUp ? 'Create Business Account' : 'Portal Access'}
-          </h2>
-          <p className="text-xs sm:text-sm text-[#003943]/70 max-w-sm mx-auto">
-            {isSignUp
-              ? 'Register as an authorized instrument owner to submit verification applications.'
-              : 'Select your user role to enter the Legal Metrology Verification System.'}
-          </p>
         </div>
 
         {/* Role Selector Tabs (Visible during Sign In) */}
         {!isSignUp && (
-          <div className="space-y-3">
-            <label className="block text-xs font-bold uppercase tracking-wider text-[#003943]/70">
-              Select User Role
+          <div className="space-y-2">
+            <label className="block text-xs font-semibold text-[#102A43]/80">
+              Select Portal
             </label>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-1.5 p-1 bg-[#FBF9F5] border border-[#E5E0D6] rounded-xl">
               <button
                 type="button"
                 onClick={() => handleRoleSelect(USER_ROLES.BUSINESS)}
-                className={`p-4 rounded-2xl border text-center transition-all flex flex-col items-center gap-2 ${
+                className={`py-2 px-2.5 rounded-lg text-xs font-medium transition-all flex items-center justify-center gap-1.5 ${
                   selectedRole === USER_ROLES.BUSINESS
-                    ? 'border-[#00959C] bg-[#003943] text-white font-bold shadow-md ring-2 ring-[#00959C]/30'
-                    : 'border-[#003943]/15 bg-[#FDF9F6] text-[#003943] hover:border-[#00959C] hover:bg-white'
+                    ? 'bg-white text-[#102A43] font-semibold shadow-xs border border-[#E5E0D6]'
+                    : 'text-[#102A43]/70 hover:text-[#102A43]'
                 }`}
               >
-                <Building2 className={`w-6 h-6 ${selectedRole === USER_ROLES.BUSINESS ? 'text-[#02B7BF]' : 'text-[#00959C]'}`} />
-                <span className="text-xs sm:text-sm">Business</span>
+                <Building2 className="w-3.5 h-3.5 shrink-0 text-[#B85D19]" />
+                <span>Business</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleRoleSelect(USER_ROLES.LMD_ADMIN)}
-                className={`p-4 rounded-2xl border text-center transition-all flex flex-col items-center gap-2 ${
+                className={`py-2 px-2.5 rounded-lg text-xs font-medium transition-all flex items-center justify-center gap-1.5 ${
                   selectedRole === USER_ROLES.LMD_ADMIN
-                    ? 'border-[#00959C] bg-[#003943] text-white font-bold shadow-md ring-2 ring-[#00959C]/30'
-                    : 'border-[#003943]/15 bg-[#FDF9F6] text-[#003943] hover:border-[#00959C] hover:bg-white'
+                    ? 'bg-white text-[#102A43] font-semibold shadow-xs border border-[#E5E0D6]'
+                    : 'text-[#102A43]/70 hover:text-[#102A43]'
                 }`}
               >
-                <ShieldCheck className={`w-6 h-6 ${selectedRole === USER_ROLES.LMD_ADMIN ? 'text-[#02B7BF]' : 'text-[#00959C]'}`} />
-                <span className="text-xs sm:text-sm">LMD Admin</span>
+                <ShieldCheck className="w-3.5 h-3.5 shrink-0 text-[#B85D19]" />
+                <span>Admin</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => handleRoleSelect(USER_ROLES.OFFICER)}
-                className={`p-4 rounded-2xl border text-center transition-all flex flex-col items-center gap-2 ${
+                className={`py-2 px-2.5 rounded-lg text-xs font-medium transition-all flex items-center justify-center gap-1.5 ${
                   selectedRole === USER_ROLES.OFFICER
-                    ? 'border-[#00959C] bg-[#003943] text-white font-bold shadow-md ring-2 ring-[#00959C]/30'
-                    : 'border-[#003943]/15 bg-[#FDF9F6] text-[#003943] hover:border-[#00959C] hover:bg-white'
+                    ? 'bg-white text-[#102A43] font-semibold shadow-xs border border-[#E5E0D6]'
+                    : 'text-[#102A43]/70 hover:text-[#102A43]'
                 }`}
               >
-                <UserCheck className={`w-6 h-6 ${selectedRole === USER_ROLES.OFFICER ? 'text-[#02B7BF]' : 'text-[#00959C]'}`} />
-                <span className="text-xs sm:text-sm">LMO / GATC</span>
+                <UserCheck className="w-3.5 h-3.5 shrink-0 text-[#B85D19]" />
+                <span>Officer</span>
               </button>
             </div>
           </div>
         )}
 
-        {/* Success Alert Banners */}
+        {/* Success / Error Alerts */}
         {signUpSuccess && (
-          <div className="p-4 bg-emerald-50 border border-emerald-300 rounded-2xl text-emerald-800 text-xs sm:text-sm font-bold flex items-center gap-3 animate-in fade-in">
-            <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+          <div className="p-3.5 bg-emerald-50/70 border border-emerald-200 rounded-xl text-emerald-900 text-xs font-medium flex items-start gap-2.5">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
             <div>
-              <p>Business Account Registered Successfully!</p>
-              <p className="text-[11px] font-normal text-emerald-700 mt-0.5">
-                If a verification link was sent to your email, please confirm it, then sign in below.
-              </p>
+              <p className="font-semibold">Business account created</p>
+              <p className="text-emerald-700 mt-0.5">Please check your email to verify your address, then sign in.</p>
             </div>
           </div>
         )}
 
         {loginSuccess && (
-          <div className="p-4 bg-emerald-50 border border-emerald-300 rounded-2xl text-emerald-800 text-xs sm:text-sm font-bold flex items-center gap-3 animate-in fade-in">
-            <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-            <span>
-              Login Successful!
-            </span>
+          <div className="p-3 bg-emerald-50/70 border border-emerald-200 rounded-xl text-emerald-900 text-xs font-medium flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span>Login successful</span>
           </div>
         )}
 
         {errorMsg && (
-          <div className="p-4 bg-red-50 border border-red-300 rounded-2xl text-red-800 text-xs sm:text-sm font-bold flex items-center gap-3 animate-in fade-in">
-            <AlertCircle className="w-5 h-5 text-red-600 shrink-0" />
+          <div className="p-3 bg-red-50/70 border border-red-200 rounded-xl text-red-900 text-xs font-medium flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
             <span>{errorMsg}</span>
           </div>
         )}
 
-        {/* FORM SECTION */}
+        {/* Form */}
         {isSignUp ? (
-          /* BUSINESS SIGN UP FORM */
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1">
-              <label className="block text-xs font-bold uppercase tracking-wider text-[#003943]/80">
-                Full Name / Authorized Person <span className="text-red-500">*</span>
+              <label className="block text-xs font-medium text-[#102A43]">
+                Full Name / Authorized Person
               </label>
               <input
                 type="text"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                placeholder="e.g. Vikramaditya Mehta"
+                placeholder="Vikramaditya Mehta"
                 required
-                className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-sm font-semibold text-[#003943] focus:outline-none focus:border-[#00959C] focus:ring-2 focus:ring-[#00959C]/20 transition-all"
+                className="w-full bg-white border border-[#D5D0C5] rounded-lg px-3.5 py-2.5 text-sm text-[#102A43] focus:outline-none focus:border-[#B85D19] focus:ring-1 focus:ring-[#B85D19]"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="block text-xs font-bold uppercase tracking-wider text-[#003943]/80">
-                Email <span className="text-red-500">*</span>
+              <label className="block text-xs font-medium text-[#102A43]">
+                Email
               </label>
               <input
                 type="email"
                 value={signUpEmail}
                 onChange={(e) => setSignUpEmail(e.target.value)}
-                placeholder="e.g. v.mehta@apexlogistics.in"
+                placeholder="name@company.com"
                 required
-                className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-sm font-semibold text-[#003943] focus:outline-none focus:border-[#00959C] focus:ring-2 focus:ring-[#00959C]/20 transition-all"
+                className="w-full bg-white border border-[#D5D0C5] rounded-lg px-3.5 py-2.5 text-sm text-[#102A43] focus:outline-none focus:border-[#B85D19] focus:ring-1 focus:ring-[#B85D19]"
               />
             </div>
 
             <div className="space-y-1">
-              <label className="block text-xs font-bold uppercase tracking-wider text-[#003943]/80">
-                Mobile Number <span className="text-red-500">*</span>
+              <label className="block text-xs font-medium text-[#102A43]">
+                Mobile Number
               </label>
               <input
                 type="tel"
                 value={mobileNumber}
                 onChange={(e) => setMobileNumber(e.target.value)}
-                placeholder="e.g. +91 98765 43210"
+                placeholder="+91 98765 43210"
                 required
-                className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-sm font-semibold text-[#003943] focus:outline-none focus:border-[#00959C] focus:ring-2 focus:ring-[#00959C]/20 transition-all"
+                className="w-full bg-white border border-[#D5D0C5] rounded-lg px-3.5 py-2.5 text-sm text-[#102A43] focus:outline-none focus:border-[#B85D19] focus:ring-1 focus:ring-[#B85D19]"
               />
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1">
-                <label className="block text-xs font-bold uppercase tracking-wider text-[#003943]/80">
-                  Password <span className="text-red-500">*</span>
+                <label className="block text-xs font-medium text-[#102A43]">
+                  Password
                 </label>
                 <div className="relative">
                   <input
@@ -307,22 +292,22 @@ export const LoginPage = () => {
                     value={signUpPassword}
                     onChange={(e) => setSignUpPassword(e.target.value)}
                     required
-                    className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 pr-12 text-sm font-mono font-bold text-[#003943] focus:outline-none focus:border-[#00959C] focus:ring-2 focus:ring-[#00959C]/20 transition-all"
+                    className="w-full bg-white border border-[#D5D0C5] rounded-lg px-3.5 py-2.5 pr-10 text-sm text-[#102A43] focus:outline-none focus:border-[#B85D19] focus:ring-1 focus:ring-[#B85D19]"
                   />
                   <button
                     type="button"
                     onClick={() => setShowSignUpPassword(!showSignUpPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#003943]/60 hover:text-[#003943] focus:outline-none p-1 rounded-md"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#102A43]/50 hover:text-[#102A43] p-1"
                     aria-label={showSignUpPassword ? "Hide password" : "Show password"}
                   >
-                    {showSignUpPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    {showSignUpPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
 
               <div className="space-y-1">
-                <label className="block text-xs font-bold uppercase tracking-wider text-[#003943]/80">
-                  Confirm Password <span className="text-red-500">*</span>
+                <label className="block text-xs font-medium text-[#102A43]">
+                  Confirm Password
                 </label>
                 <div className="relative">
                   <input
@@ -330,15 +315,15 @@ export const LoginPage = () => {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
-                    className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 pr-12 text-sm font-mono font-bold text-[#003943] focus:outline-none focus:border-[#00959C] focus:ring-2 focus:ring-[#00959C]/20 transition-all"
+                    className="w-full bg-white border border-[#D5D0C5] rounded-lg px-3.5 py-2.5 pr-10 text-sm text-[#102A43] focus:outline-none focus:border-[#B85D19] focus:ring-1 focus:ring-[#B85D19]"
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#003943]/60 hover:text-[#003943] focus:outline-none p-1 rounded-md"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#102A43]/50 hover:text-[#102A43] p-1"
                     aria-label={showConfirmPassword ? "Hide password" : "Show password"}
                   >
-                    {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
@@ -347,16 +332,12 @@ export const LoginPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-4 rounded-full bg-[#003943] hover:bg-[#002B33] text-white font-extrabold text-base sm:text-lg transition-all shadow-lg flex items-center justify-center gap-3 group mt-2"
+              className="w-full py-2.5 min-h-[44px] rounded-md bg-[#0B315B] hover:bg-blue-900 text-white font-medium text-sm transition-colors flex items-center justify-center gap-2 mt-2"
             >
-              <span>{loading ? 'Creating Account...' : 'Create Business Account'}</span>
-              <div className="w-7 h-7 rounded-full bg-[#02B7BF] text-[#003943] flex items-center justify-center group-hover:translate-x-1 transition-transform">
-                <ArrowUpRight className="w-4 h-4" />
-              </div>
+              <span>{loading ? 'Creating account...' : 'Create account'}</span>
             </button>
 
-            {/* Back to Sign In Link */}
-            <p className="text-center text-xs sm:text-sm text-[#003943]/70 font-medium pt-2">
+            <p className="text-center text-xs text-slate-500 pt-1">
               Already have an account?{' '}
               <button
                 type="button"
@@ -366,24 +347,22 @@ export const LoginPage = () => {
                   setSignUpSuccess(false);
                   setErrorMsg('');
                 }}
-                className="text-[#00959C] font-bold hover:underline"
+                className="text-[#C87541] font-semibold hover:underline"
               >
-                Sign In
+                Sign in
               </button>
             </p>
           </form>
         ) : (
-          /* REGULAR PORTAL LOGIN FORM */
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-1.5">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-1">
               <div className="flex items-center justify-between">
-                <label className="block text-xs font-bold uppercase tracking-wider text-[#003943]/80">
+                <label className="block text-xs font-medium text-slate-700">
                   {selectedRole === USER_ROLES.BUSINESS
-                    ? 'Email / Mobile Number'
+                    ? 'Email or mobile'
                     : selectedRole === USER_ROLES.LMD_ADMIN
-                    ? 'Government Email / Employee ID'
-                    : 'Official Email / Officer ID'}{' '}
-                  <span className="text-red-500">*</span>
+                    ? 'Department email or Employee ID'
+                    : 'Officer email or ID'}
                 </label>
                 {selectedRole === USER_ROLES.BUSINESS && (
                   <button
@@ -392,9 +371,9 @@ export const LoginPage = () => {
                       setUsername('business.demo@maapsetu.demo');
                       setPassword('MaapSetu@2026');
                     }}
-                    className="text-[11px] font-bold text-[#00959C] hover:underline"
+                    className="text-xs text-[#C87541] hover:underline font-medium"
                   >
-                    Use Demo Account
+                    Demo account
                   </button>
                 )}
               </div>
@@ -404,19 +383,19 @@ export const LoginPage = () => {
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder={
                   selectedRole === USER_ROLES.BUSINESS
-                    ? 'e.g. v.mehta@apexlogistics.in or +91 98765 43210'
+                    ? 'name@company.com'
                     : selectedRole === USER_ROLES.LMD_ADMIN
-                    ? 'e.g. admin.ngp@maapsetu.gov.in or EMP-LMD-9041'
-                    : 'e.g. r.sharma.lmo@maapsetu.gov.in or OFFICER-NGP-442'
+                    ? 'admin@maapsetu.gov.in'
+                    : 'officer@maapsetu.gov.in'
                 }
                 required
-                className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 text-sm font-semibold text-[#003943] focus:outline-none focus:border-[#00959C] focus:ring-2 focus:ring-[#00959C]/20 transition-all"
+                className="w-full bg-white border border-slate-300 rounded-md px-3.5 py-2.5 min-h-[44px] text-sm text-slate-800 focus:outline-none focus:border-[#C87541] focus:ring-1 focus:ring-[#C87541]"
               />
             </div>
 
-            <div className="space-y-1.5">
-              <label className="block text-xs font-bold uppercase tracking-wider text-[#003943]/80">
-                Password <span className="text-red-500">*</span>
+            <div className="space-y-1">
+              <label className="block text-xs font-medium text-slate-700">
+                Password
               </label>
               <div className="relative">
                 <input
@@ -424,15 +403,15 @@ export const LoginPage = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-4 py-3 pr-12 text-sm font-mono font-bold text-[#003943] focus:outline-none focus:border-[#00959C] focus:ring-2 focus:ring-[#00959C]/20 transition-all"
+                  className="w-full bg-white border border-slate-300 rounded-md px-3.5 py-2.5 min-h-[44px] pr-10 text-sm text-slate-800 focus:outline-none focus:border-[#C87541] focus:ring-1 focus:ring-[#C87541]"
                 />
                 <button
                   type="button"
                   onClick={() => setShowLoginPassword(!showLoginPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#003943]/60 hover:text-[#003943] focus:outline-none p-1 rounded-md"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 p-1"
                   aria-label={showLoginPassword ? "Hide password" : "Show password"}
                 >
-                  {showLoginPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  {showLoginPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
             </div>
@@ -440,18 +419,14 @@ export const LoginPage = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-4 rounded-full bg-[#003943] hover:bg-[#002B33] text-white font-extrabold text-base sm:text-lg transition-all shadow-lg flex items-center justify-center gap-3 group"
+              className="w-full py-2.5 min-h-[44px] rounded-md bg-[#0B315B] hover:bg-blue-900 text-white font-medium text-sm transition-colors flex items-center justify-center gap-2 mt-2"
             >
-              <span>{loading ? 'Authenticating...' : 'Enter the Portal'}</span>
-              <div className="w-7 h-7 rounded-full bg-[#02B7BF] text-[#003943] flex items-center justify-center group-hover:translate-x-1 transition-transform">
-                <ArrowUpRight className="w-4 h-4" />
-              </div>
+              <span>{loading ? 'Signing in...' : 'Sign in'}</span>
             </button>
 
-            {/* ROLE SPECIFIC FOOTER GUIDANCE TEXT */}
-            <div className="pt-2">
+            <div className="pt-1">
               {selectedRole === USER_ROLES.BUSINESS && (
-                <p className="text-center text-xs sm:text-sm text-[#003943]/70 font-medium">
+                <p className="text-center text-xs text-[#102A43]/70">
                   Don't have an account?{' '}
                   <button
                     type="button"
@@ -461,22 +436,16 @@ export const LoginPage = () => {
                       setSignUpSuccess(false);
                       setErrorMsg('');
                     }}
-                    className="text-[#00959C] font-bold hover:underline"
+                    className="text-[#B85D19] font-semibold hover:underline"
                   >
-                    Sign Up
+                    Sign up
                   </button>
                 </p>
               )}
 
-              {selectedRole === USER_ROLES.LMD_ADMIN && (
-                <p className="text-center text-xs sm:text-sm text-[#003943]/70 font-medium">
-                  Need access? <span className="font-bold text-[#003943]">Contact your department administrator.</span>
-                </p>
-              )}
-
-              {selectedRole === USER_ROLES.OFFICER && (
-                <p className="text-center text-xs sm:text-sm text-[#003943]/70 font-medium">
-                  Need access? <span className="font-bold text-[#003943]">Contact LMD Administrator.</span>
+              {selectedRole !== USER_ROLES.BUSINESS && (
+                <p className="text-center text-xs text-[#102A43]/60">
+                  Authorized personnel only. Contact department admin for credential issues.
                 </p>
               )}
             </div>

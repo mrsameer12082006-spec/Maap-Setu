@@ -4,28 +4,27 @@ export const Badge = ({ children, status = 'default', className = '' }) => {
   const statusLower = String(status || children || '').toLowerCase();
 
   let label = 'In Progress';
-  let colorClasses = 'bg-cyan-100 text-cyan-900 border-cyan-300';
+  let colorClasses = 'bg-blue-50 text-blue-800 border-blue-200';
 
   if (['pass', 'passed', 'valid', 'verified', 'approved', 'active'].includes(statusLower)) {
     label = 'Passed';
-    colorClasses = 'bg-emerald-100 text-emerald-800 border-emerald-300';
+    colorClasses = 'bg-emerald-50 text-emerald-800 border-emerald-200';
   } else if (['fail', 'failed', 'rejected', 'expired', 'danger'].includes(statusLower)) {
     label = 'Failed';
-    colorClasses = 'bg-red-100 text-red-800 border-red-300';
+    colorClasses = 'bg-red-50 text-red-800 border-red-200';
   } else if (
     ['submitted', 'under_review', 'assigned', 'in_progress', 'processing', 'pending', 'default'].includes(statusLower)
   ) {
     label = 'In Progress';
-    colorClasses = 'bg-cyan-100 text-cyan-900 border-cyan-300';
+    colorClasses = 'bg-blue-50 text-blue-800 border-blue-200';
   } else {
     // Custom non-status badge (e.g., role tags)
     label = typeof children === 'string' ? children : String(status);
-    colorClasses = 'bg-neutral-100 text-neutral-900 border-neutral-300';
+    colorClasses = 'bg-slate-100 text-slate-800 border-slate-200';
   }
 
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold border ${colorClasses} ${className}`}>
-      <span className="w-1.5 h-1.5 rounded-full bg-current mr-1.5 shrink-0" />
+    <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border ${colorClasses} ${className}`}>
       {label}
     </span>
   );

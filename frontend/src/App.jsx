@@ -37,10 +37,10 @@ const ProtectedRoute = ({ children, allowedRole }) => {
   
   if (loading || (session && !currentRole)) {
     return (
-      <div className="min-h-[60vh] flex items-center justify-center bg-[#FDF9F6]">
+      <div className="min-h-[60vh] flex items-center justify-center bg-[#FBF9F5]">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-8 h-8 border-4 border-[#00959C] border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-sm font-semibold text-[#003943]">Loading your portal...</p>
+          <div className="w-8 h-8 border-4 border-[#B85D19] border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-sm font-semibold text-[#102A43]">Loading your portal...</p>
         </div>
       </div>
     );

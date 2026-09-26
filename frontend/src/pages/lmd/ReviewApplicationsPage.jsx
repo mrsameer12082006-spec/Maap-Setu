@@ -244,8 +244,8 @@ export const ReviewApplicationsPage = () => {
               }}
               className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-2 ${
                 isActive
-                  ? 'bg-[#003943] text-white shadow-sm'
-                  : 'bg-white border border-[#003943]/15 text-[#003943]/80 hover:bg-[#003943]/5'
+                  ? 'bg-[#102A43] text-white shadow-sm'
+                  : 'bg-white border border-[#102A43]/15 text-[#102A43]/80 hover:bg-[#102A43]/5'
               }`}
             >
               <span>{tab.label}</span>
@@ -376,106 +376,106 @@ export const ReviewApplicationsPage = () => {
             </div>
 
             {/* Full Machine Specifications & Legal Application Record */}
-            <div className="p-4 bg-[#FDF9F6] rounded-2xl border border-[#003943]/15 space-y-4 text-xs">
-              <div className="flex items-center justify-between border-b border-[#003943]/10 pb-2">
+            <div className="p-4 bg-[#FBF9F5] rounded-2xl border border-[#102A43]/15 space-y-4 text-xs">
+              <div className="flex items-center justify-between border-b border-[#102A43]/10 pb-2">
                 <div>
-                  <span className="font-mono font-bold text-[#00959C]">{selectedApp.id}</span>
-                  <h4 className="font-serif font-bold text-[#003943] text-sm mt-0.5">{selectedApp.instrumentName}</h4>
+                  <span className="font-mono font-bold text-[#B85D19]">{selectedApp.id}</span>
+                  <h4 className="font-serif font-bold text-[#102A43] text-sm mt-0.5">{selectedApp.instrumentName}</h4>
                 </div>
-                <span className="px-2.5 py-1 rounded-full bg-[#E0F5F6] text-[#003943] font-bold text-[10px] uppercase">
+                <span className="px-2.5 py-1 rounded-full bg-[#FDF3EC] text-[#102A43] font-bold text-[10px] uppercase">
                   {selectedApp.applicationType}
                 </span>
               </div>
 
               {/* 1. Technical Specifications */}
               <div className="space-y-1.5">
-                <p className="font-bold uppercase text-[10px] tracking-wider text-[#00959C]">
+                <p className="font-bold uppercase text-[10px] tracking-wider text-[#B85D19]">
                   1. Technical Specifications
                 </p>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 bg-white p-3 rounded-xl border border-[#003943]/10">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 bg-white p-3 rounded-xl border border-[#102A43]/10">
                   <div>
-                    <span className="text-[#003943]/60 text-[10px] font-bold block uppercase">Manufacturer</span>
-                    <span className="font-semibold text-[#003943]">{selectedApp.instrument?.manufacturer || 'N/A'}</span>
+                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Manufacturer</span>
+                    <span className="font-semibold text-[#102A43]">{selectedApp.instrument?.manufacturer || 'N/A'}</span>
                   </div>
                   <div>
-                    <span className="text-[#003943]/60 text-[10px] font-bold block uppercase">Model Designation</span>
-                    <span className="font-semibold text-[#003943]">{selectedApp.instrument?.model || 'N/A'}</span>
+                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Model Designation</span>
+                    <span className="font-semibold text-[#102A43]">{selectedApp.instrument?.model || 'N/A'}</span>
                   </div>
                   <div>
-                    <span className="text-[#003943]/60 text-[10px] font-bold block uppercase">Serial Number</span>
-                    <span className="font-mono font-bold text-[#00959C]">{selectedApp.instrument?.serialNumber || 'N/A'}</span>
+                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Serial Number</span>
+                    <span className="font-mono font-bold text-[#B85D19]">{selectedApp.instrument?.serialNumber || 'N/A'}</span>
                   </div>
                   <div>
-                    <span className="text-[#003943]/60 text-[10px] font-bold block uppercase">Max Capacity</span>
-                    <span className="font-semibold text-[#003943]">{selectedApp.instrument?.maxCapacity || 'N/A'}</span>
+                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Max Capacity</span>
+                    <span className="font-semibold text-[#102A43]">{selectedApp.instrument?.maxCapacity || 'N/A'}</span>
                   </div>
                   <div>
-                    <span className="text-[#003943]/60 text-[10px] font-bold block uppercase">Min Capacity</span>
-                    <span className="font-semibold text-[#003943]">{selectedApp.instrument?.minCapacity || 'N/A'}</span>
+                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Min Capacity</span>
+                    <span className="font-semibold text-[#102A43]">{selectedApp.instrument?.minCapacity || 'N/A'}</span>
                   </div>
                   <div>
-                    <span className="text-[#003943]/60 text-[10px] font-bold block uppercase">Accuracy Class</span>
-                    <span className="font-semibold text-[#003943]">{selectedApp.instrument?.accuracyClass || 'N/A'}</span>
+                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Accuracy Class</span>
+                    <span className="font-semibold text-[#102A43]">{selectedApp.instrument?.accuracyClass || 'N/A'}</span>
                   </div>
                   <div>
-                    <span className="text-[#003943]/60 text-[10px] font-bold block uppercase">Scale Interval (e)</span>
-                    <span className="font-semibold text-[#003943]">{selectedApp.instrument?.scaleInterval || 'N/A'}</span>
+                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Scale Interval (e)</span>
+                    <span className="font-semibold text-[#102A43]">{selectedApp.instrument?.scaleInterval || 'N/A'}</span>
                   </div>
                   <div>
-                    <span className="text-[#003943]/60 text-[10px] font-bold block uppercase">Unit of Measure</span>
-                    <span className="font-semibold text-[#003943]">{selectedApp.instrument?.unitOfMeasurement || 'N/A'}</span>
+                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Unit of Measure</span>
+                    <span className="font-semibold text-[#102A43]">{selectedApp.instrument?.unitOfMeasurement || 'N/A'}</span>
                   </div>
                   <div>
-                    <span className="text-[#003943]/60 text-[10px] font-bold block uppercase">Quantity</span>
-                    <span className="font-semibold text-[#003943]">{selectedApp.instrument?.quantity || '1 Unit'}</span>
+                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Quantity</span>
+                    <span className="font-semibold text-[#102A43]">{selectedApp.instrument?.quantity || '1 Unit'}</span>
                   </div>
                 </div>
               </div>
 
               {/* 2. Premises & Installation Location */}
               <div className="space-y-1.5">
-                <p className="font-bold uppercase text-[10px] tracking-wider text-[#00959C]">
+                <p className="font-bold uppercase text-[10px] tracking-wider text-[#B85D19]">
                   2. Premises & Installation Details
                 </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 bg-white p-3 rounded-xl border border-[#003943]/10">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 bg-white p-3 rounded-xl border border-[#102A43]/10">
                   <div>
-                    <span className="text-[#003943]/60 text-[10px] font-bold block uppercase">Business / Premises</span>
-                    <span className="font-semibold text-[#003943]">{selectedApp.applicantName}</span>
+                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Business / Premises</span>
+                    <span className="font-semibold text-[#102A43]">{selectedApp.applicantName}</span>
                   </div>
                   <div>
-                    <span className="text-[#003943]/60 text-[10px] font-bold block uppercase">Installation Address</span>
-                    <span className="font-semibold text-[#003943]">{selectedApp.inspectionLocation}</span>
+                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Installation Address</span>
+                    <span className="font-semibold text-[#102A43]">{selectedApp.inspectionLocation}</span>
                   </div>
                 </div>
               </div>
 
               {/* 3. Legal Approval & Verification Details */}
               <div className="space-y-1.5">
-                <p className="font-bold uppercase text-[10px] tracking-wider text-[#00959C]">
+                <p className="font-bold uppercase text-[10px] tracking-wider text-[#B85D19]">
                   3. Legal Approval & Certificate Details
                 </p>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 bg-white p-3 rounded-xl border border-[#003943]/10">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 bg-white p-3 rounded-xl border border-[#102A43]/10">
                   <div>
-                    <span className="text-[#003943]/60 text-[10px] font-bold block uppercase">Verification Type</span>
-                    <span className="font-semibold text-[#003943]">{selectedApp.applicationType}</span>
+                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Verification Type</span>
+                    <span className="font-semibold text-[#102A43]">{selectedApp.applicationType}</span>
                   </div>
                   <div>
-                    <span className="text-[#003943]/60 text-[10px] font-bold block uppercase">Model Approval No</span>
-                    <span className="font-mono font-bold text-[#003943]">IND/09/2021/442</span>
+                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Model Approval No</span>
+                    <span className="font-mono font-bold text-[#102A43]">IND/09/2021/442</span>
                   </div>
                   {selectedApp.applicationType?.toLowerCase().includes('re-verification') && (
                     <div>
-                      <span className="text-[#003943]/60 text-[10px] font-bold block uppercase">Previous Cert No</span>
-                      <span className="font-mono font-bold text-[#003943]">CERT-2025-8891</span>
+                      <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Previous Cert No</span>
+                      <span className="font-mono font-bold text-[#102A43]">CERT-2025-8891</span>
                     </div>
                   )}
                 </div>
               </div>
 
               {/* 4. LMO Field Inspection Result & Technical Report */}
-              <div className="space-y-2 pt-2 border-t border-[#003943]/15">
+              <div className="space-y-2 pt-2 border-t border-[#102A43]/15">
                 <div className="flex items-center justify-between">
-                  <p className="font-bold uppercase text-[11px] tracking-wider text-[#00959C]">
+                  <p className="font-bold uppercase text-[11px] tracking-wider text-[#B85D19]">
                     4. LMO Field Inspection Result & Technical Report
                   </p>
                   {selectedApp.status === 'passed' && (
@@ -495,24 +495,24 @@ export const ReviewApplicationsPage = () => {
                   )}
                 </div>
 
-                <div className="p-4 bg-white rounded-2xl border border-[#003943]/15 space-y-3 text-xs">
-                  <div className="flex justify-between items-center bg-[#FDF9F6] p-3 rounded-xl border border-[#003943]/10">
+                <div className="p-4 bg-white rounded-2xl border border-[#102A43]/15 space-y-3 text-xs">
+                  <div className="flex justify-between items-center bg-[#FBF9F5] p-3 rounded-xl border border-[#102A43]/10">
                     <div>
-                      <span className="text-[#003943]/60 text-[10px] font-bold block uppercase">Assigned Inspection Officer</span>
-                      <span className="font-bold text-[#003943] text-sm">
+                      <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Assigned Inspection Officer</span>
+                      <span className="font-bold text-[#102A43] text-sm">
                         {selectedApp.assignedOfficerName || 'Inspector Rajesh V. Sharma (LMO Nagpur Zone)'}
                       </span>
                     </div>
                     <div className="text-right">
-                      <span className="text-[#003943]/60 text-[10px] font-bold block uppercase">Scheduled / Inspection Date</span>
-                      <span className="font-mono font-bold text-[#003943]">
+                      <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Scheduled / Inspection Date</span>
+                      <span className="font-mono font-bold text-[#102A43]">
                         {selectedApp.scheduledInspectionDate || '28 Aug 2026'}
                       </span>
                     </div>
                   </div>
 
                   <div>
-                    <span className="text-[#003943]/60 text-[10px] font-bold block uppercase mb-1">
+                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase mb-1">
                       Physical Inspection Checklist (Verified on Site)
                     </span>
                     <div className="grid grid-cols-2 gap-2 text-xs">
@@ -524,7 +524,7 @@ export const ReviewApplicationsPage = () => {
                   </div>
 
                   <div>
-                    <span className="text-[#003943]/60 text-[10px] font-bold block uppercase mb-1">
+                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase mb-1">
                       Technical Verification & Rule MPE Test Results
                     </span>
                     <DynamicTechnicalVerification
@@ -537,8 +537,8 @@ export const ReviewApplicationsPage = () => {
                   </div>
 
                   <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
-                    <span className="text-[#003943]/60 text-[10px] font-bold block uppercase">Officer Remarks & Observations</span>
-                    <p className="font-semibold text-[#003943] text-xs mt-1">
+                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Officer Remarks & Observations</span>
+                    <p className="font-semibold text-[#102A43] text-xs mt-1">
                       "{selectedApp.observations || 'All physical inspection criteria passed. Lead seal affixed & QR code digital stamp generated.'}"
                     </p>
                   </div>
@@ -554,17 +554,17 @@ export const ReviewApplicationsPage = () => {
 
             {selectedApp.applicationType?.toLowerCase().includes('re-verification') && (
               <div>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-[#003943]/80 border-b pb-1 mb-2">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-[#102A43]/80 border-b pb-1 mb-2">
                   Attached Document (1)
                 </h4>
-                <div className="p-3 bg-white rounded-xl border border-[#003943]/15 flex items-center justify-between text-xs shadow-xs">
-                  <span className="font-bold text-[#003943] flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-[#00959C]" /> Previous_Verification_Certificate_2025.pdf
+                <div className="p-3 bg-white rounded-xl border border-[#102A43]/15 flex items-center justify-between text-xs shadow-xs">
+                  <span className="font-bold text-[#102A43] flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-[#B85D19]" /> Previous_Verification_Certificate_2025.pdf
                   </span>
                   <button
                     type="button"
                     onClick={() => alert('Previewing Previous_Verification_Certificate_2025.pdf')}
-                    className="text-xs text-[#00959C] font-bold hover:underline"
+                    className="text-xs text-[#B85D19] font-bold hover:underline"
                   >
                     Preview File
                   </button>
@@ -662,15 +662,15 @@ export const ReviewApplicationsPage = () => {
           title={`Verifier Assignment: ${assignModalApp.id}`}
           maxWidth="max-w-2xl"
         >
-          <div className="space-y-5 text-[#003943]">
+          <div className="space-y-5 text-[#102A43]">
             {/* Header info */}
-            <div className="p-3.5 bg-[#FDF9F6] rounded-2xl border border-[#003943]/15 text-xs space-y-1">
+            <div className="p-3.5 bg-[#FBF9F5] rounded-2xl border border-[#102A43]/15 text-xs space-y-1">
               <div className="flex justify-between items-center">
-                <span className="font-mono font-bold text-[#00959C]">{assignModalApp.id}</span>
+                <span className="font-mono font-bold text-[#B85D19]">{assignModalApp.id}</span>
                 <Badge status={assignModalApp.status}>{assignModalApp.status}</Badge>
               </div>
-              <p className="font-serif font-bold text-[#003943] text-sm">{assignModalApp.instrumentName}</p>
-              <p className="text-[#003943]/70 font-medium">Applicant Vendor: {assignModalApp.applicantName}</p>
+              <p className="font-serif font-bold text-[#102A43] text-sm">{assignModalApp.instrumentName}</p>
+              <p className="text-[#102A43]/70 font-medium">Applicant Vendor: {assignModalApp.applicantName}</p>
             </div>
 
             {/* Currently Assigned Officer Details (Name, Date, Rating) */}
@@ -681,16 +681,16 @@ export const ReviewApplicationsPage = () => {
                 </span>
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="font-serif font-bold text-[#003943] text-base">{assignModalApp.assignedOfficerName}</h4>
-                    <p className="text-xs text-[#00959C] font-semibold">State LMO Officer</p>
+                    <h4 className="font-serif font-bold text-[#102A43] text-base">{assignModalApp.assignedOfficerName}</h4>
+                    <p className="text-xs text-[#B85D19] font-semibold">State LMO Officer</p>
                   </div>
                   <span className="text-xs font-extrabold text-emerald-800 bg-white px-3 py-1 rounded-full border border-emerald-300 shadow-xs">
                     ★ 4.9 Rating
                   </span>
                 </div>
                 <div className="pt-2 border-t border-emerald-200/80 flex items-center justify-between text-xs">
-                  <span className="text-[#003943]/70 font-medium">Scheduled Inspection Date:</span>
-                  <span className="font-mono font-bold text-[#003943]">{assignModalApp.scheduledInspectionDate || '28 Aug 2026'}</span>
+                  <span className="text-[#102A43]/70 font-medium">Scheduled Inspection Date:</span>
+                  <span className="font-mono font-bold text-[#102A43]">{assignModalApp.scheduledInspectionDate || '28 Aug 2026'}</span>
                 </div>
               </div>
             ) : (
@@ -700,14 +700,14 @@ export const ReviewApplicationsPage = () => {
             )}
 
             {/* Assign / Change Officer Controls */}
-            <div className="space-y-3 pt-2 border-t border-[#003943]/10">
-              <p className="text-xs font-bold uppercase tracking-wider text-[#003943]/80">
+            <div className="space-y-3 pt-2 border-t border-[#102A43]/10">
+              <p className="text-xs font-bold uppercase tracking-wider text-[#102A43]/80">
                 {assignModalApp.assignedOfficerName ? 'Reassign / Change Officer' : 'Assign Authorized Officer'}
               </p>
 
               {/* Route Selector: LMO vs GATC */}
               <div className="space-y-1.5">
-                <label className="block text-[11px] font-bold text-[#003943]">Verification Authority Route</label>
+                <label className="block text-[11px] font-bold text-[#102A43]">Verification Authority Route</label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
@@ -718,8 +718,8 @@ export const ReviewApplicationsPage = () => {
                     }}
                     className={`p-2.5 rounded-xl border text-center font-bold text-xs transition-all flex items-center justify-center gap-1.5 ${
                       verifierType === 'LMO'
-                        ? 'border-[#00959C] bg-[#003943] text-white shadow-xs'
-                        : 'border-[#003943]/20 bg-[#FDF9F6] text-[#003943]'
+                        ? 'border-[#B85D19] bg-[#102A43] text-white shadow-xs'
+                        : 'border-[#102A43]/20 bg-[#FBF9F5] text-[#102A43]'
                     }`}
                   >
                     <ShieldCheck className="w-3.5 h-3.5" />
@@ -735,8 +735,8 @@ export const ReviewApplicationsPage = () => {
                     }}
                     className={`p-2.5 rounded-xl border text-center font-bold text-xs transition-all flex items-center justify-center gap-1.5 ${
                       verifierType === 'GATC'
-                        ? 'border-[#00959C] bg-[#003943] text-white shadow-xs'
-                        : 'border-[#003943]/20 bg-[#FDF9F6] text-[#003943]'
+                        ? 'border-[#B85D19] bg-[#102A43] text-white shadow-xs'
+                        : 'border-[#102A43]/20 bg-[#FBF9F5] text-[#102A43]'
                     }`}
                   >
                     <Building2 className="w-3.5 h-3.5" />
@@ -746,13 +746,13 @@ export const ReviewApplicationsPage = () => {
               </div>
 
               <div className="space-y-1">
-                <label className="block text-[11px] font-bold text-[#003943]">
+                <label className="block text-[11px] font-bold text-[#102A43]">
                   Select Authorized Inspector / Centre ({verifierType})
                 </label>
                 <select
                   value={selectedOfficerId}
                   onChange={(e) => setSelectedOfficerId(e.target.value)}
-                  className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-3.5 py-2.5 text-xs font-bold text-[#003943]"
+                  className="w-full bg-[#FBF9F5] border border-[#102A43]/20 rounded-xl px-3.5 py-2.5 text-xs font-bold text-[#102A43]"
                 >
                   {officers
                     .filter((off) => (off.officerType || 'LMO') === verifierType)
@@ -766,7 +766,7 @@ export const ReviewApplicationsPage = () => {
 
               {assignModalApp.preferredDate && (
                 <div className="space-y-1 mb-2">
-                  <label className="block text-[10px] font-bold uppercase tracking-wider text-[#003943]/70">
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-[#102A43]/70">
                     BUSINESS REQUEST: Preferred Inspection Date
                   </label>
                   <div className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-700 cursor-not-allowed">
@@ -776,14 +776,14 @@ export const ReviewApplicationsPage = () => {
               )}
 
               <div className="space-y-1">
-                <label className="block text-[11px] font-bold text-[#003943]">
+                <label className="block text-[11px] font-bold text-[#102A43]">
                   LMD DECISION: Scheduled Inspection Date
                 </label>
                 <input
                   type="date"
                   value={scheduledDate}
                   onChange={(e) => setScheduledDate(e.target.value)}
-                  className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl px-3.5 py-2.5 text-xs font-bold text-[#003943]"
+                  className="w-full bg-[#FBF9F5] border border-[#102A43]/20 rounded-xl px-3.5 py-2.5 text-xs font-bold text-[#102A43]"
                 />
                 <p className="text-[10px] text-neutral-500 mt-1">Requested by business. You may adjust the final inspection date.</p>
               </div>
@@ -817,17 +817,17 @@ export const ReviewApplicationsPage = () => {
           title={`Record Offline Inspection Result: ${inspectModalApp.id}`}
           maxWidth="max-w-3xl"
         >
-          <div className="space-y-5 text-[#003943]">
-            <div className="p-3.5 bg-[#FDF9F6] rounded-2xl border border-[#003943]/15 text-xs space-y-1">
-              <span className="font-mono font-bold text-[#00959C]">{inspectModalApp.id}</span>
-              <p className="font-serif font-bold text-[#003943] text-sm">{inspectModalApp.instrumentName}</p>
-              <p className="text-[#003943]/70 font-medium">
-                Assigned Inspector: <span className="font-bold text-[#003943]">{inspectModalApp.assignedOfficerName || 'Inspector Rajesh V. Sharma'}</span>
+          <div className="space-y-5 text-[#102A43]">
+            <div className="p-3.5 bg-[#FBF9F5] rounded-2xl border border-[#102A43]/15 text-xs space-y-1">
+              <span className="font-mono font-bold text-[#B85D19]">{inspectModalApp.id}</span>
+              <p className="font-serif font-bold text-[#102A43] text-sm">{inspectModalApp.instrumentName}</p>
+              <p className="text-[#102A43]/70 font-medium">
+                Assigned Inspector: <span className="font-bold text-[#102A43]">{inspectModalApp.assignedOfficerName || 'Inspector Rajesh V. Sharma'}</span>
               </p>
             </div>
 
-            <div className="p-4 bg-white rounded-2xl border border-[#003943]/10 space-y-3 text-xs">
-              <span className="font-bold text-xs uppercase tracking-wider text-[#00959C] block">
+            <div className="p-4 bg-white rounded-2xl border border-[#102A43]/10 space-y-3 text-xs">
+              <span className="font-bold text-xs uppercase tracking-wider text-[#B85D19] block">
                 Offline Physical Test Verification Checklist
               </span>
               <div className="grid grid-cols-2 gap-2 text-xs">
@@ -848,7 +848,7 @@ export const ReviewApplicationsPage = () => {
             />
 
             <div className="space-y-1.5">
-              <label className="block text-xs font-bold uppercase tracking-wider text-[#003943]/80">
+              <label className="block text-xs font-bold uppercase tracking-wider text-[#102A43]/80">
                 Inspection Outcome <span className="text-red-500">*</span>
               </label>
               <div className="grid grid-cols-2 gap-3">
@@ -932,18 +932,18 @@ export const ReviewApplicationsPage = () => {
             </div>
 
             <div className="space-y-1">
-              <label className="block text-xs font-bold uppercase tracking-wider text-[#003943]/80">
+              <label className="block text-xs font-bold uppercase tracking-wider text-[#102A43]/80">
                 Officer Remarks & Observations
               </label>
               <textarea
                 rows={2}
                 value={inspectionRemarks}
                 onChange={(e) => setInspectionRemarks(e.target.value)}
-                className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl p-3 text-xs font-bold text-[#003943]"
+                className="w-full bg-[#FBF9F5] border border-[#102A43]/20 rounded-xl p-3 text-xs font-bold text-[#102A43]"
               />
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-3 border-t border-[#003943]/10">
+            <div className="flex items-center justify-end gap-2 pt-3 border-t border-[#102A43]/10">
               <Button variant="ghost" onClick={() => setInspectModalApp(null)}>
                 Cancel
               </Button>

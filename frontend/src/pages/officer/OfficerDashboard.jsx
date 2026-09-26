@@ -119,64 +119,64 @@ export const OfficerDashboard = () => {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto space-y-7 pb-20 text-[#003943]">
+    <div className="w-full max-w-5xl mx-auto space-y-7 pb-20 text-[#102A43]">
       {/* 1. OFFICER HEADER BANNER */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2">
         <div className="flex items-center gap-3.5">
-          <div className="w-14 h-14 rounded-2xl bg-[#003943] text-[#02B7BF] flex items-center justify-center shadow-md font-bold text-lg border-2 border-[#00959C]">
+          <div className="w-14 h-14 rounded-2xl bg-[#102A43] text-[#C2672B] flex items-center justify-center shadow-md font-bold text-lg border-2 border-[#B85D19]">
             <span>RS</span>
           </div>
           <div>
-            <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#00959C]">
+            <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#B85D19]">
               AUTHORIZED VERIFICATION OFFICER
             </span>
-            <h1 className="text-2xl sm:text-3xl font-serif font-bold text-[#003943]">
+            <h1 className="text-2xl sm:text-3xl font-serif font-bold text-[#102A43]">
               {user?.name || 'Inspector Rajesh V. Sharma'}
             </h1>
-            <p className="text-xs text-[#003943]/70 font-medium">
+            <p className="text-xs text-[#102A43]/70 font-medium">
               Badge #LMO-NGP-442 • Zone: Nagpur Industrial Division & GATC Liaison
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-3">
-          <span className="px-3.5 py-1.5 rounded-full bg-[#E0F5F6] text-[#003943] text-xs font-bold">
+          <span className="px-3.5 py-1.5 rounded-full bg-[#FDF3EC] text-[#102A43] text-xs font-bold">
             {assignedQueue.length} Field Inspections Pending
           </span>
         </div>
       </div>
 
       {/* 2. TODAY'S FIELD VERIFICATION SCHEDULE */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#003943]/15 shadow-md space-y-6">
-        <div className="flex items-center justify-between pb-3 border-b border-[#003943]/10">
+      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#102A43]/15 shadow-md space-y-6">
+        <div className="flex items-center justify-between pb-3 border-b border-[#102A43]/10">
           <div>
-            <h2 className="font-serif font-bold text-xl sm:text-2xl text-[#003943]">
+            <h2 className="font-serif font-bold text-xl sm:text-2xl text-[#102A43]">
               Today's Field Verification Schedule
             </h2>
-            <p className="text-xs text-[#003943]/70">
+            <p className="text-xs text-[#102A43]/70">
               Assigned physical verification appointments needing on-site testing.
             </p>
           </div>
-          <Clock className="w-5 h-5 text-[#00959C]" />
+          <Clock className="w-5 h-5 text-[#B85D19]" />
         </div>
 
         {assignedQueue.length === 0 ? (
-          <div className="bg-[#FDF9F6] rounded-2xl p-8 text-center space-y-2 border border-[#003943]/10">
-            <CheckCircle2 className="w-8 h-8 text-[#00959C] mx-auto" />
-            <p className="font-serif font-bold text-[#003943]">All field verifications completed!</p>
-            <p className="text-xs text-[#003943]/60">There are no pending inspections scheduled for today.</p>
+          <div className="bg-[#FBF9F5] rounded-2xl p-8 text-center space-y-2 border border-[#102A43]/10">
+            <CheckCircle2 className="w-8 h-8 text-[#B85D19] mx-auto" />
+            <p className="font-serif font-bold text-[#102A43]">All field verifications completed!</p>
+            <p className="text-xs text-[#102A43]/60">There are no pending inspections scheduled for today.</p>
           </div>
         ) : (
           <div className="space-y-4">
             {pendingPreview.map((app) => (
               <div
                 key={app.id}
-                className="p-5 rounded-2xl bg-[#FDF9F6] border border-[#003943]/15 hover:border-[#00959C] transition-all space-y-3"
+                className="p-5 rounded-2xl bg-[#FBF9F5] border border-[#102A43]/15 hover:border-[#B85D19] transition-all space-y-3"
               >
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-mono text-xs font-bold text-[#00959C]">{app.id}</span>
+                      <span className="font-mono text-xs font-bold text-[#B85D19]">{app.id}</span>
                       <span className="px-2.5 py-0.5 rounded-full bg-cyan-100 text-cyan-900 text-[10px] font-bold uppercase">
                         Scheduled: {app.scheduledInspectionDate || 'Today'}
                       </span>
@@ -185,24 +185,24 @@ export const OfficerDashboard = () => {
                       </span>
                     </div>
 
-                    <h3 className="font-serif font-bold text-base sm:text-lg text-[#003943]">
+                    <h3 className="font-serif font-bold text-base sm:text-lg text-[#102A43]">
                       {app.instrumentName}
                     </h3>
 
-                    <p className="text-xs text-[#003943]/80">
-                      Owner: <span className="font-semibold text-[#003943]">{app.applicantName}</span>
+                    <p className="text-xs text-[#102A43]/80">
+                      Owner: <span className="font-semibold text-[#102A43]">{app.applicantName}</span>
                     </p>
 
-                    <p className="text-xs text-[#003943]/70 flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5 text-[#00959C]" /> Location: {app.inspectionLocation}
+                    <p className="text-xs text-[#102A43]/70 flex items-center gap-1">
+                      <MapPin className="w-3.5 h-3.5 text-[#B85D19]" /> Location: {app.inspectionLocation}
                     </p>
                   </div>
 
                   <Link
                     to={`/officer/record/${app.id}`}
-                    className="px-5 py-2.5 rounded-full bg-[#003943] hover:bg-[#002B33] text-white font-bold text-xs sm:text-sm transition-all shadow-md flex items-center gap-2 shrink-0"
+                    className="px-5 py-2.5 rounded-full bg-[#102A43] hover:bg-[#0A1C2E] text-white font-bold text-xs sm:text-sm transition-all shadow-md flex items-center gap-2 shrink-0"
                   >
-                    <FileText className="w-4 h-4 text-[#02B7BF]" />
+                    <FileText className="w-4 h-4 text-[#C2672B]" />
                     <span>View Record</span>
                   </Link>
                 </div>
@@ -213,9 +213,9 @@ export const OfficerDashboard = () => {
       </div>
 
       {/* 3. COMPLETED FIELD VERIFICATION LOG */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#003943]/15 shadow-md space-y-5">
-        <div className="pb-3 border-b border-[#003943]/10 flex items-center justify-between">
-          <h3 className="font-serif font-bold text-xl text-[#003943]">
+      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#102A43]/15 shadow-md space-y-5">
+        <div className="pb-3 border-b border-[#102A43]/10 flex items-center justify-between">
+          <h3 className="font-serif font-bold text-xl text-[#102A43]">
             Recent Completed Inspections
           </h3>
           <span className="text-xs font-bold text-emerald-700">{completedQueue.length} Verified</span>
@@ -223,11 +223,11 @@ export const OfficerDashboard = () => {
 
         <div className="space-y-3">
           {completedPreview.map((app) => (
-            <div key={app.id} className="p-4 rounded-2xl bg-[#FDF9F6] border border-[#003943]/10 flex items-center justify-between text-xs">
+            <div key={app.id} className="p-4 rounded-2xl bg-[#FBF9F5] border border-[#102A43]/10 flex items-center justify-between text-xs">
               <div>
-                <p className="font-mono font-bold text-[#00959C]">{app.id}</p>
-                <p className="font-serif font-bold text-[#003943] text-sm">{app.instrumentName}</p>
-                <p className="text-[#003943]/70">Owner: {app.applicantName}</p>
+                <p className="font-mono font-bold text-[#B85D19]">{app.id}</p>
+                <p className="font-serif font-bold text-[#102A43] text-sm">{app.instrumentName}</p>
+                <p className="text-[#102A43]/70">Owner: {app.applicantName}</p>
               </div>
               <div className="flex items-center gap-2">
                 <span className={`px-3.5 py-1 rounded-full font-bold text-xs ${app.status === 'failed' ? 'bg-red-100 text-red-800' : 'bg-emerald-100 text-emerald-800'}`}>
@@ -235,7 +235,7 @@ export const OfficerDashboard = () => {
                 </span>
                 <Link
                   to={`/officer/record/${app.id}`}
-                  className="px-3 py-1 rounded-full border border-[#003943]/20 font-bold text-xs text-[#003943] hover:bg-white hover:border-[#00959C] transition-all"
+                  className="px-3 py-1 rounded-full border border-[#102A43]/20 font-bold text-xs text-[#102A43] hover:bg-white hover:border-[#B85D19] transition-all"
                 >
                   View Record
                 </Link>
@@ -248,21 +248,18 @@ export const OfficerDashboard = () => {
       {/* 4. INTERACTIVE FIELD VERIFICATION WORKSPACE MODAL */}
       {activeApp && (
         <div className="fixed inset-0 z-[100] w-screen h-screen bg-transparent flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-3xl w-full max-h-[92vh] flex flex-col overflow-hidden border border-[#003943]/20 shadow-2xl animate-in zoom-in-95 duration-150">
+          <div className="bg-white rounded-md max-w-3xl w-full max-h-[92vh] flex flex-col overflow-hidden border border-slate-200 shadow-lg animate-in zoom-in-95 duration-150 text-left">
             {/* Fixed Header */}
-            <div className="px-6 py-4 border-b border-[#003943]/10 flex items-center justify-between bg-white shrink-0">
+            <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50 shrink-0">
               <div>
-                <span className="text-[10px] font-extrabold text-[#00959C] uppercase tracking-wider">
-                  INSTRUMENT VERIFICATION WORKSPACE
-                </span>
-                <h3 className="font-serif font-bold text-xl sm:text-2xl text-[#003943]">
+                <h3 className="font-semibold text-lg text-[#0B315B]">
                   Physical Inspection & Test Report
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setActiveApp(null)}
-                className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-[#003943] flex items-center justify-center font-bold text-lg transition-colors shrink-0"
+                className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-[#102A43] flex items-center justify-center font-bold text-lg transition-colors shrink-0"
               >
                 ✕
               </button>
@@ -279,85 +276,85 @@ export const OfficerDashboard = () => {
             )}
 
             {/* Instrument Info Header Box */}
-            <div className="p-4 bg-[#FDF9F6] rounded-2xl border border-[#003943]/15 space-y-1.5 text-xs">
+            <div className="p-4 bg-[#FBF9F5] rounded-2xl border border-[#102A43]/15 space-y-1.5 text-xs">
               <div className="flex justify-between items-center">
-                <span className="font-mono font-bold text-[#00959C]">{activeApp.id}</span>
-                <span className="px-2.5 py-0.5 rounded bg-[#003943] text-white font-mono font-bold text-[10px]">
+                <span className="font-mono font-bold text-[#B85D19]">{activeApp.id}</span>
+                <span className="px-2.5 py-0.5 rounded bg-[#102A43] text-white font-mono font-bold text-[10px]">
                   AV-984210-IN
                 </span>
               </div>
-              <p className="font-serif font-bold text-[#003943] text-base">{activeApp.instrumentName}</p>
-              <p className="text-[#003943]/80">Owner: <span className="font-semibold">{activeApp.applicantName}</span></p>
-              <p className="text-[#003943]/70">Location: {activeApp.inspectionLocation}</p>
+              <p className="font-serif font-bold text-[#102A43] text-base">{activeApp.instrumentName}</p>
+              <p className="text-[#102A43]/80">Owner: <span className="font-semibold">{activeApp.applicantName}</span></p>
+              <p className="text-[#102A43]/70">Location: {activeApp.inspectionLocation}</p>
             </div>
 
             <form onSubmit={handleFinalSubmit} className="space-y-6">
               {/* A. MANDATORY REQUIREMENTS CHECKLIST */}
               <div className="space-y-3">
-                <h4 className="font-serif font-bold text-base text-[#003943] flex items-center gap-2">
-                  <CheckSquare className="w-4 h-4 text-[#00959C]" />
+                <h4 className="font-serif font-bold text-base text-[#102A43] flex items-center gap-2">
+                  <CheckSquare className="w-4 h-4 text-[#B85D19]" />
                   <span>1. Mandatory Physical Requirements Checklist</span>
                 </h4>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
-                  <label className="p-3 bg-[#FDF9F6] rounded-xl border border-[#003943]/15 flex items-center gap-3 cursor-pointer">
+                  <label className="p-3 bg-[#FBF9F5] rounded-xl border border-[#102A43]/15 flex items-center gap-3 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={checklist.nameplateChecked}
                       onChange={() => handleToggleChecklist('nameplateChecked')}
-                      className="w-4 h-4 text-[#00959C] rounded"
+                      className="w-4 h-4 text-[#B85D19] rounded"
                     />
-                    <span className="font-semibold text-[#003943]">Identification / nameplate checked</span>
+                    <span className="font-semibold text-[#102A43]">Identification / nameplate checked</span>
                   </label>
 
-                  <label className="p-3 bg-[#FDF9F6] rounded-xl border border-[#003943]/15 flex items-center gap-3 cursor-pointer">
+                  <label className="p-3 bg-[#FBF9F5] rounded-xl border border-[#102A43]/15 flex items-center gap-3 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={checklist.modelChecked}
                       onChange={() => handleToggleChecklist('modelChecked')}
-                      className="w-4 h-4 text-[#00959C] rounded"
+                      className="w-4 h-4 text-[#B85D19] rounded"
                     />
-                    <span className="font-semibold text-[#003943]">Manufacturer / model checked</span>
+                    <span className="font-semibold text-[#102A43]">Manufacturer / model checked</span>
                   </label>
 
-                  <label className="p-3 bg-[#FDF9F6] rounded-xl border border-[#003943]/15 flex items-center gap-3 cursor-pointer">
+                  <label className="p-3 bg-[#FBF9F5] rounded-xl border border-[#102A43]/15 flex items-center gap-3 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={checklist.capacityChecked}
                       onChange={() => handleToggleChecklist('capacityChecked')}
-                      className="w-4 h-4 text-[#00959C] rounded"
+                      className="w-4 h-4 text-[#B85D19] rounded"
                     />
-                    <span className="font-semibold text-[#003943]">Capacity checked</span>
+                    <span className="font-semibold text-[#102A43]">Capacity checked</span>
                   </label>
 
-                  <label className="p-3 bg-[#FDF9F6] rounded-xl border border-[#003943]/15 flex items-center gap-3 cursor-pointer">
+                  <label className="p-3 bg-[#FBF9F5] rounded-xl border border-[#102A43]/15 flex items-center gap-3 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={checklist.accuracyClassChecked}
                       onChange={() => handleToggleChecklist('accuracyClassChecked')}
-                      className="w-4 h-4 text-[#00959C] rounded"
+                      className="w-4 h-4 text-[#B85D19] rounded"
                     />
-                    <span className="font-semibold text-[#003943]">Accuracy class checked</span>
+                    <span className="font-semibold text-[#102A43]">Accuracy class checked</span>
                   </label>
 
-                  <label className="p-3 bg-[#FDF9F6] rounded-xl border border-[#003943]/15 flex items-center gap-3 cursor-pointer">
+                  <label className="p-3 bg-[#FBF9F5] rounded-xl border border-[#102A43]/15 flex items-center gap-3 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={checklist.markingsChecked}
                       onChange={() => handleToggleChecklist('markingsChecked')}
-                      className="w-4 h-4 text-[#00959C] rounded"
+                      className="w-4 h-4 text-[#B85D19] rounded"
                     />
-                    <span className="font-semibold text-[#003943]">Required markings checked</span>
+                    <span className="font-semibold text-[#102A43]">Required markings checked</span>
                   </label>
 
-                  <label className="p-3 bg-[#FDF9F6] rounded-xl border border-[#003943]/15 flex items-center gap-3 cursor-pointer">
+                  <label className="p-3 bg-[#FBF9F5] rounded-xl border border-[#102A43]/15 flex items-center gap-3 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={checklist.sealConditionChecked}
                       onChange={() => handleToggleChecklist('sealConditionChecked')}
-                      className="w-4 h-4 text-[#00959C] rounded"
+                      className="w-4 h-4 text-[#B85D19] rounded"
                     />
-                    <span className="font-semibold text-[#003943]">Seal condition checked</span>
+                    <span className="font-semibold text-[#102A43]">Seal condition checked</span>
                   </label>
                 </div>
               </div>
@@ -371,8 +368,8 @@ export const OfficerDashboard = () => {
 
               {/* C. PHOTO EVIDENCE & OFFICER REMARKS */}
               <div className="space-y-3">
-                <h4 className="font-serif font-bold text-base text-[#003943] flex items-center gap-2">
-                  <Camera className="w-4 h-4 text-[#00959C]" />
+                <h4 className="font-serif font-bold text-base text-[#102A43] flex items-center gap-2">
+                  <Camera className="w-4 h-4 text-[#B85D19]" />
                   <span>3. Photo Evidence & Inspection Remarks</span>
                 </h4>
 
@@ -392,7 +389,7 @@ export const OfficerDashboard = () => {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="block font-bold text-xs uppercase tracking-wider text-[#003943]/80">
+                  <label className="block font-bold text-xs uppercase tracking-wider text-[#102A43]/80">
                     Officer Remarks & Observations <span className="text-red-500">*</span>
                   </label>
                   <textarea
@@ -400,14 +397,14 @@ export const OfficerDashboard = () => {
                     value={remarks}
                     onChange={(e) => setRemarks(e.target.value)}
                     required
-                    className="w-full bg-[#FDF9F6] border border-[#003943]/20 rounded-xl p-3 text-xs font-semibold text-[#003943]"
+                    className="w-full bg-[#FBF9F5] border border-[#102A43]/20 rounded-xl p-3 text-xs font-semibold text-[#102A43]"
                   />
                 </div>
               </div>
 
               {/* D. FINAL OUTCOME ACTION */}
-              <div className="space-y-3 pt-2 border-t border-[#003943]/10">
-                <label className="block font-bold text-xs uppercase tracking-wider text-[#003943]/80">
+              <div className="space-y-3 pt-2 border-t border-[#102A43]/10">
+                <label className="block font-bold text-xs uppercase tracking-wider text-[#102A43]/80">
                   Select Inspection Final Outcome <span className="text-red-500">*</span>
                 </label>
                 <div className="grid grid-cols-2 gap-4">
@@ -501,11 +498,11 @@ export const OfficerDashboard = () => {
                 )}
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#003943]/10">
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#102A43]/10">
                 <button
                   type="button"
                   onClick={() => setActiveApp(null)}
-                  className="px-5 py-2.5 rounded-full bg-slate-100 text-[#003943] font-bold text-xs"
+                  className="px-5 py-2.5 rounded-full bg-slate-100 text-[#102A43] font-bold text-xs"
                 >
                   Cancel
                 </button>
@@ -513,10 +510,10 @@ export const OfficerDashboard = () => {
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-7 py-3.5 rounded-full bg-[#003943] hover:bg-[#002B33] text-white font-extrabold text-xs sm:text-sm transition-all shadow-md flex items-center gap-2"
+                  className="px-7 py-3.5 rounded-full bg-[#102A43] hover:bg-[#0A1C2E] text-white font-extrabold text-xs sm:text-sm transition-all shadow-md flex items-center gap-2"
                 >
                   <span>{submitting ? 'Submitting to LMD...' : 'Submit Verification Result to LMD'}</span>
-                  <ArrowRight className="w-4 h-4 text-[#02B7BF]" />
+                  <ArrowRight className="w-4 h-4 text-[#C2672B]" />
                 </button>
               </div>
             </form>

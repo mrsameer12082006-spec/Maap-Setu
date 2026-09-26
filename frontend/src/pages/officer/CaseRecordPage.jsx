@@ -31,10 +31,10 @@ import { Badge } from '../../components/common/Badge';
 
 // ─── Helper: Section wrapper ──────────────────────────────────────
 const Section = ({ icon: Icon, title, children, className = '' }) => (
-  <div className={`bg-white rounded-2xl border border-[#003943]/15 shadow-xs overflow-hidden ${className}`}>
-    <div className="flex items-center gap-2.5 px-5 py-3.5 bg-[#F0F9FA] border-b border-[#003943]/10">
-      {Icon && <Icon className="w-4 h-4 text-[#00959C] shrink-0" />}
-      <h3 className="font-semibold text-[#003943] text-sm uppercase tracking-wide">{title}</h3>
+  <div className={`bg-white rounded-2xl border border-[#102A43]/15 shadow-xs overflow-hidden ${className}`}>
+    <div className="flex items-center gap-2.5 px-5 py-3.5 bg-[#F0F9FA] border-b border-[#102A43]/10">
+      {Icon && <Icon className="w-4 h-4 text-[#B85D19] shrink-0" />}
+      <h3 className="font-semibold text-[#102A43] text-sm uppercase tracking-wide">{title}</h3>
     </div>
     <div className="p-5">{children}</div>
   </div>
@@ -43,9 +43,9 @@ const Section = ({ icon: Icon, title, children, className = '' }) => (
 // ─── Helper: Label-Value pair ─────────────────────────────────────
 const Field = ({ label, value, mono = false, className = '' }) => (
   <div className={className}>
-    <span className="text-[10px] text-[#003943]/50 uppercase font-semibold tracking-wider block mb-0.5">{label}</span>
-    <span className={`text-sm font-medium text-[#003943] ${mono ? 'font-mono' : ''}`}>
-      {value || <span className="text-[#003943]/30 italic">—</span>}
+    <span className="text-[10px] text-[#102A43]/50 uppercase font-semibold tracking-wider block mb-0.5">{label}</span>
+    <span className={`text-sm font-medium text-[#102A43] ${mono ? 'font-mono' : ''}`}>
+      {value || <span className="text-[#102A43]/30 italic">—</span>}
     </span>
   </div>
 );
@@ -65,12 +65,12 @@ const TimelineEvent = ({ event, isLast }) => {
         <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${color}`}>
           <Ico className="w-4 h-4" />
         </div>
-        {!isLast && <div className="w-px flex-1 bg-[#003943]/10 mt-1" />}
+        {!isLast && <div className="w-px flex-1 bg-[#102A43]/10 mt-1" />}
       </div>
       <div className={`pb-5 ${isLast ? '' : ''}`}>
-        <p className="font-semibold text-[#003943] text-sm">{event.step}</p>
-        <p className="text-xs text-[#003943]/60 mt-0.5">{event.message}</p>
-        <p className="text-[10px] text-[#003943]/40 mt-1 font-mono">
+        <p className="font-semibold text-[#102A43] text-sm">{event.step}</p>
+        <p className="text-xs text-[#102A43]/60 mt-0.5">{event.message}</p>
+        <p className="text-[10px] text-[#102A43]/40 mt-1 font-mono">
           {event.actorRole?.toUpperCase()} · {new Date(event.createdAt).toLocaleString('en-IN')}
         </p>
       </div>
@@ -128,9 +128,9 @@ export const CaseRecordPage = () => {
   if (!app) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[300px] gap-4">
-        <FileText className="w-12 h-12 text-[#003943]/20" />
-        <p className="text-[#003943]/60 font-semibold">Application not found.</p>
-        <Link to="/officer/queue" className="text-xs text-[#00959C] font-bold hover:underline">← Return to Queue</Link>
+        <FileText className="w-12 h-12 text-[#102A43]/20" />
+        <p className="text-[#102A43]/60 font-semibold">Application not found.</p>
+        <Link to="/officer/queue" className="text-xs text-[#B85D19] font-bold hover:underline">← Return to Queue</Link>
       </div>
     );
   }
@@ -145,23 +145,23 @@ export const CaseRecordPage = () => {
     <div className="w-full space-y-6 pb-16">
       {/* ── Back nav ── */}
       <div>
-        <Link to="/officer/queue" className="inline-flex items-center gap-1 text-xs text-[#003943]/60 hover:text-[#003943] transition-colors mb-3">
+        <Link to="/officer/queue" className="inline-flex items-center gap-1 text-xs text-[#102A43]/60 hover:text-[#102A43] transition-colors mb-3">
           <ArrowLeft className="w-3.5 h-3.5" /> Back to Assigned Queue
         </Link>
 
         {/* ── Case Header ── */}
-        <div className="bg-white rounded-2xl border border-[#003943]/15 shadow-sm p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="bg-white rounded-2xl border border-[#102A43]/15 shadow-sm p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-mono text-xs font-extrabold text-[#00959C] bg-[#E0F5F6] px-2.5 py-0.5 rounded-full">
+              <span className="font-mono text-xs font-extrabold text-[#B85D19] bg-[#FDF3EC] px-2.5 py-0.5 rounded-full">
                 {app.applicationNumber || app.id}
               </span>
               <Badge status={app.status}>{app.status?.replace('_', ' ')}</Badge>
             </div>
-            <h1 className="text-xl sm:text-2xl font-serif font-bold text-[#003943]">
+            <h1 className="text-xl sm:text-2xl font-serif font-bold text-[#102A43]">
               {app.instrument?.name || app.instrumentName}
             </h1>
-            <p className="text-xs text-[#003943]/60">
+            <p className="text-xs text-[#102A43]/60">
               {app.applicationType} · Submitted {app.submissionDate ? new Date(app.submissionDate).toLocaleDateString('en-IN') : '—'}
             </p>
           </div>
@@ -170,7 +170,7 @@ export const CaseRecordPage = () => {
             {hasPendingVerification && (
               <button
                 onClick={() => navigate(`/officer/verify/new?appId=${app.id}`)}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#003943] text-white text-sm font-bold hover:bg-[#002B33] transition-colors"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#102A43] text-white text-sm font-bold hover:bg-[#0A1C2E] transition-colors"
               >
                 <ClipboardList className="w-4 h-4" />
                 Start Physical Verification
@@ -179,9 +179,9 @@ export const CaseRecordPage = () => {
             {app.status === 'failed' && (
               <button
                 onClick={() => navigate(`/officer/verify/new?appId=${app.id}`)}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#003943] text-white text-sm font-bold hover:bg-[#002B33] transition-colors"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#102A43] text-white text-sm font-bold hover:bg-[#0A1C2E] transition-colors"
               >
-                <ClipboardList className="w-4 h-4 text-[#02B7BF]" />
+                <ClipboardList className="w-4 h-4 text-[#C2672B]" />
                 Start Re-Verification
               </button>
             )}
@@ -203,9 +203,9 @@ export const CaseRecordPage = () => {
           <div className="grid grid-cols-2 gap-x-6 gap-y-4">
             <Field label="Application Number" value={app.applicationNumber} mono />
             <div className="space-y-0.5">
-              <span className="text-[10px] text-[#003943]/50 uppercase font-semibold tracking-wider block mb-0.5">Application ID</span>
+              <span className="text-[10px] text-[#102A43]/50 uppercase font-semibold tracking-wider block mb-0.5">Application ID</span>
               <div className="flex items-center gap-1.5" title={app.id}>
-                <span className="text-sm font-mono font-medium text-[#003943]">
+                <span className="text-sm font-mono font-medium text-[#102A43]">
                   {app.id?.slice(0, 13)}…
                 </span>
                 <button
@@ -215,7 +215,7 @@ export const CaseRecordPage = () => {
                     setCopiedId(true);
                     setTimeout(() => setCopiedId(false), 2000);
                   }}
-                  className="p-1 hover:bg-[#003943]/10 rounded text-[#00959C] transition-colors"
+                  className="p-1 hover:bg-[#102A43]/10 rounded text-[#B85D19] transition-colors"
                   title="Copy full Application UUID"
                 >
                   {copiedId ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
@@ -277,24 +277,24 @@ export const CaseRecordPage = () => {
               value={vr?.createdAt ? new Date(vr.createdAt).toLocaleDateString('en-IN') : 'Pending Inspection'}
             />
             <div>
-              <span className="text-[10px] text-[#003943]/50 uppercase font-semibold tracking-wider block mb-0.5">
+              <span className="text-[10px] text-[#102A43]/50 uppercase font-semibold tracking-wider block mb-0.5">
                 Business Preferred Date
               </span>
-              <span className="text-sm font-semibold text-[#003943]">
+              <span className="text-sm font-semibold text-[#102A43]">
                 {app.preferredDate ? new Date(app.preferredDate).toLocaleDateString('en-IN') : '—'}
               </span>
             </div>
             <div>
-              <span className="text-[10px] text-[#003943]/50 uppercase font-semibold tracking-wider block mb-0.5">
+              <span className="text-[10px] text-[#102A43]/50 uppercase font-semibold tracking-wider block mb-0.5">
                 LMD Scheduled Date
               </span>
-              <span className="text-sm font-bold text-[#00959C]">
+              <span className="text-sm font-bold text-[#B85D19]">
                 {app.scheduledInspectionDate ? new Date(app.scheduledInspectionDate).toLocaleDateString('en-IN') : '—'}
               </span>
             </div>
           </div>
           {app.notes && (
-            <div className="mt-4 p-3 bg-[#F0F9FA] rounded-xl border border-[#003943]/10 text-xs text-[#003943]/70 italic">
+            <div className="mt-4 p-3 bg-[#F0F9FA] rounded-xl border border-[#102A43]/10 text-xs text-[#102A43]/70 italic">
               {app.notes}
             </div>
           )}
@@ -305,14 +305,14 @@ export const CaseRecordPage = () => {
           {app.documents?.length > 0 ? (
             <div className="space-y-2">
               {app.documents.map((doc, i) => (
-                <div key={i} className="flex items-center justify-between p-2.5 bg-[#F8FAFB] rounded-xl border border-[#003943]/10 text-xs">
+                <div key={i} className="flex items-center justify-between p-2.5 bg-[#F8FAFB] rounded-xl border border-[#102A43]/10 text-xs">
                   <div className="flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-[#00959C] shrink-0" />
-                    <span className="font-semibold text-[#003943] truncate">{doc.name || doc.filename || `Document ${i + 1}`}</span>
-                    {doc.category && <span className="text-[#003943]/50">{doc.category}</span>}
+                    <FileText className="w-4 h-4 text-[#B85D19] shrink-0" />
+                    <span className="font-semibold text-[#102A43] truncate">{doc.name || doc.filename || `Document ${i + 1}`}</span>
+                    {doc.category && <span className="text-[#102A43]/50">{doc.category}</span>}
                   </div>
                   {doc.url && (
-                    <a href={doc.url} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-[#00959C] font-bold hover:underline shrink-0 ml-2">
+                    <a href={doc.url} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-[#B85D19] font-bold hover:underline shrink-0 ml-2">
                       View <ExternalLink className="w-3 h-3" />
                     </a>
                   )}
@@ -320,7 +320,7 @@ export const CaseRecordPage = () => {
               ))}
             </div>
           ) : (
-            <p className="text-sm text-[#003943]/40 italic">No documents attached to this application.</p>
+            <p className="text-sm text-[#102A43]/40 italic">No documents attached to this application.</p>
           )}
         </Section>
       </div>
@@ -337,7 +337,7 @@ export const CaseRecordPage = () => {
               <p className={`text-lg font-serif font-bold ${isPassed ? 'text-emerald-800' : 'text-red-800'}`}>
                 Verification {isPassed ? 'PASSED' : 'FAILED'}
               </p>
-              <p className="text-xs text-[#003943]/60 mt-0.5">
+              <p className="text-xs text-[#102A43]/60 mt-0.5">
                 Completed: {vr.createdAt ? new Date(vr.createdAt).toLocaleString('en-IN') : '—'}
                 {app.assignedOfficerName && ` · Verified by: ${app.assignedOfficerName}`}
               </p>
@@ -369,14 +369,14 @@ export const CaseRecordPage = () => {
                       };
                       const passed = val === true || val === 'YES' || val === 'PASSED' || val === 'NEW';
                       return (
-                        <div key={key} className="flex items-center gap-3 p-2.5 rounded-xl bg-[#F8FAFB] border border-[#003943]/8">
+                        <div key={key} className="flex items-center gap-3 p-2.5 rounded-xl bg-[#F8FAFB] border border-[#102A43]/8">
                           <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${passed ? 'bg-emerald-100' : 'bg-red-100'}`}>
                             {passed
                               ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
                               : <XCircle className="w-3.5 h-3.5 text-red-700" />
                             }
                           </div>
-                          <span className="text-xs font-medium text-[#003943]">{labels[key] || key}</span>
+                          <span className="text-xs font-medium text-[#102A43]">{labels[key] || key}</span>
                           <span className={`ml-auto text-[10px] font-bold uppercase ${passed ? 'text-emerald-700' : 'text-red-700'}`}>
                             {typeof val === 'boolean' ? (val ? 'Pass' : 'Fail') : val}
                           </span>
@@ -446,11 +446,11 @@ export const CaseRecordPage = () => {
                         labMpe: 'Analytical Sensitivity & MPE'
                       };
                       return (
-                        <div key={key} className="flex items-start justify-between gap-2 border-b border-[#003943]/5 pb-1.5 last:border-b-0">
-                          <span className="text-[10px] text-[#003943]/50 uppercase font-semibold tracking-wider">
+                        <div key={key} className="flex items-start justify-between gap-2 border-b border-[#102A43]/5 pb-1.5 last:border-b-0">
+                          <span className="text-[10px] text-[#102A43]/50 uppercase font-semibold tracking-wider">
                             {labels[key] || key.replace(/([A-Z])/g, ' $1').trim()}
                           </span>
-                          <span className="text-xs font-mono font-bold text-[#003943] text-right">
+                          <span className="text-xs font-mono font-bold text-[#102A43] text-right">
                             {String(val)}
                           </span>
                         </div>
@@ -459,53 +459,53 @@ export const CaseRecordPage = () => {
 
                   {/* Explainable Regulatory MPE Derivation Audit Card */}
                   {vr.technicalTestResults.verificationScaleInterval && (
-                    <div className="mt-3 p-3.5 bg-[#F0F9FA] rounded-xl border border-[#00959C]/25 space-y-2">
-                      <div className="flex items-center justify-between border-b border-[#00959C]/15 pb-1.5 flex-wrap gap-1">
+                    <div className="mt-3 p-3.5 bg-[#F0F9FA] rounded-xl border border-[#B85D19]/25 space-y-2">
+                      <div className="flex items-center justify-between border-b border-[#B85D19]/15 pb-1.5 flex-wrap gap-1">
                         <div className="flex items-center gap-1.5">
-                          <Scale className="w-3.5 h-3.5 text-[#00959C]" />
-                          <span className="text-[10px] uppercase font-bold text-[#00959C] tracking-wider">
+                          <Scale className="w-3.5 h-3.5 text-[#B85D19]" />
+                          <span className="text-[10px] uppercase font-bold text-[#B85D19] tracking-wider">
                             Regulatory MPE Calculation & Derivation Audit
                           </span>
                           {vr.technicalTestResults.verificationStage && (
-                            <span className="px-2 py-0.5 rounded-full bg-[#00959C]/10 text-[#00959C] text-[9px] font-bold uppercase">
+                            <span className="px-2 py-0.5 rounded-full bg-[#B85D19]/10 text-[#B85D19] text-[9px] font-bold uppercase">
                               {vr.technicalTestResults.verificationStageLabel || vr.technicalTestResults.verificationStage}
                               {vr.technicalTestResults.stageMultiplier ? ` (${vr.technicalTestResults.stageMultiplier}x MPE)` : ''}
                             </span>
                           )}
                         </div>
-                        <span className="text-[9px] font-mono text-[#003943]/60">
+                        <span className="text-[9px] font-mono text-[#102A43]/60">
                           {vr.technicalTestResults.mpeRuleReference || 'OIML R76-1 / LM Rules 2011'}
                         </span>
                       </div>
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
                         <div>
-                          <span className="text-[10px] text-[#003943]/50 uppercase font-semibold block">Scale Interval (e)</span>
-                          <span className="font-mono font-bold text-[#003943]">
+                          <span className="text-[10px] text-[#102A43]/50 uppercase font-semibold block">Scale Interval (e)</span>
+                          <span className="font-mono font-bold text-[#102A43]">
                             {vr.technicalTestResults.verificationScaleInterval}
                           </span>
                         </div>
                         <div>
-                          <span className="text-[10px] text-[#003943]/50 uppercase font-semibold block">Tested Load (m)</span>
-                          <span className="font-mono font-bold text-[#003943]">
+                          <span className="text-[10px] text-[#102A43]/50 uppercase font-semibold block">Tested Load (m)</span>
+                          <span className="font-mono font-bold text-[#102A43]">
                             {vr.technicalTestResults.testedLoad || '—'}
                             {vr.technicalTestResults.testedLoadInE && ` (${vr.technicalTestResults.testedLoadInE.toLocaleString()} e)`}
                           </span>
                         </div>
                         <div>
-                          <span className="text-[10px] text-[#003943]/50 uppercase font-semibold block">Regulatory Limit</span>
-                          <span className="font-mono font-bold text-[#00959C]">
+                          <span className="text-[10px] text-[#102A43]/50 uppercase font-semibold block">Regulatory Limit</span>
+                          <span className="font-mono font-bold text-[#B85D19]">
                             {vr.technicalTestResults.mpeLimit || '—'}
                           </span>
                         </div>
                         <div>
-                          <span className="text-[10px] text-[#003943]/50 uppercase font-semibold block">Observed Error</span>
-                          <span className="font-mono font-bold text-[#003943]">
+                          <span className="text-[10px] text-[#102A43]/50 uppercase font-semibold block">Observed Error</span>
+                          <span className="font-mono font-bold text-[#102A43]">
                             {vr.technicalTestResults.observedError || '—'}
                           </span>
                         </div>
                       </div>
                       {vr.technicalTestResults.mpeExplanation && (
-                        <p className="text-[11px] text-[#003943]/70 italic border-t border-[#00959C]/10 pt-1.5">
+                        <p className="text-[11px] text-[#102A43]/70 italic border-t border-[#B85D19]/10 pt-1.5">
                           {vr.technicalTestResults.mpeExplanation}
                         </p>
                       )}
@@ -528,7 +528,7 @@ export const CaseRecordPage = () => {
                       key={i}
                       type="button"
                       onClick={() => displayUrl && setLightboxPhoto({ url: displayUrl, name: fileName })}
-                      className="group relative rounded-xl overflow-hidden border border-[#003943]/15 bg-[#F8FAFB] aspect-square flex items-center justify-center hover:border-[#00959C] transition-all focus:outline-none focus:ring-2 focus:ring-[#00959C]"
+                      className="group relative rounded-xl overflow-hidden border border-[#102A43]/15 bg-[#F8FAFB] aspect-square flex items-center justify-center hover:border-[#B85D19] transition-all focus:outline-none focus:ring-2 focus:ring-[#B85D19]"
                     >
                       {displayUrl ? (
                         <>
@@ -542,8 +542,8 @@ export const CaseRecordPage = () => {
                         </>
                       ) : (
                         <div className="flex flex-col items-center gap-1 p-3 text-center">
-                          <Camera className="w-6 h-6 text-[#003943]/30" />
-                          <span className="text-[10px] text-[#003943]/40 font-mono break-all">{fileName}</span>
+                          <Camera className="w-6 h-6 text-[#102A43]/30" />
+                          <span className="text-[10px] text-[#102A43]/40 font-mono break-all">{fileName}</span>
                         </div>
                       )}
                     </button>
@@ -551,7 +551,7 @@ export const CaseRecordPage = () => {
                 })}
               </div>
             ) : (
-              <div className="p-4 bg-[#F8FAFB] rounded-xl border border-[#003943]/8 text-center text-xs text-[#003943]/50 italic">
+              <div className="p-4 bg-[#F8FAFB] rounded-xl border border-[#102A43]/8 text-center text-xs text-[#102A43]/50 italic">
                 No photo evidence attached to this verification.
               </div>
             )}
@@ -560,8 +560,8 @@ export const CaseRecordPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             {/* Officer Remarks */}
             <Section icon={User} title="Officer Remarks">
-              <p className="text-sm text-[#003943] leading-relaxed whitespace-pre-wrap">
-                {vr.officerRemarks || <span className="text-[#003943]/40 italic">No remarks recorded.</span>}
+              <p className="text-sm text-[#102A43] leading-relaxed whitespace-pre-wrap">
+                {vr.officerRemarks || <span className="text-[#102A43]/40 italic">No remarks recorded.</span>}
               </p>
             </Section>
 
@@ -599,23 +599,23 @@ export const CaseRecordPage = () => {
                   key={attempt.id || idx}
                   className={`p-4 rounded-xl border transition-all ${
                     isLatest
-                      ? 'bg-[#F0F9FA] border-[#00959C]/30 shadow-2xs'
-                      : 'bg-[#FDF9F6] border-[#003943]/10'
+                      ? 'bg-[#F0F9FA] border-[#B85D19]/30 shadow-2xs'
+                      : 'bg-[#FBF9F5] border-[#102A43]/10'
                   }`}
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#003943]/10 pb-2 mb-2">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#102A43]/10 pb-2 mb-2">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-[#003943] text-sm">
+                      <span className="font-bold text-[#102A43] text-sm">
                         Attempt #{attemptNumber}
                       </span>
                       {isLatest && (
-                        <span className="text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-full bg-[#00959C] text-white">
+                        <span className="text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-full bg-[#B85D19] text-white">
                           Latest Attempt
                         </span>
                       )}
                     </div>
                     <div className="flex items-center gap-3">
-                      <span className="text-xs font-mono text-[#003943]/60">
+                      <span className="text-xs font-mono text-[#102A43]/60">
                         {attempt.createdAt ? new Date(attempt.createdAt).toLocaleString('en-IN') : '—'}
                       </span>
                       <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${
@@ -634,16 +634,16 @@ export const CaseRecordPage = () => {
                   )}
 
                   {attempt.officerRemarks && (
-                    <div className="text-xs text-[#003943]/80">
-                      <span className="text-[10px] uppercase font-bold text-[#003943]/50 block">Officer Remarks</span>
+                    <div className="text-xs text-[#102A43]/80">
+                      <span className="text-[10px] uppercase font-bold text-[#102A43]/50 block">Officer Remarks</span>
                       <p className="mt-0.5 italic">{attempt.officerRemarks}</p>
                     </div>
                   )}
 
                   {attempt.photoEvidenceUrls && attempt.photoEvidenceUrls.length > 0 && (
-                    <div className="mt-3 pt-2.5 border-t border-[#003943]/10">
+                    <div className="mt-3 pt-2.5 border-t border-[#102A43]/10">
                       <div className="flex items-center justify-between">
-                        <div className="text-[11px] text-[#00959C] font-semibold flex items-center gap-1.5">
+                        <div className="text-[11px] text-[#B85D19] font-semibold flex items-center gap-1.5">
                           <Camera className="w-3.5 h-3.5" />
                           <span>{attempt.photoEvidenceUrls.length} evidence photo(s) recorded</span>
                         </div>
@@ -657,7 +657,7 @@ export const CaseRecordPage = () => {
                             }
                             setExpandedHistoryPhotos(prev => ({ ...prev, [key]: !isExp }));
                           }}
-                          className="text-[11px] text-[#003943] hover:text-[#00959C] font-bold flex items-center gap-1 underline transition-colors"
+                          className="text-[11px] text-[#102A43] hover:text-[#B85D19] font-bold flex items-center gap-1 underline transition-colors"
                         >
                           <Eye className="w-3 h-3" />
                           {expandedHistoryPhotos[attempt.id || `idx-${idx}`] ? 'Hide Photos' : 'View Photos'}
@@ -674,7 +674,7 @@ export const CaseRecordPage = () => {
                                 key={pIdx}
                                 type="button"
                                 onClick={() => displayUrl && setLightboxPhoto({ url: displayUrl, name: fName })}
-                                className="group relative rounded-lg overflow-hidden border border-[#003943]/15 bg-white aspect-square flex items-center justify-center hover:border-[#00959C] transition-all"
+                                className="group relative rounded-lg overflow-hidden border border-[#102A43]/15 bg-white aspect-square flex items-center justify-center hover:border-[#B85D19] transition-all"
                               >
                                 {displayUrl ? (
                                   <>
@@ -685,8 +685,8 @@ export const CaseRecordPage = () => {
                                   </>
                                 ) : (
                                   <div className="p-2 text-center">
-                                    <Camera className="w-4 h-4 mx-auto text-[#003943]/30" />
-                                    <span className="text-[9px] text-[#003943]/40 font-mono block truncate mt-1">{fName}</span>
+                                    <Camera className="w-4 h-4 mx-auto text-[#102A43]/30" />
+                                    <span className="text-[9px] text-[#102A43]/40 font-mono block truncate mt-1">{fName}</span>
                                   </div>
                                 )}
                               </button>
@@ -706,9 +706,9 @@ export const CaseRecordPage = () => {
       {/* ── WORKFLOW TIMELINE ── */}
       <Section icon={Clock} title="Workflow Timeline">
         {loadingTimeline ? (
-          <p className="text-xs text-[#003943]/50 italic">Loading timeline…</p>
+          <p className="text-xs text-[#102A43]/50 italic">Loading timeline…</p>
         ) : timeline.length === 0 ? (
-          <p className="text-xs text-[#003943]/40 italic">No timeline events recorded yet.</p>
+          <p className="text-xs text-[#102A43]/40 italic">No timeline events recorded yet.</p>
         ) : (
           <div>
             {timeline.map((t, i) => (
@@ -723,7 +723,7 @@ export const CaseRecordPage = () => {
         <div className="flex justify-end pt-2">
           <button
             onClick={() => navigate(`/officer/verify/new?appId=${app.id}`)}
-            className="flex items-center gap-2 px-6 py-3 rounded-full bg-[#003943] text-white font-bold hover:bg-[#002B33] transition-colors shadow-lg"
+            className="flex items-center gap-2 px-6 py-3 rounded-full bg-[#102A43] text-white font-bold hover:bg-[#0A1C2E] transition-colors shadow-lg"
           >
             <ClipboardList className="w-5 h-5" />
             Start Physical Verification
@@ -739,12 +739,12 @@ export const CaseRecordPage = () => {
           onClick={() => setLightboxPhoto(null)}
         >
           <div
-            className="relative max-w-4xl w-full bg-[#003943] rounded-2xl overflow-hidden shadow-2xl flex flex-col"
+            className="relative max-w-4xl w-full bg-[#102A43] rounded-2xl overflow-hidden shadow-2xl flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between px-4 py-3 bg-[#002B33] text-white border-b border-white/10">
+            <div className="flex items-center justify-between px-4 py-3 bg-[#0A1C2E] text-white border-b border-white/10">
               <div className="flex items-center gap-2">
-                <Camera className="w-4 h-4 text-[#02B7BF]" />
+                <Camera className="w-4 h-4 text-[#C2672B]" />
                 <span className="text-xs font-mono font-bold truncate max-w-md">{lightboxPhoto.name}</span>
               </div>
               <button

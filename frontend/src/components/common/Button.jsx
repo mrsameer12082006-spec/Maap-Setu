@@ -13,20 +13,21 @@ export const Button = ({
   onClick,
   ...props
 }) => {
-  const baseStyles = 'inline-flex items-center justify-center font-medium rounded-button transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 disabled:opacity-60 disabled:cursor-not-allowed';
+  const baseStyles = 'inline-flex items-center justify-center font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 disabled:opacity-60 disabled:cursor-not-allowed text-left';
 
   const variants = {
-    primary: 'bg-primary hover:bg-primary-dark text-white focus:ring-primary',
-    secondary: 'bg-white border border-neutral-300 text-neutral-900 hover:bg-neutral-100 focus:ring-neutral-300',
-    ghost: 'bg-transparent text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900 focus:ring-neutral-300',
-    danger: 'bg-danger text-white hover:bg-red-800 focus:ring-danger',
-    accent: 'bg-accent text-white hover:bg-emerald-700 focus:ring-accent'
+    primary: 'bg-[#0B315B] hover:bg-blue-900 text-white focus:ring-[#0B315B]/30',
+    secondary: 'bg-transparent border border-[#C87541] text-[#C87541] hover:bg-[#FDF3EC] focus:ring-[#C87541]/30',
+    outline: 'bg-white border border-slate-300 text-slate-800 hover:bg-slate-50 focus:ring-slate-300',
+    ghost: 'bg-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900 focus:ring-slate-300',
+    danger: 'bg-red-700 text-white hover:bg-red-800 focus:ring-red-600',
+    accent: 'bg-[#C87541] hover:bg-[#B85D19] text-white focus:ring-[#C87541]/30'
   };
 
   const sizes = {
-    sm: 'px-3 py-1.5 text-xs gap-1.5',
-    md: 'px-4 py-2 text-sm gap-2',
-    lg: 'px-6 py-3 text-base gap-2.5'
+    sm: 'px-3 py-1.5 text-xs min-h-[36px] gap-1.5',
+    md: 'px-4 py-2.5 text-sm min-h-[44px] gap-2',
+    lg: 'px-6 py-3 text-base min-h-[48px] gap-2.5'
   };
 
   return (

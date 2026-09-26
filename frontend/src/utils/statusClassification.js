@@ -21,8 +21,8 @@ export const STATUS_CATEGORY_CONFIG = {
   [STATUS_CATEGORIES.NEW]: {
     key: 'new',
     label: 'New',
-    colorClass: 'text-[#003943]',
-    bgBadgeClass: 'bg-[#003943]/10 text-[#003943] border-[#003943]/20',
+    colorClass: 'text-[#102A43]',
+    bgBadgeClass: 'bg-[#102A43]/10 text-[#102A43] border-[#102A43]/20',
     description: 'Newly submitted applications awaiting LMD initial review'
   },
   [STATUS_CATEGORIES.IN_PROGRESS]: {
@@ -35,8 +35,8 @@ export const STATUS_CATEGORY_CONFIG = {
   [STATUS_CATEGORIES.AWAITING_ASSIGN]: {
     key: 'awaiting_assignment',
     label: 'Awaiting Assign',
-    colorClass: 'text-[#00959C]',
-    bgBadgeClass: 'bg-[#00959C]/10 text-[#00959C] border-[#00959C]/20',
+    colorClass: 'text-[#B85D19]',
+    bgBadgeClass: 'bg-[#B85D19]/10 text-[#B85D19] border-[#B85D19]/20',
     description: 'Applications reviewed/eligible and waiting for verifier assignment'
   },
   [STATUS_CATEGORIES.VERIFICATION]: {

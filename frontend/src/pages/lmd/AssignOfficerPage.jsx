@@ -7,6 +7,7 @@ import { Button } from '../../components/common/Button';
 import { Select } from '../../components/common/Select';
 import { Input } from '../../components/common/Input';
 import { Badge } from '../../components/common/Badge';
+import { VernierRuler } from '../../components/common/VernierRuler';
 
 export const AssignOfficerPage = () => {
   const navigate = useNavigate();
@@ -40,80 +41,96 @@ export const AssignOfficerPage = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-6 font-sans">
       <div>
-        <Link to="/lmd" className="inline-flex items-center gap-1 text-xs text-neutral-600 hover:text-neutral-900 mb-1">
-          <ArrowLeft className="w-3.5 h-3.5" /> Back to Admin Dashboard
+        <Link to="/lmd" className="inline-flex items-center gap-1.5 text-xs font-mono text-slate-500 hover:text-[#0B315B] mb-2 transition-colors">
+          <ArrowLeft className="w-3.5 h-3.5" /> Back to Admin Console
         </Link>
-        <h1 className="text-2xl font-bold text-neutral-900">Assign Verification Officer / GATC</h1>
-        <p className="text-xs text-neutral-600">
-          Assign an authorized Legal Metrology Officer (LMO) or Government Approved Test Centre (GATC) to conduct physical field verification.
+        <div className="flex items-center justify-between">
+          <div>
+            <span className="text-[10px] font-mono tracking-widest uppercase text-slate-500 block mb-0.5">
+              Enforcement Administration • Statutory Allocation
+            </span>
+            <h1 className="text-xl font-semibold text-[#0B315B] tracking-tight">Assign Verification Officer / GATC Center</h1>
+          </div>
+          <div className="hidden sm:flex items-center gap-2 border border-slate-300 bg-white px-3 py-1 rounded-sm">
+            <span className="text-[10px] font-mono uppercase text-slate-500">Legal Authority:</span>
+            <span className="text-xs font-mono font-semibold text-[#0B315B]">Act 2009 / Sec 14</span>
+          </div>
+        </div>
+        <VernierRuler className="my-3 opacity-75" />
+        <p className="text-xs text-slate-600">
+          Assign an authorized Legal Metrology Officer (LMO) or Government Approved Test Centre (GATC) to conduct physical field calibration and stamping.
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-5">
         {/* Select Application */}
-        <Card title="1. Select Application for Officer Assignment">
-          <Select
-            label="Application Queue"
-            value={selectedAppId}
-            onChange={(e) => setSelectedAppId(e.target.value)}
-            required
-            options={applications.map((app) => ({
-              value: app.id,
-              label: `${app.id} - ${app.instrumentName} (${app.applicantName})`
-            }))}
-          />
+        <Card accent title="1. Select Application Docket for Officer Assignment">
+          <div className="space-y-4">
+            <Select
+              label="Application Queue"
+              value={selectedAppId}
+              onChange={(e) => setSelectedAppId(e.target.value)}
+              required
+              options={applications.map((app) => ({
+                value: app.id,
+                label: `${app.id} - ${app.instrumentName} (${app.applicantName})`
+              }))}
+            />
 
-          {currentApp && (
-            <div className="mt-4 p-5 bg-[#FBF9F5] rounded-2xl border border-[#102A43]/15 text-xs space-y-3">
-              <div className="flex items-center justify-between border-b border-[#102A43]/10 pb-2">
-                <span className="font-mono font-bold text-[#B85D19]">{currentApp.id}</span>
-                <Badge status={currentApp.status}>{currentApp.status}</Badge>
+            {currentApp && (
+              <div className="border border-slate-300 rounded-sm bg-white overflow-hidden text-xs">
+                <div className="p-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono font-semibold text-xs text-[#0B315B] tabular-nums">{currentApp.id}</span>
+                    <span className="text-slate-400 font-mono">•</span>
+                    <span className="font-mono text-[11px] text-slate-600 uppercase">{currentApp.applicationType}</span>
+                  </div>
+                  <Badge status={currentApp.status} variant="stamp">{currentApp.status}</Badge>
+                </div>
+
+                <dl className="grid grid-cols-1 sm:grid-cols-2 text-xs divide-x divide-y divide-slate-100 border-b border-slate-200">
+                  <div className="p-3">
+                    <dt className="text-slate-500 font-mono text-[11px]">APPLICANT / ENTERPRISE</dt>
+                    <dd className="font-medium text-slate-900 mt-0.5">{currentApp.applicantName}</dd>
+                  </div>
+                  <div className="p-3">
+                    <dt className="text-slate-500 font-mono text-[11px]">INSTRUMENT SPECIFICATION</dt>
+                    <dd className="font-medium text-slate-900 mt-0.5">{currentApp.instrumentName}</dd>
+                  </div>
+                  <div className="p-3 sm:col-span-2">
+                    <dt className="text-slate-500 font-mono text-[11px]">INSTALLATION / FIELD SITE</dt>
+                    <dd className="font-sans text-slate-800 mt-0.5 flex items-center gap-1.5">
+                      <MapPin className="w-3.5 h-3.5 text-[#0B315B] shrink-0" />
+                      <span>{currentApp.inspectionLocation}</span>
+                    </dd>
+                  </div>
+                </dl>
+
+                {currentApp.assignedOfficerName ? (
+                  <div className="p-3 bg-emerald-50/70 border-t border-emerald-200 text-emerald-950 space-y-0.5 font-sans">
+                    <span className="text-[10px] font-mono font-semibold uppercase tracking-wider text-emerald-800 block">
+                      Currently Assigned Verifier
+                    </span>
+                    <p className="font-semibold text-xs text-slate-900">{currentApp.assignedOfficerName}</p>
+                    <p className="text-[11px] font-mono text-slate-500">
+                      Scheduled Field Inspection: <span className="font-medium text-slate-800 tabular-nums">{currentApp.scheduledInspectionDate || 'Pending Date'}</span>
+                    </p>
+                  </div>
+                ) : (
+                  <div className="p-2.5 bg-amber-50/70 border-t border-amber-200 text-amber-900 font-mono text-xs flex items-center gap-2">
+                    <span className="text-amber-600 font-bold">ℹ</span>
+                    <span>No Verifier Assigned Yet — Ready to allocate LMO Inspector or GATC Centre below.</span>
+                  </div>
+                )}
               </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white p-3.5 rounded-xl border border-[#102A43]/10">
-                <div>
-                  <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Vendor Business Name</span>
-                  <p className="font-serif font-bold text-[#102A43] text-sm">{currentApp.applicantName}</p>
-                </div>
-                <div>
-                  <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Machine / Instrument</span>
-                  <p className="font-bold text-[#102A43]">{currentApp.instrumentName}</p>
-                </div>
-                <div>
-                  <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Verification Type</span>
-                  <p className="font-semibold text-[#102A43]">{currentApp.applicationType}</p>
-                </div>
-                <div>
-                  <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Installation Location</span>
-                  <p className="font-semibold text-[#102A43] flex items-center gap-1">
-                    <MapPin className="w-3.5 h-3.5 text-[#B85D19] shrink-0" /> {currentApp.inspectionLocation}
-                  </p>
-                </div>
-              </div>
-
-              {currentApp.assignedOfficerName ? (
-                <div className="p-3.5 bg-emerald-50 rounded-xl border border-emerald-200 text-emerald-800 space-y-1">
-                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-700 block">
-                    Currently Assigned Verifier for Vendor
-                  </span>
-                  <p className="font-serif font-bold text-[#102A43] text-sm">{currentApp.assignedOfficerName}</p>
-                  <p className="text-[11px] text-[#102A43]/70">
-                    Scheduled Field Inspection: <span className="font-semibold">{currentApp.scheduledInspectionDate || 'Pending Date'}</span>
-                  </p>
-                </div>
-              ) : (
-                <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 text-amber-800 font-bold text-xs">
-                  ⚠️ No Verifier Assigned Yet — Ready to allocate LMO Inspector or GATC Centre below.
-                </div>
-              )}
-            </div>
-          )}
+            )}
+          </div>
         </Card>
 
         {/* Select Officer */}
-        <Card title="2. Select LMO Inspector or GATC Center">
+        <Card accent title="2. Select LMO Inspector or GATC Testing Centre">
           <div className="space-y-4">
             <Select
               label="Authorized Verifier Roster"
@@ -128,25 +145,25 @@ export const AssignOfficerPage = () => {
 
             {/* Officer Details Preview */}
             {currentOfficer && (
-              <div className="p-4 bg-primary-light/40 rounded-lg border border-primary/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs">
+              <div className="p-3.5 bg-slate-50 border border-slate-300 rounded-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-sans">
                 <div className="flex items-center gap-3">
-                  <img src={currentOfficer.avatar} alt={currentOfficer.name} className="w-12 h-12 rounded-full object-cover border border-white shrink-0" />
+                  <img src={currentOfficer.avatar} alt={currentOfficer.name} className="w-10 h-10 rounded-sm object-cover border border-slate-300 shrink-0" />
                   <div>
-                    <h4 className="font-bold text-neutral-900 text-sm">{currentOfficer.name}</h4>
-                    <p className="text-neutral-600">{currentOfficer.designation}</p>
-                    <p className="text-neutral-600 font-medium mt-0.5">Zone: {currentOfficer.zone}</p>
+                    <h4 className="font-semibold text-slate-900 text-xs">{currentOfficer.name}</h4>
+                    <p className="text-slate-500 font-mono text-[11px]">{currentOfficer.designation}</p>
+                    <p className="text-slate-600 font-mono text-[11px] mt-0.5">Zone: {currentOfficer.zone}</p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <span className="inline-block bg-white px-2.5 py-1 rounded font-bold text-primary border border-neutral-300">
-                    Active Load: {currentOfficer.activeCount} verifications
+                <div className="sm:text-right">
+                  <span className="inline-block bg-white px-2 py-0.5 rounded-xs font-mono text-[11px] font-semibold text-[#0B315B] border border-slate-300">
+                    Active Load: <span className="tabular-nums">{currentOfficer.activeCount}</span> dockets
                   </span>
-                  <p className="text-emerald-700 font-semibold mt-1">★ {currentOfficer.rating} Inspector Rating</p>
+                  <p className="text-emerald-700 font-mono text-[11px] font-medium mt-1">★ {currentOfficer.rating} Verification Rating</p>
                 </div>
               </div>
             )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
               <Input
                 label="Scheduled Inspection Date"
                 type="date"
@@ -156,7 +173,7 @@ export const AssignOfficerPage = () => {
               />
 
               <Input
-                label="Special Instructions / Test Weights Required"
+                label="Special Directives / Test Weights Required"
                 placeholder="e.g., Carry 20T standard deadweight truck or prover loop measures"
                 value={adminNotes}
                 onChange={(e) => setAdminNotes(e.target.value)}
@@ -166,12 +183,12 @@ export const AssignOfficerPage = () => {
         </Card>
 
         {/* Submit Actions */}
-        <div className="flex items-center justify-end gap-3 pt-4 border-t border-neutral-300">
+        <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-200">
           <Link to="/lmd">
-            <Button variant="ghost">Cancel</Button>
+            <Button variant="outline" size="sm" className="font-mono text-xs">Cancel</Button>
           </Link>
-          <Button type="submit" variant="primary" loading={loading} icon={UserCheck}>
-            Confirm Officer Assignment & Schedule Inspection
+          <Button type="submit" variant="primary" size="sm" loading={loading} icon={UserCheck} className="font-mono uppercase tracking-wider text-xs">
+            Confirm Assignment & Schedule Inspection
           </Button>
         </div>
       </form>

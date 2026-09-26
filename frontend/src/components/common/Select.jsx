@@ -24,7 +24,7 @@ export const Select = React.forwardRef(({
         ref={ref}
         id={selectId}
         required={required}
-        className={`w-full rounded-md border text-sm text-slate-800 bg-white px-3.5 py-2.5 min-h-[44px] transition-colors focus:outline-none focus:ring-1 focus:ring-[#0B315B] focus:border-[#0B315B] disabled:bg-slate-100 disabled:opacity-75 ${
+        className={`w-full rounded-sm border text-sm text-slate-800 bg-white px-3.5 py-2.5 min-h-[44px] transition-colors focus:outline-none focus:ring-1 focus:ring-[#0B315B] focus:border-[#0B315B] disabled:bg-slate-100 disabled:opacity-75 ${
           error ? 'border-red-500 focus:ring-red-500' : 'border-slate-300'
         }`}
         {...props}

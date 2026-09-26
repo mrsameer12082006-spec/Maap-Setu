@@ -8,10 +8,10 @@ export const Table = ({
   className = ''
 }) => {
   return (
-    <div className={`overflow-x-auto w-full border border-slate-200 rounded-md bg-white shadow-none ${className}`}>
+    <div className={`overflow-x-auto w-full border border-slate-200 rounded-sm bg-white shadow-none ${className}`}>
       <table className="w-full text-left border-collapse text-sm tabular-nums">
         <thead>
-          <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 font-medium text-xs uppercase tracking-wider">
+          <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-mono font-medium text-[11px] uppercase tracking-wider">
             {columns.map((col, idx) => (
               <th key={col.key || idx} className={`py-3 px-4 text-left ${col.className || ''}`}>
                 {col.header}

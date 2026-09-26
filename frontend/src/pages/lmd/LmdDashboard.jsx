@@ -29,6 +29,8 @@ import {
   STATUS_CATEGORIES,
   calculateLmdDashboardCounts
 } from '../../utils/statusClassification';
+import { Badge } from '../../components/common/Badge';
+import { VernierRuler } from '../../components/common/VernierRuler';
 
 // Helper to format GovTech ISO dates cleanly
 const formatGovDate = (d) => {
@@ -372,76 +374,84 @@ export const LmdDashboard = () => {
   return (
     <div className="w-full space-y-6 pb-20 text-slate-800 font-sans">
       {/* 1. HIERARCHICAL SUB-HEADER & STATUTORY BREADCRUMB */}
-      <div className="bg-white border border-slate-200 rounded-md p-6 space-y-4 text-left">
-        {/* Hierarchical Breadcrumb Navigation */}
-        <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-500">
-          <span className="text-slate-600">Department of Legal Metrology</span>
-          <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-          <span className="text-slate-600">State Verification & Licensing Directorate</span>
-          <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-          <span className="text-[#0B315B] font-semibold">LMD Admin / GATC Testing Center</span>
-          <span className="ml-auto inline-flex items-center px-2.5 py-0.5 rounded border border-slate-200 bg-slate-50 text-[11px] font-mono tabular-nums text-slate-700">
-            OIML R76 / LM RULES 2011 · ACTIVE ROSTER
-          </span>
-        </div>
+      <div className="bg-white border border-slate-300 rounded-xs shadow-none overflow-hidden text-left">
+        {/* Subtle top accent line in Warm Precision Copper */}
+        <div className="h-1 bg-[#C87541] w-full" />
 
-        {/* Title & Primary Batch Action Toolbar */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pt-1">
-          <div className="space-y-1">
-            <h1 className="text-2xl sm:text-3xl font-bold text-[#0B315B] tracking-tight">
-              LMD Administrative & GATC Testing Roster
-            </h1>
-            <p className="text-xs sm:text-sm text-slate-600 max-w-3xl">
-              Statutory verification oversight, automated technical route allocation (State LMO Inspectorate vs. Approved GATC Laboratories), batch officer scheduling, and legal certificate control.
-            </p>
+        <div className="p-6 space-y-4">
+          {/* Hierarchical Breadcrumb Navigation */}
+          <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-500">
+            <span className="text-slate-600">Department of Legal Metrology</span>
+            <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+            <span className="text-slate-600">State Verification & Licensing Directorate</span>
+            <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+            <span className="text-[#0B315B] font-semibold">LMD Admin / GATC Testing Center</span>
+            <span className="ml-auto inline-flex items-center px-2.5 py-0.5 rounded border border-slate-300 bg-slate-50 text-[11px] font-mono tabular-nums text-slate-700">
+              OIML R76 / LM RULES 2011 · ACTIVE ROSTER
+            </span>
           </div>
 
-          {/* Primary Batch Action Buttons */}
-          <div className="flex flex-wrap items-center gap-3 shrink-0">
-            {/* Batch Assign Button */}
-            <button
-              type="button"
-              onClick={() => setIsBatchAssignOpen(true)}
-              disabled={selectedAppIds.length === 0}
-              className={`min-h-[44px] px-4 py-2.5 rounded-md font-medium text-sm flex items-center gap-2 transition-colors border ${
-                selectedAppIds.length > 0
-                  ? 'bg-[#0B315B] hover:bg-blue-900 text-white border-[#0B315B] cursor-pointer'
-                  : 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed'
-              }`}
-              title={selectedAppIds.length === 0 ? 'Select rows in table to enable batch assignment' : 'Assign selected verification cases'}
-            >
-              <Users className="w-4 h-4 shrink-0" />
-              <span>
-                Batch Assign Verifiers
-                {selectedAppIds.length > 0 && (
-                  <span className="ml-2 px-2 py-0.5 rounded bg-white text-[#0B315B] text-xs font-bold tabular-nums">
-                    {selectedAppIds.length}
-                  </span>
-                )}
-              </span>
-            </button>
+          {/* Title & Primary Batch Action Toolbar */}
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pt-1">
+            <div className="space-y-1">
+              <h1 className="text-2xl sm:text-3xl font-bold text-[#0B315B] tracking-tight">
+                LMD Administrative & GATC Testing Roster
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-600 max-w-3xl">
+                Statutory verification oversight, automated technical route allocation (State LMO Inspectorate vs. Approved GATC Laboratories), batch officer scheduling, and legal certificate control.
+              </p>
+            </div>
 
-            {/* Export CSV Button */}
-            <button
-              type="button"
-              onClick={handleExportCSV}
-              className="min-h-[44px] px-4 py-2.5 rounded-md font-medium text-sm border border-[#C87541] text-[#C87541] hover:bg-[#FDF3EC] transition-colors flex items-center gap-2 bg-white"
-              title="Export complete metrological queue as standardized CSV"
-            >
-              <Download className="w-4 h-4 shrink-0 text-[#C87541]" />
-              <span>Export Regulatory Roster (CSV)</span>
-            </button>
+            {/* Primary Batch Action Buttons */}
+            <div className="flex flex-wrap items-center gap-3 shrink-0">
+              {/* Batch Assign Button */}
+              <button
+                type="button"
+                onClick={() => setIsBatchAssignOpen(true)}
+                disabled={selectedAppIds.length === 0}
+                className={`min-h-[44px] px-4 py-2.5 rounded-md font-medium text-sm flex items-center gap-2 transition-colors border ${
+                  selectedAppIds.length > 0
+                    ? 'bg-[#0B315B] hover:bg-blue-900 text-white border-[#0B315B] cursor-pointer'
+                    : 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed'
+                }`}
+                title={selectedAppIds.length === 0 ? 'Select rows in table to enable batch assignment' : 'Assign selected verification cases'}
+              >
+                <Users className="w-4 h-4 shrink-0" />
+                <span>
+                  Batch Assign Verifiers
+                  {selectedAppIds.length > 0 && (
+                    <span className="ml-2 px-2 py-0.5 rounded bg-white text-[#0B315B] text-xs font-bold tabular-nums">
+                      {selectedAppIds.length}
+                    </span>
+                  )}
+                </span>
+              </button>
 
-            {/* Comprehensive Review Link */}
-            <Link
-              to="/lmd/review"
-              className="min-h-[44px] px-4 py-2.5 rounded-md font-medium text-sm border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition-colors flex items-center gap-1.5"
-            >
-              <FileCheck className="w-4 h-4 text-slate-500" />
-              <span>Technical Review &rarr;</span>
-            </Link>
+              {/* Export CSV Button */}
+              <button
+                type="button"
+                onClick={handleExportCSV}
+                className="min-h-[44px] px-4 py-2.5 rounded-md font-medium text-sm border border-[#C87541] text-[#C87541] hover:bg-[#FDF3EC] transition-colors flex items-center gap-2 bg-white"
+                title="Export complete metrological queue as standardized CSV"
+              >
+                <Download className="w-4 h-4 shrink-0 text-[#C87541]" />
+                <span>Export Regulatory Roster (CSV)</span>
+              </button>
+
+              {/* Comprehensive Review Link */}
+              <Link
+                to="/lmd/review"
+                className="min-h-[44px] px-4 py-2.5 rounded-md font-medium text-sm border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition-colors flex items-center gap-1.5"
+              >
+                <FileCheck className="w-4 h-4 text-slate-500" />
+                <span>Technical Review &rarr;</span>
+              </Link>
+            </div>
           </div>
         </div>
+
+        {/* Vernier Metric Ruler Tick Divider */}
+        <VernierRuler />
       </div>
 
       {/* 2. STATUTORY METRICS STRIP (HIGH DENSITY FLAT CARDS) */}
@@ -807,27 +817,7 @@ export const LmdDashboard = () => {
 
                       {/* Verification Status */}
                       <td className="py-3 px-4 align-top text-left">
-                        {isPassed ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded border text-xs font-medium bg-emerald-50 text-emerald-800 border-emerald-200">
-                            <CheckCircle2 className="w-3 h-3 text-emerald-700" />
-                            <span>Passed</span>
-                          </span>
-                        ) : isFailed ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded border text-xs font-medium bg-red-50 text-red-800 border-red-200">
-                            <AlertTriangle className="w-3 h-3 text-red-700" />
-                            <span>Failed</span>
-                          </span>
-                        ) : isAssigned ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded border text-xs font-medium bg-blue-50 text-blue-800 border-blue-200">
-                            <Clock className="w-3 h-3 text-blue-700" />
-                            <span>In Verification</span>
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded border text-xs font-medium bg-amber-50 text-amber-800 border-amber-200">
-                            <Clock className="w-3 h-3 text-amber-700" />
-                            <span>Awaiting Assign</span>
-                          </span>
-                        )}
+                        <Badge status={app.status} variant="stamp" />
                       </td>
 
                       {/* Actions */}
@@ -1097,51 +1087,74 @@ export const LmdDashboard = () => {
 
             {/* Scrollable Body */}
             <div className="p-6 overflow-y-auto flex-1 space-y-6 text-xs sm:text-sm">
-              {/* Technical Profile Box */}
-              <div className="bg-slate-50 border border-slate-200 rounded-md p-4 space-y-3">
-                <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-200">
+              {/* Technical Spec Container with Ruler Header & Monospace Precision */}
+              <div className="relative bg-white border border-slate-300 rounded-xs shadow-none overflow-hidden text-left">
+                {/* Subtle top accent line in Warm Copper */}
+                <div className="h-1 bg-[#C87541] w-full" />
+
+                {/* Header with Technical Stamp */}
+                <div className="p-4 sm:p-5 border-b border-slate-200 flex items-start justify-between bg-slate-50/70 gap-3">
                   <div>
-                    <h3 className="font-bold text-slate-900 text-sm sm:text-base">
+                    <span className="text-[10px] font-mono tracking-widest uppercase text-slate-500 block mb-0.5">
+                      Calibration Record • {selectedApp.displayAppId}
+                    </span>
+                    <h3 className="text-sm sm:text-base font-semibold text-[#0B315B] tracking-tight">
                       {selectedApp.instrumentName}
                     </h3>
                     <p className="text-xs text-slate-500">Applicant: {selectedApp.applicantName}</p>
                   </div>
-                  <span className="px-2.5 py-0.5 rounded border border-slate-300 bg-white font-mono text-xs text-slate-700">
-                    {selectedApp.applicationType}
-                  </span>
+
+                  {/* Tactile Stamp Badge */}
+                  <Badge
+                    status={selectedApp.status || 'verified'}
+                    variant="stamp"
+                    subtext="NPL Traceable"
+                    className="shrink-0"
+                  />
                 </div>
 
-                {/* Technical Grid */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  <div>
-                    <span className="text-[10px] uppercase font-bold text-slate-500 block">Model Class</span>
-                    <span className="font-semibold text-slate-900">{selectedApp.modelClass}</span>
-                  </div>
-                  <div>
-                    <span className="text-[10px] uppercase font-bold text-slate-500 block">Max Capacity</span>
-                    <span className="font-semibold text-slate-900 tabular-nums">{selectedApp.maxCapacity}</span>
-                  </div>
-                  <div>
-                    <span className="text-[10px] uppercase font-bold text-slate-500 block">Scale Interval (e)</span>
-                    <span className="font-semibold text-slate-900 tabular-nums">{selectedApp.scaleInterval}</span>
-                  </div>
-                  <div>
-                    <span className="text-[10px] uppercase font-bold text-slate-500 block">Statutory Error Margin (MPE)</span>
-                    <span className="font-semibold text-slate-900 tabular-nums">{selectedApp.errorMargin}</span>
-                  </div>
-                  <div>
-                    <span className="text-[10px] uppercase font-bold text-slate-500 block">Serial Number</span>
-                    <span className="font-mono font-semibold text-slate-900 tabular-nums">
+                {/* Vernier scale divider line */}
+                <div className="vernier-ticks-sm" />
+
+                {/* High-Density Spec Grid */}
+                <dl className="grid grid-cols-2 text-xs divide-x divide-y divide-slate-100 border-b border-slate-200">
+                  <div className="p-3">
+                    <dt className="text-slate-500 font-mono text-[10px] uppercase">SERIAL NO.</dt>
+                    <dd className="font-mono font-medium text-slate-900 mt-0.5 tabular-nums text-xs">
                       {selectedApp.instrument?.serialNumber || 'AV-984210-IN'}
-                    </span>
+                    </dd>
                   </div>
-                  <div>
-                    <span className="text-[10px] uppercase font-bold text-slate-500 block">Premises Location</span>
-                    <span className="font-semibold text-slate-900 truncate block">
+                  <div className="p-3">
+                    <dt className="text-slate-500 font-mono text-[10px] uppercase">VERIFICATION UNIT / CLASS</dt>
+                    <dd className="font-medium text-slate-900 mt-0.5 text-xs">
+                      {selectedApp.modelClass} ({selectedApp.scaleInterval})
+                    </dd>
+                  </div>
+                  <div className="p-3">
+                    <dt className="text-slate-500 font-mono text-[10px] uppercase">MAX CAPACITY</dt>
+                    <dd className="font-mono font-medium text-slate-900 mt-0.5 tabular-nums text-xs">
+                      {selectedApp.maxCapacity}
+                    </dd>
+                  </div>
+                  <div className="p-3">
+                    <dt className="text-slate-500 font-mono text-[10px] uppercase">STATUTORY MPE / DEVIATION</dt>
+                    <dd className="font-mono font-medium text-slate-900 mt-0.5 tabular-nums text-xs">
+                      {selectedApp.errorMargin}
+                    </dd>
+                  </div>
+                  <div className="p-3">
+                    <dt className="text-slate-500 font-mono text-[10px] uppercase">PREMISES LOCATION</dt>
+                    <dd className="font-medium text-slate-800 mt-0.5 text-xs truncate">
                       {selectedApp.inspectionLocation}
-                    </span>
+                    </dd>
                   </div>
-                </div>
+                  <div className="p-3">
+                    <dt className="text-slate-500 font-mono text-[10px] uppercase">APPLICATION STAGE</dt>
+                    <dd className="font-mono font-medium text-[#0B315B] mt-0.5 text-xs">
+                      {selectedApp.applicationType}
+                    </dd>
+                  </div>
+                </dl>
               </div>
 
               {/* Assignment Form */}

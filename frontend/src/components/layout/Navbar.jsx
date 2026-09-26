@@ -43,7 +43,7 @@ export const Navbar = () => {
             <button
               type="button"
               onClick={() => setProfileOpen(!profileOpen)}
-              className="w-9 h-9 rounded-md bg-[#0B315B] hover:bg-blue-900 text-white font-semibold text-xs flex items-center justify-center transition-colors focus:ring-2 focus:ring-[#0B315B]/30"
+              className="w-9 h-9 rounded-sm bg-[#0B315B] hover:bg-[#082240] text-white font-mono font-bold text-xs flex items-center justify-center transition-colors border border-[#0B315B] focus:ring-2 focus:ring-[#0B315B]/30"
               title="User Account Menu"
             >
               <span>{user ? getInitials(user.name) : 'VM'}</span>
@@ -51,40 +51,41 @@ export const Navbar = () => {
 
             {/* Profile Dropdown Menu */}
             {profileOpen && (
-              <div className="absolute top-full right-0 mt-2 w-64 bg-white border border-slate-200 rounded-md shadow-lg p-4 z-50 space-y-3 animate-in fade-in duration-100 text-left">
+              <div className="absolute top-full right-0 mt-2 w-64 bg-white border border-slate-300 rounded-sm shadow-xl p-4 z-50 space-y-3 animate-in fade-in duration-100 text-left">
+                <div className="h-1 bg-[#C87541] -mx-4 -mt-4 mb-3"></div>
                 <div className="pb-3 border-b border-slate-200 space-y-0.5">
-                  <p className="font-semibold text-slate-800 text-sm">{user ? user.name : 'Vikramaditya Mehta'}</p>
-                  <span className="inline-block mt-1 px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-[10px] font-medium uppercase tracking-wide">
+                  <p className="font-semibold text-slate-800 text-sm tracking-tight">{user ? user.name : 'Vikramaditya Mehta'}</p>
+                  <span className="inline-block mt-1 px-2 py-0.5 rounded-xs bg-slate-100 text-slate-600 text-[10px] font-mono font-semibold uppercase tracking-wider border border-slate-200">
                     {user ? user.roleTitle : 'Business Owner'}
                   </span>
                 </div>
 
-                <div className="space-y-1.5 pt-1">
+                <div className="space-y-1 pt-1">
                   {user?.role === 'lmd' ? (
                     <Link
                       to="/lmd"
                       onClick={() => setProfileOpen(false)}
-                      className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-[#102A43] hover:bg-[#FDF3EC] transition-colors"
+                      className="w-full flex items-center gap-2 px-3 py-2 rounded-sm text-xs font-semibold text-slate-700 hover:bg-slate-100 hover:text-[#0B315B] transition-colors"
                     >
-                      <User className="w-4 h-4 text-[#B85D19]" />
+                      <User className="w-4 h-4 text-[#C87541]" />
                       <span>LMD Admin Control</span>
                     </Link>
                   ) : user?.role === 'officer' ? (
                     <Link
                       to="/officer"
                       onClick={() => setProfileOpen(false)}
-                      className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-[#102A43] hover:bg-[#FDF3EC] transition-colors"
+                      className="w-full flex items-center gap-2 px-3 py-2 rounded-sm text-xs font-semibold text-slate-700 hover:bg-slate-100 hover:text-[#0B315B] transition-colors"
                     >
-                      <User className="w-4 h-4 text-[#B85D19]" />
+                      <User className="w-4 h-4 text-[#C87541]" />
                       <span>LMO / GATC Inspection Queue</span>
                     </Link>
                   ) : (
                     <Link
                       to="/business"
                       onClick={() => setProfileOpen(false)}
-                      className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-[#102A43] hover:bg-[#FDF3EC] transition-colors"
+                      className="w-full flex items-center gap-2 px-3 py-2 rounded-sm text-xs font-semibold text-slate-700 hover:bg-slate-100 hover:text-[#0B315B] transition-colors"
                     >
-                      <User className="w-4 h-4 text-[#B85D19]" />
+                      <User className="w-4 h-4 text-[#C87541]" />
                       <span>Business Dashboard</span>
                     </Link>
                   )}
@@ -92,18 +93,18 @@ export const Navbar = () => {
                   <Link
                     to="/"
                     onClick={() => setProfileOpen(false)}
-                    className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-[#102A43] hover:bg-[#FDF3EC] transition-colors"
+                    className="w-full flex items-center gap-2 px-3 py-2 rounded-sm text-xs font-semibold text-slate-700 hover:bg-slate-100 hover:text-[#0B315B] transition-colors"
                   >
-                    <ArrowLeft className="w-4 h-4 text-[#B85D19]" />
+                    <ArrowLeft className="w-4 h-4 text-[#C87541]" />
                     <span>Return to Homepage</span>
                   </Link>
 
                   <button
                     type="button"
                     onClick={handleLogout}
-                    className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-red-600 hover:bg-red-50 transition-colors"
+                    className="w-full flex items-center gap-2 px-3 py-2 rounded-sm text-xs font-semibold text-red-700 hover:bg-red-50 transition-colors"
                   >
-                    <LogOut className="w-4 h-4 text-red-500" />
+                    <LogOut className="w-4 h-4 text-red-600" />
                     <span>Sign Out</span>
                   </button>
                 </div>
@@ -114,13 +115,14 @@ export const Navbar = () => {
           {/* Return to Homepage Button */}
           <Link
             to="/"
-            className="hidden sm:inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-[#102A43] hover:bg-[#0A1C2E] text-white border border-[#B85D19]/40 font-bold text-xs sm:text-sm transition-all shadow-md shrink-0 group"
+            className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-sm bg-[#0B315B] hover:bg-[#082240] text-white border border-[#0B315B] font-semibold text-xs transition-colors shrink-0 group"
           >
-            <ArrowLeft className="w-4 h-4 text-[#C2672B] group-hover:-translate-x-1 transition-transform" />
-            <span>Return to MaapSetu Homepage</span>
+            <ArrowLeft className="w-3.5 h-3.5 text-[#C87541] group-hover:-translate-x-0.5 transition-transform" />
+            <span>Return to Homepage</span>
           </Link>
         </div>
       </div>
+      <div className="vernier-ticks-sm w-full" />
     </header>
   );
 };

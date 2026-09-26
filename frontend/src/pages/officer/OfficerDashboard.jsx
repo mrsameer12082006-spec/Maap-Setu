@@ -19,6 +19,8 @@ import {
 import { useData } from '../../context/DataContext';
 import { useAuth } from '../../context/AuthContext';
 import { DynamicTechnicalVerification } from '../../components/verification/DynamicTechnicalVerification';
+import { VernierRuler } from '../../components/common/VernierRuler';
+import { Badge } from '../../components/common/Badge';
 
 export const OfficerDashboard = () => {
   const { user } = useAuth();
@@ -119,123 +121,153 @@ export const OfficerDashboard = () => {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto space-y-7 pb-20 text-[#102A43]">
+    <div className="w-full max-w-5xl mx-auto space-y-6 pb-20 text-slate-900 font-sans">
       {/* 1. OFFICER HEADER BANNER */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2">
-        <div className="flex items-center gap-3.5">
-          <div className="w-14 h-14 rounded-2xl bg-[#102A43] text-[#C2672B] flex items-center justify-center shadow-md font-bold text-lg border-2 border-[#B85D19]">
-            <span>RS</span>
+      <div className="relative bg-white border border-slate-200 rounded-sm p-6 shadow-none overflow-hidden">
+        <div className="h-1 bg-[#C87541] w-full absolute top-0 left-0" />
+        
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-1">
+          <div className="flex items-center gap-3.5">
+            <div className="w-12 h-12 rounded-sm bg-[#0B315B] text-[#C87541] flex items-center justify-center font-mono font-bold text-base border border-[#C87541]/40 shrink-0">
+              <span>RS</span>
+            </div>
+            <div>
+              <span className="text-[10px] font-mono uppercase tracking-widest text-[#C87541] block">
+                AUTHORIZED VERIFICATION OFFICER • LMO SEC. 24(1)
+              </span>
+              <h1 className="text-xl sm:text-2xl font-semibold text-[#0B315B] tracking-tight">
+                {user?.name || 'Inspector Rajesh V. Sharma'}
+              </h1>
+              <p className="text-xs text-slate-500 font-mono mt-0.5">
+                Badge #LMO-NGP-442 • Zone: Nagpur Industrial Division & GATC Liaison
+              </p>
+            </div>
           </div>
-          <div>
-            <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#B85D19]">
-              AUTHORIZED VERIFICATION OFFICER
-            </span>
-            <h1 className="text-2xl sm:text-3xl font-serif font-bold text-[#102A43]">
-              {user?.name || 'Inspector Rajesh V. Sharma'}
-            </h1>
-            <p className="text-xs text-[#102A43]/70 font-medium">
-              Badge #LMO-NGP-442 • Zone: Nagpur Industrial Division & GATC Liaison
-            </p>
+
+          <div className="flex items-center gap-3">
+            <Badge status={assignedQueue.length > 0 ? 'in_progress' : 'passed'} variant="stamp" subtext={`${assignedQueue.length} INSPECTIONS DUE`}>
+              FIELD DISPATCH ACTIVE
+            </Badge>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <span className="px-3.5 py-1.5 rounded-full bg-[#FDF3EC] text-[#102A43] text-xs font-bold">
-            {assignedQueue.length} Field Inspections Pending
-          </span>
-        </div>
+        <VernierRuler className="mt-4" />
       </div>
 
       {/* 2. TODAY'S FIELD VERIFICATION SCHEDULE */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#102A43]/15 shadow-md space-y-6">
-        <div className="flex items-center justify-between pb-3 border-b border-[#102A43]/10">
+      <div className="bg-white rounded-sm border border-slate-200 shadow-none overflow-hidden">
+        <div className="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
           <div>
-            <h2 className="font-serif font-bold text-xl sm:text-2xl text-[#102A43]">
+            <div className="text-[10px] font-mono uppercase tracking-wider text-slate-500">
+              PHYSICAL ENFORCEMENT QUEUE • SCHEDULED INSPECTIONS
+            </div>
+            <h2 className="text-base font-semibold text-[#0B315B] tracking-tight mt-0.5">
               Today's Field Verification Schedule
             </h2>
-            <p className="text-xs text-[#102A43]/70">
-              Assigned physical verification appointments needing on-site testing.
-            </p>
           </div>
-          <Clock className="w-5 h-5 text-[#B85D19]" />
+          <Clock className="w-4 h-4 text-[#C87541]" />
         </div>
 
-        {assignedQueue.length === 0 ? (
-          <div className="bg-[#FBF9F5] rounded-2xl p-8 text-center space-y-2 border border-[#102A43]/10">
-            <CheckCircle2 className="w-8 h-8 text-[#B85D19] mx-auto" />
-            <p className="font-serif font-bold text-[#102A43]">All field verifications completed!</p>
-            <p className="text-xs text-[#102A43]/60">There are no pending inspections scheduled for today.</p>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {pendingPreview.map((app) => (
-              <div
-                key={app.id}
-                className="p-5 rounded-2xl bg-[#FBF9F5] border border-[#102A43]/15 hover:border-[#B85D19] transition-all space-y-3"
-              >
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                  <div className="space-y-1">
+        <div className="vernier-ruler-divider w-full" />
+
+        <div className="p-6">
+          {assignedQueue.length === 0 ? (
+            <div className="bg-slate-50 rounded-sm p-8 text-center space-y-2 border border-slate-200">
+              <CheckCircle2 className="w-8 h-8 text-emerald-600 mx-auto" />
+              <p className="font-semibold text-slate-900">All field verifications completed!</p>
+              <p className="text-xs text-slate-500 font-mono">There are no pending inspections scheduled for today.</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {pendingPreview.map((app) => (
+                <div
+                  key={app.id}
+                  className="rounded-sm bg-white border border-slate-200 hover:border-slate-400 transition-colors overflow-hidden"
+                >
+                  <div className="p-4 bg-slate-50/60 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-mono text-xs font-bold text-[#B85D19]">{app.id}</span>
-                      <span className="px-2.5 py-0.5 rounded-full bg-cyan-100 text-cyan-900 text-[10px] font-bold uppercase">
-                        Scheduled: {app.scheduledInspectionDate || 'Today'}
+                      <span className="font-mono text-xs font-semibold text-[#0B315B] bg-slate-200/60 px-2 py-0.5 rounded-xs border border-slate-300">
+                        {app.id}
                       </span>
-                      <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[10px] font-bold uppercase">
-                        {String(app.applicationType || '').toLowerCase().includes('re') ? 'Re-verification' : 'Initial Verification'}
+                      <span className="font-mono text-[11px] text-slate-500">
+                        SCHEDULED: <span className="text-slate-900 font-medium">{app.scheduledInspectionDate || 'Today'}</span>
                       </span>
                     </div>
 
-                    <h3 className="font-serif font-bold text-base sm:text-lg text-[#102A43]">
-                      {app.instrumentName}
-                    </h3>
-
-                    <p className="text-xs text-[#102A43]/80">
-                      Owner: <span className="font-semibold text-[#102A43]">{app.applicantName}</span>
-                    </p>
-
-                    <p className="text-xs text-[#102A43]/70 flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5 text-[#B85D19]" /> Location: {app.inspectionLocation}
-                    </p>
+                    <Badge status="in_progress" variant="stamp" subtext={String(app.applicationType || '').toUpperCase()}>
+                      PENDING FIELD CHECK
+                    </Badge>
                   </div>
 
-                  <Link
-                    to={`/officer/record/${app.id}`}
-                    className="px-5 py-2.5 rounded-full bg-[#102A43] hover:bg-[#0A1C2E] text-white font-bold text-xs sm:text-sm transition-all shadow-md flex items-center gap-2 shrink-0"
-                  >
-                    <FileText className="w-4 h-4 text-[#C2672B]" />
-                    <span>View Record</span>
-                  </Link>
+                  <dl className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-slate-100 border-b border-slate-200 text-xs">
+                    <div className="p-3.5">
+                      <dt className="text-slate-500 font-mono text-[10px] uppercase">INSTRUMENT DESIGNATION</dt>
+                      <dd className="font-semibold text-slate-900 mt-0.5">{app.instrumentName}</dd>
+                    </div>
+                    <div className="p-3.5">
+                      <dt className="text-slate-500 font-mono text-[10px] uppercase">APPLICANT / COMMERCIAL ENTITY</dt>
+                      <dd className="font-medium text-slate-900 mt-0.5">{app.applicantName}</dd>
+                    </div>
+                    <div className="p-3.5">
+                      <dt className="text-slate-500 font-mono text-[10px] uppercase">INSPECTION PREMISES</dt>
+                      <dd className="text-slate-700 mt-0.5 flex items-center gap-1">
+                        <MapPin className="w-3.5 h-3.5 text-[#C87541] shrink-0" />
+                        <span className="truncate">{app.inspectionLocation}</span>
+                      </dd>
+                    </div>
+                  </dl>
+
+                  <div className="p-3 bg-slate-50/80 flex items-center justify-between">
+                    <span className="text-[11px] font-mono text-slate-500">
+                      Standard Reference: Rule 11 Verification
+                    </span>
+                    <Link
+                      to={`/officer/record/${app.id}`}
+                      className="px-3.5 py-1.5 rounded-sm bg-[#0B315B] hover:bg-[#082342] text-white font-medium text-xs transition-colors flex items-center gap-1.5"
+                    >
+                      <FileText className="w-3.5 h-3.5 text-[#C87541]" />
+                      <span>Open Inspection Record</span>
+                    </Link>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* 3. COMPLETED FIELD VERIFICATION LOG */}
-      <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#102A43]/15 shadow-md space-y-5">
-        <div className="pb-3 border-b border-[#102A43]/10 flex items-center justify-between">
-          <h3 className="font-serif font-bold text-xl text-[#102A43]">
-            Recent Completed Inspections
-          </h3>
-          <span className="text-xs font-bold text-emerald-700">{completedQueue.length} Verified</span>
+      <div className="bg-white rounded-sm border border-slate-200 shadow-none overflow-hidden">
+        <div className="p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
+          <div>
+            <div className="text-[10px] font-mono uppercase tracking-wider text-slate-500">
+              AUDIT LOG • RECENT VERIFICATION OUTCOMES
+            </div>
+            <h3 className="text-base font-semibold text-[#0B315B] tracking-tight mt-0.5">
+              Recent Completed Inspections
+            </h3>
+          </div>
+          <span className="text-xs font-mono text-slate-600 bg-slate-100 px-2.5 py-1 rounded-xs border border-slate-200">
+            {completedQueue.length} VERIFIED
+          </span>
         </div>
 
-        <div className="space-y-3">
+        <div className="divide-y divide-slate-200">
           {completedPreview.map((app) => (
-            <div key={app.id} className="p-4 rounded-2xl bg-[#FBF9F5] border border-[#102A43]/10 flex items-center justify-between text-xs">
-              <div>
-                <p className="font-mono font-bold text-[#B85D19]">{app.id}</p>
-                <p className="font-serif font-bold text-[#102A43] text-sm">{app.instrumentName}</p>
-                <p className="text-[#102A43]/70">Owner: {app.applicantName}</p>
+            <div key={app.id} className="p-4 hover:bg-slate-50/50 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono font-medium text-[#0B315B]">{app.id}</span>
+                  <span className="text-slate-300">•</span>
+                  <span className="font-semibold text-slate-900">{app.instrumentName}</span>
+                </div>
+                <p className="text-slate-500 text-[11px]">Owner: {app.applicantName}</p>
               </div>
-              <div className="flex items-center gap-2">
-                <span className={`px-3.5 py-1 rounded-full font-bold text-xs ${app.status === 'failed' ? 'bg-red-100 text-red-800' : 'bg-emerald-100 text-emerald-800'}`}>
-                  {app.status === 'failed' ? 'FAIL' : 'PASS'}
-                </span>
+              <div className="flex items-center gap-3">
+                <Badge status={app.status} variant="stamp" />
                 <Link
                   to={`/officer/record/${app.id}`}
-                  className="px-3 py-1 rounded-full border border-[#102A43]/20 font-bold text-xs text-[#102A43] hover:bg-white hover:border-[#B85D19] transition-all"
+                  className="px-3 py-1 rounded-sm border border-slate-300 font-medium text-xs text-[#0B315B] hover:bg-slate-100 transition-colors"
                 >
                   View Record
                 </Link>
@@ -247,280 +279,271 @@ export const OfficerDashboard = () => {
 
       {/* 4. INTERACTIVE FIELD VERIFICATION WORKSPACE MODAL */}
       {activeApp && (
-        <div className="fixed inset-0 z-[100] w-screen h-screen bg-transparent flex items-center justify-center p-4">
-          <div className="bg-white rounded-md max-w-3xl w-full max-h-[92vh] flex flex-col overflow-hidden border border-slate-200 shadow-lg animate-in zoom-in-95 duration-150 text-left">
+        <div className="fixed inset-0 z-[100] w-screen h-screen bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-sm max-w-3xl w-full max-h-[92vh] flex flex-col overflow-hidden border border-slate-300 shadow-xl animate-in zoom-in-95 duration-150 text-left">
+            {/* Top Mechanical Accent */}
+            <div className="h-1 bg-[#C87541] w-full shrink-0" />
+
             {/* Fixed Header */}
             <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50 shrink-0">
               <div>
-                <h3 className="font-semibold text-lg text-[#0B315B]">
-                  Physical Inspection & Test Report
+                <span className="text-[10px] font-mono tracking-widest uppercase text-slate-500 block mb-0.5">
+                  LEGAL METROLOGY ACT, 2009 • SECTION 24(1)
+                </span>
+                <h3 className="font-semibold text-lg text-[#0B315B] tracking-tight">
+                  Physical Inspection & Test Report Workspace
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setActiveApp(null)}
-                className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-[#102A43] flex items-center justify-center font-bold text-lg transition-colors shrink-0"
+                className="w-8 h-8 rounded-sm bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center font-mono text-sm transition-colors shrink-0 border border-slate-200"
               >
                 ✕
               </button>
             </div>
 
+            <div className="vernier-ruler-divider w-full shrink-0" />
+
             {/* Scrollable Body */}
-            <div className="p-6 sm:p-8 overflow-y-auto flex-1 space-y-6">
-
-            {submitSuccess && (
-              <div className="p-4 bg-emerald-100 border border-emerald-300 rounded-2xl text-emerald-800 text-sm font-bold flex items-center gap-3">
-                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-                <span>Verification Result Submitted to LMD Admin for Final Approval!</span>
-              </div>
-            )}
-
-            {/* Instrument Info Header Box */}
-            <div className="p-4 bg-[#FBF9F5] rounded-2xl border border-[#102A43]/15 space-y-1.5 text-xs">
-              <div className="flex justify-between items-center">
-                <span className="font-mono font-bold text-[#B85D19]">{activeApp.id}</span>
-                <span className="px-2.5 py-0.5 rounded bg-[#102A43] text-white font-mono font-bold text-[10px]">
-                  AV-984210-IN
-                </span>
-              </div>
-              <p className="font-serif font-bold text-[#102A43] text-base">{activeApp.instrumentName}</p>
-              <p className="text-[#102A43]/80">Owner: <span className="font-semibold">{activeApp.applicantName}</span></p>
-              <p className="text-[#102A43]/70">Location: {activeApp.inspectionLocation}</p>
-            </div>
-
-            <form onSubmit={handleFinalSubmit} className="space-y-6">
-              {/* A. MANDATORY REQUIREMENTS CHECKLIST */}
-              <div className="space-y-3">
-                <h4 className="font-serif font-bold text-base text-[#102A43] flex items-center gap-2">
-                  <CheckSquare className="w-4 h-4 text-[#B85D19]" />
-                  <span>1. Mandatory Physical Requirements Checklist</span>
-                </h4>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
-                  <label className="p-3 bg-[#FBF9F5] rounded-xl border border-[#102A43]/15 flex items-center gap-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={checklist.nameplateChecked}
-                      onChange={() => handleToggleChecklist('nameplateChecked')}
-                      className="w-4 h-4 text-[#B85D19] rounded"
-                    />
-                    <span className="font-semibold text-[#102A43]">Identification / nameplate checked</span>
-                  </label>
-
-                  <label className="p-3 bg-[#FBF9F5] rounded-xl border border-[#102A43]/15 flex items-center gap-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={checklist.modelChecked}
-                      onChange={() => handleToggleChecklist('modelChecked')}
-                      className="w-4 h-4 text-[#B85D19] rounded"
-                    />
-                    <span className="font-semibold text-[#102A43]">Manufacturer / model checked</span>
-                  </label>
-
-                  <label className="p-3 bg-[#FBF9F5] rounded-xl border border-[#102A43]/15 flex items-center gap-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={checklist.capacityChecked}
-                      onChange={() => handleToggleChecklist('capacityChecked')}
-                      className="w-4 h-4 text-[#B85D19] rounded"
-                    />
-                    <span className="font-semibold text-[#102A43]">Capacity checked</span>
-                  </label>
-
-                  <label className="p-3 bg-[#FBF9F5] rounded-xl border border-[#102A43]/15 flex items-center gap-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={checklist.accuracyClassChecked}
-                      onChange={() => handleToggleChecklist('accuracyClassChecked')}
-                      className="w-4 h-4 text-[#B85D19] rounded"
-                    />
-                    <span className="font-semibold text-[#102A43]">Accuracy class checked</span>
-                  </label>
-
-                  <label className="p-3 bg-[#FBF9F5] rounded-xl border border-[#102A43]/15 flex items-center gap-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={checklist.markingsChecked}
-                      onChange={() => handleToggleChecklist('markingsChecked')}
-                      className="w-4 h-4 text-[#B85D19] rounded"
-                    />
-                    <span className="font-semibold text-[#102A43]">Required markings checked</span>
-                  </label>
-
-                  <label className="p-3 bg-[#FBF9F5] rounded-xl border border-[#102A43]/15 flex items-center gap-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={checklist.sealConditionChecked}
-                      onChange={() => handleToggleChecklist('sealConditionChecked')}
-                      className="w-4 h-4 text-[#B85D19] rounded"
-                    />
-                    <span className="font-semibold text-[#102A43]">Seal condition checked</span>
-                  </label>
+            <div className="p-6 overflow-y-auto flex-1 space-y-6">
+              {submitSuccess && (
+                <div className="p-3.5 bg-emerald-50 border border-emerald-500/40 rounded-sm text-emerald-800 text-xs font-mono flex items-center gap-2.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>VERIFICATION RECORD STORED • SUBMITTED FOR LMD SUPERINTENDENT SEAL</span>
                 </div>
-              </div>
+              )}
 
-              {/* B. INSTRUMENT-SPECIFIC DYNAMIC TECHNICAL VERIFICATION */}
-              <DynamicTechnicalVerification 
-                instrumentName={activeApp.instrumentName} 
-                applicationType={activeApp.applicationType} 
-                onDataChange={setTechnicalResults}
-              />
-
-              {/* C. PHOTO EVIDENCE & OFFICER REMARKS */}
-              <div className="space-y-3">
-                <h4 className="font-serif font-bold text-base text-[#102A43] flex items-center gap-2">
-                  <Camera className="w-4 h-4 text-[#B85D19]" />
-                  <span>3. Photo Evidence & Inspection Remarks</span>
-                </h4>
-
-                <div className="flex items-center gap-3 text-xs flex-wrap">
-                  <div className="flex items-center gap-2 p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-emerald-800 font-bold">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                    <span>📷 Instrument / Inspection Photo</span>
+              {/* Instrument Spec Sheet Container */}
+              <div className="border border-slate-200 rounded-sm overflow-hidden text-xs">
+                <div className="p-3 bg-slate-50/80 border-b border-slate-200 flex items-center justify-between">
+                  <div>
+                    <span className="font-mono text-xs font-semibold text-[#0B315B] bg-slate-200/70 px-2 py-0.5 rounded-xs border border-slate-300">
+                      {activeApp.id}
+                    </span>
+                    <span className="ml-2 font-mono text-[10px] text-slate-500 uppercase">
+                      STATUTORY CASE FILE
+                    </span>
                   </div>
-                  <div className="flex items-center gap-2 p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-emerald-800 font-bold">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                    <span>📷 Nameplate Scan Attached</span>
-                  </div>
-                  <div className="flex items-center gap-2 p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-emerald-800 font-bold">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                    <span>📷 Lead Seal & QR Stamp Photo Attached</span>
-                  </div>
+                  <Badge status="in_progress" variant="stamp" subtext="UNDER INSPECTION">
+                    CALIBRATION DISPATCH
+                  </Badge>
                 </div>
 
-                <div className="space-y-1">
-                  <label className="block font-bold text-xs uppercase tracking-wider text-[#102A43]/80">
-                    Officer Remarks & Observations <span className="text-red-500">*</span>
-                  </label>
-                  <textarea
-                    rows={2}
-                    value={remarks}
-                    onChange={(e) => setRemarks(e.target.value)}
-                    required
-                    className="w-full bg-[#FBF9F5] border border-[#102A43]/20 rounded-xl p-3 text-xs font-semibold text-[#102A43]"
-                  />
-                </div>
+                <dl className="grid grid-cols-2 text-xs divide-x divide-y divide-slate-100">
+                  <div className="p-3">
+                    <dt className="text-slate-500 font-mono text-[10px] uppercase">INSTRUMENT</dt>
+                    <dd className="font-semibold text-slate-900 mt-0.5">{activeApp.instrumentName}</dd>
+                  </div>
+                  <div className="p-3">
+                    <dt className="text-slate-500 font-mono text-[10px] uppercase">APPLICANT ENTITY</dt>
+                    <dd className="font-medium text-slate-900 mt-0.5">{activeApp.applicantName}</dd>
+                  </div>
+                  <div className="p-3 col-span-2">
+                    <dt className="text-slate-500 font-mono text-[10px] uppercase">LOCATION</dt>
+                    <dd className="text-slate-700 mt-0.5 font-mono text-[11px]">{activeApp.inspectionLocation}</dd>
+                  </div>
+                </dl>
               </div>
 
-              {/* D. FINAL OUTCOME ACTION */}
-              <div className="space-y-3 pt-2 border-t border-[#102A43]/10">
-                <label className="block font-bold text-xs uppercase tracking-wider text-[#102A43]/80">
-                  Select Inspection Final Outcome <span className="text-red-500">*</span>
-                </label>
-                <div className="grid grid-cols-2 gap-4">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setOutcome('PASS');
-                      setCustomOtherReason('');
-                    }}
-                    className={`py-3.5 rounded-2xl font-extrabold text-sm transition-all flex items-center justify-center gap-2 ${
-                      outcome === 'PASS'
-                        ? 'bg-emerald-700 text-white shadow-md ring-2 ring-emerald-500'
-                        : 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-                    }`}
-                  >
-                    <CheckCircle2 className="w-5 h-5" />
-                    <span>[ PASS / STAMP ]</span>
-                  </button>
+              <form onSubmit={handleFinalSubmit} className="space-y-6">
+                {/* A. MANDATORY REQUIREMENTS CHECKLIST */}
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-xs uppercase tracking-wider text-[#0B315B] flex items-center gap-1.5 font-mono">
+                    <CheckSquare className="w-4 h-4 text-[#C87541]" />
+                    <span>1. Statutory Physical Checklist (Rule 11)</span>
+                  </h4>
 
-                  <button
-                    type="button"
-                    onClick={() => setOutcome('FAIL')}
-                    className={`py-3.5 rounded-2xl font-extrabold text-sm transition-all flex items-center justify-center gap-2 ${
-                      outcome === 'FAIL'
-                        ? 'bg-red-700 text-white shadow-md ring-2 ring-red-500'
-                        : 'bg-red-50 text-red-800 border border-red-200'
-                    }`}
-                  >
-                    <AlertTriangle className="w-5 h-5" />
-                    <span>[ FAIL / REJECT ]</span>
-                  </button>
-                </div>
-
-                {/* Reason for Failure Selection (Shown when FAIL is selected) */}
-                {outcome === 'FAIL' && (
-                  <div className="p-4 bg-red-50/90 rounded-2xl border border-red-200 space-y-3 animate-in fade-in duration-200 mt-3">
-                    <label className="block font-extrabold text-xs uppercase tracking-wider text-red-900">
-                      Reason for Failure <span className="text-red-600">*</span>
-                    </label>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                      {[
-                        'MPE exceeded',
-                        'Nameplate mismatch',
-                        'Seal damaged',
-                        'Required marking missing',
-                        'Instrument not functioning',
-                        'Other'
-                      ].map((reason) => (
-                        <label
-                          key={reason}
-                          className={`p-3 rounded-xl border flex items-center gap-2.5 cursor-pointer font-bold transition-all ${
-                            failReason === reason
-                              ? 'bg-red-700 text-white border-red-800 shadow-xs'
-                              : 'bg-white text-red-900 border-red-200 hover:bg-red-100/60'
-                          }`}
-                        >
-                          <input
-                            type="radio"
-                            name="failReason"
-                            value={reason}
-                            checked={failReason === reason}
-                            onChange={(e) => {
-                              setFailReason(e.target.value);
-                              if (e.target.value !== 'Other') {
-                                setCustomOtherReason('');
-                              }
-                            }}
-                            className="w-4 h-4 accent-red-700"
-                          />
-                          <span>{reason}</span>
-                        </label>
-                      ))}
-                    </div>
-
-                    {failReason === 'Other' && (
-                      <div className="pt-2">
-                        <label className="block font-bold text-xs uppercase tracking-wider text-red-900 mb-1.5">
-                          OTHER REASON FOR FAILURE <span className="text-red-600">*</span>
-                        </label>
-                        <textarea
-                          rows={2}
-                          value={customOtherReason}
-                          onChange={(e) => setCustomOtherReason(e.target.value)}
-                          placeholder="Describe the reason for rejection..."
-                          className="w-full rounded-xl border border-red-200 text-xs text-red-900 bg-white p-3 focus:outline-none focus:ring-2 focus:ring-red-500"
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                    {[
+                      { key: 'nameplateChecked', label: 'Identification / nameplate checked' },
+                      { key: 'modelChecked', label: 'Manufacturer / model verified' },
+                      { key: 'capacityChecked', label: 'Capacity & division confirmed' },
+                      { key: 'accuracyClassChecked', label: 'Accuracy class verified' },
+                      { key: 'markingsChecked', label: 'Required statutory markings intact' },
+                      { key: 'sealConditionChecked', label: 'Physical lead seal intact' }
+                    ].map((item) => (
+                      <label
+                        key={item.key}
+                        className={`p-3 rounded-sm border flex items-center gap-3 cursor-pointer transition-colors ${
+                          checklist[item.key]
+                            ? 'bg-slate-50/80 border-slate-300 text-slate-900'
+                            : 'bg-white border-slate-200 text-slate-500'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={checklist[item.key]}
+                          onChange={() => handleToggleChecklist(item.key)}
+                          className="w-4 h-4 accent-[#0B315B] rounded-xs"
                         />
-                      </div>
-                    )}
+                        <span className="font-medium text-xs">{item.label}</span>
+                      </label>
+                    ))}
                   </div>
-                )}
-              </div>
+                </div>
 
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#102A43]/10">
-                <button
-                  type="button"
-                  onClick={() => setActiveApp(null)}
-                  className="px-5 py-2.5 rounded-full bg-slate-100 text-[#102A43] font-bold text-xs"
-                >
-                  Cancel
-                </button>
+                {/* B. INSTRUMENT-SPECIFIC DYNAMIC TECHNICAL VERIFICATION */}
+                <DynamicTechnicalVerification
+                  instrumentName={activeApp.instrumentName}
+                  applicationType={activeApp.applicationType}
+                  onDataChange={setTechnicalResults}
+                />
 
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="px-7 py-3.5 rounded-full bg-[#102A43] hover:bg-[#0A1C2E] text-white font-extrabold text-xs sm:text-sm transition-all shadow-md flex items-center gap-2"
-                >
-                  <span>{submitting ? 'Submitting to LMD...' : 'Submit Verification Result to LMD'}</span>
-                  <ArrowRight className="w-4 h-4 text-[#C2672B]" />
-                </button>
-              </div>
-            </form>
+                {/* C. PHOTO EVIDENCE & OFFICER REMARKS */}
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-xs uppercase tracking-wider text-[#0B315B] flex items-center gap-1.5 font-mono">
+                    <Camera className="w-4 h-4 text-[#C87541]" />
+                    <span>3. Photo Evidence & Technical Remarks</span>
+                  </h4>
+
+                  <div className="flex items-center gap-2 text-xs flex-wrap font-mono">
+                    <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-emerald-50 rounded-xs border border-emerald-300 text-emerald-800 text-[11px]">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>INSTRUMENT PHOTO STORED</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-emerald-50 rounded-xs border border-emerald-300 text-emerald-800 text-[11px]">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>NAMEPLATE SCAN ATTACHED</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-emerald-50 rounded-xs border border-emerald-300 text-emerald-800 text-[11px]">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>LEAD SEAL & QR STAMP PHOTO</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="block font-mono text-[10px] uppercase tracking-wider text-slate-600">
+                      OFFICER OBSERVATIONS & STATUTORY REMARKS <span className="text-red-500">*</span>
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={remarks}
+                      onChange={(e) => setRemarks(e.target.value)}
+                      required
+                      className="w-full bg-white border border-slate-300 rounded-sm p-3 text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-[#0B315B]"
+                    />
+                  </div>
+                </div>
+
+                {/* D. FINAL OUTCOME ACTION */}
+                <div className="space-y-3 pt-3 border-t border-slate-200">
+                  <label className="block font-mono text-[10px] uppercase tracking-wider text-slate-600">
+                    STATUTORY VERIFICATION DETERMINATION <span className="text-red-500">*</span>
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setOutcome('PASS');
+                        setCustomOtherReason('');
+                      }}
+                      className={`py-3 rounded-sm font-mono text-xs font-semibold tracking-wider transition-all flex items-center justify-center gap-2 border ${
+                        outcome === 'PASS'
+                          ? 'bg-emerald-700 text-white border-emerald-800 shadow-xs'
+                          : 'bg-emerald-50/50 text-emerald-900 border-emerald-300 hover:bg-emerald-100/50'
+                      }`}
+                    >
+                      <CheckCircle2 className="w-4 h-4" />
+                      <span>[ PASS / ISSUE STAMP ]</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setOutcome('FAIL')}
+                      className={`py-3 rounded-sm font-mono text-xs font-semibold tracking-wider transition-all flex items-center justify-center gap-2 border ${
+                        outcome === 'FAIL'
+                          ? 'bg-red-700 text-white border-red-800 shadow-xs'
+                          : 'bg-red-50/50 text-red-900 border-red-300 hover:bg-red-100/50'
+                      }`}
+                    >
+                      <AlertTriangle className="w-4 h-4" />
+                      <span>[ FAIL / NON-COMPLIANT ]</span>
+                    </button>
+                  </div>
+
+                  {outcome === 'FAIL' && (
+                    <div className="p-4 bg-red-50/70 rounded-sm border border-red-300 space-y-3 animate-in fade-in duration-200 mt-2">
+                      <label className="block font-mono text-[10px] uppercase tracking-wider text-red-900">
+                        PRIMARY REJECTION GROUND <span className="text-red-600">*</span>
+                      </label>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                        {[
+                          'MPE exceeded',
+                          'Nameplate mismatch',
+                          'Seal damaged',
+                          'Required marking missing',
+                          'Instrument not functioning',
+                          'Other'
+                        ].map((reason) => (
+                          <label
+                            key={reason}
+                            className={`p-2.5 rounded-sm border flex items-center gap-2 cursor-pointer font-medium transition-colors text-xs ${
+                              failReason === reason
+                                ? 'bg-red-700 text-white border-red-800'
+                                : 'bg-white text-red-900 border-red-200 hover:bg-red-100/50'
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              name="failReason"
+                              value={reason}
+                              checked={failReason === reason}
+                              onChange={(e) => {
+                                setFailReason(e.target.value);
+                                if (e.target.value !== 'Other') {
+                                  setCustomOtherReason('');
+                                }
+                              }}
+                              className="w-3.5 h-3.5 accent-red-700"
+                            />
+                            <span>{reason}</span>
+                          </label>
+                        ))}
+                      </div>
+
+                      {failReason === 'Other' && (
+                        <div className="pt-2">
+                          <label className="block font-mono text-[10px] uppercase tracking-wider text-red-900 mb-1">
+                            DETAILED REJECTION SPECIFICATION <span className="text-red-600">*</span>
+                          </label>
+                          <textarea
+                            rows={2}
+                            value={customOtherReason}
+                            onChange={(e) => setCustomOtherReason(e.target.value)}
+                            placeholder="Detail non-compliance with Legal Metrology (General) Rules..."
+                            className="w-full rounded-sm border border-red-300 text-xs text-red-900 bg-white p-2.5 focus:outline-none focus:ring-1 focus:ring-red-500"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-200">
+                  <button
+                    type="button"
+                    onClick={() => setActiveApp(null)}
+                    className="px-4 py-2 rounded-sm bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium text-xs border border-slate-300 transition-colors"
+                  >
+                    Cancel
+                  </button>
+
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="px-5 py-2.5 rounded-sm bg-[#0B315B] hover:bg-[#082342] text-white font-medium text-xs transition-colors flex items-center gap-2 border border-[#0B315B]"
+                  >
+                    <span>{submitting ? 'Transmitting Record...' : 'Submit Verification Record'}</span>
+                    <ArrowRight className="w-3.5 h-3.5 text-[#C87541]" />
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
-    )}
+      )}
     </div>
   );
 };

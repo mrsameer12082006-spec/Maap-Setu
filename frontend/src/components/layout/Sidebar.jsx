@@ -52,12 +52,13 @@ export const Sidebar = () => {
   }
 
   return (
-    <aside className="w-64 bg-white border-r border-neutral-300 min-h-[calc(100vh-4rem)] shrink-0 hidden md:block">
-      <div className="p-4 space-y-6">
+    <aside className="w-64 bg-white border-r border-slate-200 min-h-[calc(100vh-4rem)] shrink-0 hidden md:block">
+      <div className="p-4 space-y-5">
         {/* Role Portal Header */}
-        <div className="px-3 py-2 bg-neutral-100 rounded-lg border border-neutral-300">
-          <p className="text-[10px] uppercase font-bold tracking-wider text-neutral-600">Portal View</p>
-          <p className="text-sm font-bold text-primary capitalize mt-0.5">
+        <div className="relative p-3 bg-slate-50 rounded-sm border border-slate-200">
+          <div className="h-0.5 bg-[#C87541] absolute top-0 left-0 right-0"></div>
+          <p className="text-[10px] uppercase font-mono font-semibold tracking-widest text-slate-500">Legal Metrology Portal</p>
+          <p className="text-sm font-semibold text-[#0B315B] capitalize mt-0.5 tracking-tight">
             {activeRole === USER_ROLES.LMD_ADMIN
               ? 'LMD Administrator'
               : activeRole === USER_ROLES.OFFICER
@@ -74,10 +75,10 @@ export const Sidebar = () => {
               to={item.to}
               end={item.end}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-button text-sm font-medium transition-colors ${
+                `flex items-center gap-3 px-3 py-2.5 rounded-sm text-xs font-medium transition-colors border ${
                   isActive
-                    ? 'bg-primary text-white shadow-xs font-semibold'
-                    : 'text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100'
+                    ? 'bg-[#0B315B] text-white border-[#0B315B] font-semibold shadow-xs'
+                    : 'text-slate-700 hover:text-[#0B315B] hover:bg-slate-100 border-transparent'
                 }`
               }
             >

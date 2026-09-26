@@ -7,19 +7,61 @@
     scroll-behavior: smooth;
   }
   body {
-    background-color: #F8FAFC; /* slate-50 */
+    background-color: #F8FAFC; /* slate-50 drafting canvas */
     color: #1E293B; /* slate-800 */
-    font-family: 'Public Sans', 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: 'Instrument Sans', 'Public Sans', 'Inter', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
   }
 
-  /* Strict Tabular Numbers for all tables, metric data, and timestamps */
+  /* Strict Monospace & Tabular Numbers for all data readouts, tolerances, and calibration tables */
+  code, pre, .font-mono, [data-mono] {
+    font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  }
+
   table, .tabular-nums, code, pre, [data-tabular] {
     font-variant-numeric: tabular-nums;
     font-feature-settings: "tnum" 1;
   }
+}
+
+/* Institutional Drafting Grid Underlay (32px hairline grid in 2.5% Deep Blue #0B315B) */
+.drafting-grid-bg {
+  background-color: #F8FAFC;
+  background-image: 
+    linear-gradient(to right, rgba(11, 49, 91, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(11, 49, 91, 0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Precision Scaler / Ruler Tick Divider (Hierarchy: Major 8px, Half 6px, Minor 4px) */
+.vernier-ruler-divider {
+  height: 8px;
+  width: 100%;
+  border-bottom: 1px solid #E2E8F0;
+  background-image: url("data:image/svg+xml;utf8,<svg width='50' height='8' xmlns='http://www.w3.org/2000/svg'><path d='M0,0 v8 M5,4 v4 M10,4 v4 M15,4 v4 M20,4 v4 M25,2 v6 M30,4 v4 M35,4 v4 M40,4 v4 M45,4 v4' stroke='%2394a3b8' stroke-width='1' fill='none'/></svg>");
+  background-repeat: repeat-x;
+  background-position: bottom;
+  opacity: 0.4;
+}
+
+.vernier-ticks-sm {
+  height: 8px;
+  width: 100%;
+  border-bottom: 1px solid #E2E8F0;
+  background-image: url("data:image/svg+xml;utf8,<svg width='50' height='8' xmlns='http://www.w3.org/2000/svg'><path d='M0,0 v8 M5,4 v4 M10,4 v4 M15,4 v4 M20,4 v4 M25,2 v6 M30,4 v4 M35,4 v4 M40,4 v4 M45,4 v4' stroke='%2394a3b8' stroke-width='1' fill='none'/></svg>");
+  background-repeat: repeat-x;
+  background-position: bottom;
+  opacity: 0.4;
+}
+
+/* Tactile Metrology Lead Seal & Ink Stamp Badges */
+.lead-seal-stamp {
+  font-family: 'Geist Mono', monospace;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-width: 1px;
 }
 
 /* Institutional Functional Utilities */

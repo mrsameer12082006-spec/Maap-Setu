@@ -31,10 +31,11 @@ import { Badge } from '../../components/common/Badge';
 
 // ─── Helper: Section wrapper ──────────────────────────────────────
 const Section = ({ icon: Icon, title, children, className = '' }) => (
-  <div className={`bg-white rounded-2xl border border-[#102A43]/15 shadow-xs overflow-hidden ${className}`}>
-    <div className="flex items-center gap-2.5 px-5 py-3.5 bg-[#F0F9FA] border-b border-[#102A43]/10">
-      {Icon && <Icon className="w-4 h-4 text-[#B85D19] shrink-0" />}
-      <h3 className="font-semibold text-[#102A43] text-sm uppercase tracking-wide">{title}</h3>
+  <div className={`bg-white rounded-sm border border-slate-300 shadow-sm overflow-hidden relative ${className}`}>
+    <div className="h-0.5 bg-[#C87541] w-full"></div>
+    <div className="flex items-center gap-2.5 px-5 py-3 bg-slate-50/70 border-b border-slate-200">
+      {Icon && <Icon className="w-4 h-4 text-[#C87541] shrink-0" />}
+      <h3 className="font-semibold text-[#0B315B] text-xs uppercase tracking-wider font-mono">{title}</h3>
     </div>
     <div className="p-5">{children}</div>
   </div>
@@ -43,9 +44,9 @@ const Section = ({ icon: Icon, title, children, className = '' }) => (
 // ─── Helper: Label-Value pair ─────────────────────────────────────
 const Field = ({ label, value, mono = false, className = '' }) => (
   <div className={className}>
-    <span className="text-[10px] text-[#102A43]/50 uppercase font-semibold tracking-wider block mb-0.5">{label}</span>
-    <span className={`text-sm font-medium text-[#102A43] ${mono ? 'font-mono' : ''}`}>
-      {value || <span className="text-[#102A43]/30 italic">—</span>}
+    <span className="text-[10px] text-slate-400 font-mono uppercase font-semibold tracking-wider block mb-0.5">{label}</span>
+    <span className={`text-sm font-medium text-slate-900 ${mono ? 'font-mono tabular-nums' : ''}`}>
+      {value || <span className="text-slate-400 italic">—</span>}
     </span>
   </div>
 );
@@ -53,24 +54,24 @@ const Field = ({ label, value, mono = false, className = '' }) => (
 // ─── Timeline event row ───────────────────────────────────────────
 const TimelineEvent = ({ event, isLast }) => {
   const iconMap = {
-    SUBMISSION: { icon: FileText, color: 'bg-blue-100 text-blue-700' },
-    ASSIGNMENT: { icon: UserCheck, color: 'bg-amber-100 text-amber-700' },
-    VERIFICATION: { icon: ClipboardList, color: 'bg-emerald-100 text-emerald-700' },
-    CERTIFICATE_GENERATE: { icon: Award, color: 'bg-purple-100 text-purple-700' },
+    SUBMISSION: { icon: FileText, color: 'bg-blue-50 text-[#0B315B] border border-blue-200' },
+    ASSIGNMENT: { icon: UserCheck, color: 'bg-amber-50 text-amber-800 border border-amber-200' },
+    VERIFICATION: { icon: ClipboardList, color: 'bg-emerald-50 text-emerald-800 border border-emerald-200' },
+    CERTIFICATE_GENERATE: { icon: Award, color: 'bg-purple-50 text-purple-800 border border-purple-200' },
   };
-  const { icon: Ico, color } = iconMap[event.eventType] || { icon: Clock, color: 'bg-neutral-100 text-neutral-600' };
+  const { icon: Ico, color } = iconMap[event.eventType] || { icon: Clock, color: 'bg-slate-100 text-slate-700 border border-slate-200' };
   return (
     <div className="flex gap-3">
       <div className="flex flex-col items-center">
-        <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${color}`}>
+        <div className={`w-8 h-8 rounded-sm flex items-center justify-center shrink-0 ${color}`}>
           <Ico className="w-4 h-4" />
         </div>
-        {!isLast && <div className="w-px flex-1 bg-[#102A43]/10 mt-1" />}
+        {!isLast && <div className="w-px flex-1 bg-slate-200 mt-1" />}
       </div>
       <div className={`pb-5 ${isLast ? '' : ''}`}>
-        <p className="font-semibold text-[#102A43] text-sm">{event.step}</p>
-        <p className="text-xs text-[#102A43]/60 mt-0.5">{event.message}</p>
-        <p className="text-[10px] text-[#102A43]/40 mt-1 font-mono">
+        <p className="font-semibold text-slate-900 text-xs sm:text-sm tracking-tight">{event.step}</p>
+        <p className="text-xs text-slate-500 mt-0.5">{event.message}</p>
+        <p className="text-[10px] text-slate-400 mt-1 font-mono uppercase tracking-wider">
           {event.actorRole?.toUpperCase()} · {new Date(event.createdAt).toLocaleString('en-IN')}
         </p>
       </div>
@@ -142,26 +143,29 @@ export const CaseRecordPage = () => {
   const history = app.verificationHistory || [];
 
   return (
-    <div className="w-full space-y-6 pb-16">
+    <div className="w-full space-y-6 pb-16 text-slate-800">
       {/* ── Back nav ── */}
       <div>
-        <Link to="/officer/queue" className="inline-flex items-center gap-1 text-xs text-[#102A43]/60 hover:text-[#102A43] transition-colors mb-3">
+        <Link to="/officer/queue" className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0B315B] hover:text-[#C87541] transition-colors mb-3">
           <ArrowLeft className="w-3.5 h-3.5" /> Back to Assigned Queue
         </Link>
 
-        {/* ── Case Header ── */}
-        <div className="bg-white rounded-2xl border border-[#102A43]/15 shadow-sm p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-1">
+        {/* ── Case Header Card ── */}
+        <div className="bg-white rounded-sm border border-slate-300 shadow-sm p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative overflow-hidden">
+          <div className="h-1 bg-[#C87541] absolute top-0 left-0 right-0"></div>
+          <div className="space-y-1.5 pt-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-mono text-xs font-extrabold text-[#B85D19] bg-[#FDF3EC] px-2.5 py-0.5 rounded-full">
-                {app.applicationNumber || app.id}
-              </span>
+              <div className="border border-slate-300 bg-slate-50 px-2 py-0.5 rounded-xs">
+                <span className="font-mono text-xs font-bold text-[#0B315B] tabular-nums">
+                  {app.applicationNumber || app.id}
+                </span>
+              </div>
               <Badge status={app.status}>{app.status?.replace('_', ' ')}</Badge>
             </div>
-            <h1 className="text-xl sm:text-2xl font-serif font-bold text-[#102A43]">
+            <h1 className="text-xl sm:text-2xl font-bold text-[#0B315B] tracking-tight">
               {app.instrument?.name || app.instrumentName}
             </h1>
-            <p className="text-xs text-[#102A43]/60">
+            <p className="text-xs text-slate-500 font-mono">
               {app.applicationType} · Submitted {app.submissionDate ? new Date(app.submissionDate).toLocaleDateString('en-IN') : '—'}
             </p>
           </div>
@@ -170,23 +174,23 @@ export const CaseRecordPage = () => {
             {hasPendingVerification && (
               <button
                 onClick={() => navigate(`/officer/verify/new?appId=${app.id}`)}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#102A43] text-white text-sm font-bold hover:bg-[#0A1C2E] transition-colors"
+                className="flex items-center gap-2 px-4 py-2 rounded-sm bg-[#0B315B] hover:bg-[#082240] text-white text-xs font-semibold border border-[#0B315B] transition-colors shadow-2xs"
               >
-                <ClipboardList className="w-4 h-4" />
+                <ClipboardList className="w-4 h-4 text-[#C87541]" />
                 Start Physical Verification
               </button>
             )}
             {app.status === 'failed' && (
               <button
                 onClick={() => navigate(`/officer/verify/new?appId=${app.id}`)}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#102A43] text-white text-sm font-bold hover:bg-[#0A1C2E] transition-colors"
+                className="flex items-center gap-2 px-4 py-2 rounded-sm bg-[#0B315B] hover:bg-[#082240] text-white text-xs font-semibold border border-[#0B315B] transition-colors shadow-2xs"
               >
-                <ClipboardList className="w-4 h-4 text-[#C2672B]" />
+                <ClipboardList className="w-4 h-4 text-[#C87541]" />
                 Start Re-Verification
               </button>
             )}
             {isCompleted && (
-              <div className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-bold ${isPassed ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}`}>
+              <div className={`flex items-center gap-2 px-3 py-1.5 rounded-sm text-xs font-mono font-bold uppercase tracking-wider border ${isPassed ? 'border-emerald-600/40 bg-emerald-50 text-emerald-800' : 'border-red-600/40 bg-red-50 text-red-800'}`}>
                 {isPassed ? <CheckCircle2 className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
                 Verification {isPassed ? 'Passed' : 'Failed'}
               </div>
@@ -203,9 +207,9 @@ export const CaseRecordPage = () => {
           <div className="grid grid-cols-2 gap-x-6 gap-y-4">
             <Field label="Application Number" value={app.applicationNumber} mono />
             <div className="space-y-0.5">
-              <span className="text-[10px] text-[#102A43]/50 uppercase font-semibold tracking-wider block mb-0.5">Application ID</span>
+              <span className="text-[10px] text-slate-400 uppercase font-mono font-semibold tracking-wider block mb-0.5">Application ID</span>
               <div className="flex items-center gap-1.5" title={app.id}>
-                <span className="text-sm font-mono font-medium text-[#102A43]">
+                <span className="text-sm font-mono font-medium text-slate-900">
                   {app.id?.slice(0, 13)}…
                 </span>
                 <button
@@ -215,7 +219,7 @@ export const CaseRecordPage = () => {
                     setCopiedId(true);
                     setTimeout(() => setCopiedId(false), 2000);
                   }}
-                  className="p-1 hover:bg-[#102A43]/10 rounded text-[#B85D19] transition-colors"
+                  className="p-1 hover:bg-slate-100 rounded-sm text-[#C87541] transition-colors"
                   title="Copy full Application UUID"
                 >
                   {copiedId ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
@@ -277,24 +281,24 @@ export const CaseRecordPage = () => {
               value={vr?.createdAt ? new Date(vr.createdAt).toLocaleDateString('en-IN') : 'Pending Inspection'}
             />
             <div>
-              <span className="text-[10px] text-[#102A43]/50 uppercase font-semibold tracking-wider block mb-0.5">
+              <span className="text-[10px] text-slate-400 uppercase font-mono font-semibold tracking-wider block mb-0.5">
                 Business Preferred Date
               </span>
-              <span className="text-sm font-semibold text-[#102A43]">
+              <span className="text-sm font-semibold text-slate-900 font-mono">
                 {app.preferredDate ? new Date(app.preferredDate).toLocaleDateString('en-IN') : '—'}
               </span>
             </div>
             <div>
-              <span className="text-[10px] text-[#102A43]/50 uppercase font-semibold tracking-wider block mb-0.5">
+              <span className="text-[10px] text-slate-400 uppercase font-mono font-semibold tracking-wider block mb-0.5">
                 LMD Scheduled Date
               </span>
-              <span className="text-sm font-bold text-[#B85D19]">
+              <span className="text-sm font-bold text-[#C87541] font-mono">
                 {app.scheduledInspectionDate ? new Date(app.scheduledInspectionDate).toLocaleDateString('en-IN') : '—'}
               </span>
             </div>
           </div>
           {app.notes && (
-            <div className="mt-4 p-3 bg-[#F0F9FA] rounded-xl border border-[#102A43]/10 text-xs text-[#102A43]/70 italic">
+            <div className="mt-4 p-3 bg-slate-50 rounded-sm border border-slate-200 text-xs text-slate-600 italic">
               {app.notes}
             </div>
           )}
@@ -305,14 +309,14 @@ export const CaseRecordPage = () => {
           {app.documents?.length > 0 ? (
             <div className="space-y-2">
               {app.documents.map((doc, i) => (
-                <div key={i} className="flex items-center justify-between p-2.5 bg-[#F8FAFB] rounded-xl border border-[#102A43]/10 text-xs">
+                <div key={i} className="flex items-center justify-between p-2.5 bg-slate-50/70 rounded-sm border border-slate-200 text-xs">
                   <div className="flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-[#B85D19] shrink-0" />
-                    <span className="font-semibold text-[#102A43] truncate">{doc.name || doc.filename || `Document ${i + 1}`}</span>
-                    {doc.category && <span className="text-[#102A43]/50">{doc.category}</span>}
+                    <FileText className="w-4 h-4 text-[#C87541] shrink-0" />
+                    <span className="font-semibold text-slate-900 truncate">{doc.name || doc.filename || `Document ${i + 1}`}</span>
+                    {doc.category && <span className="text-slate-400 font-mono text-[10px]">({doc.category})</span>}
                   </div>
                   {doc.url && (
-                    <a href={doc.url} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-[#B85D19] font-bold hover:underline shrink-0 ml-2">
+                    <a href={doc.url} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-[#C87541] font-semibold hover:underline shrink-0 ml-2">
                       View <ExternalLink className="w-3 h-3" />
                     </a>
                   )}
@@ -320,7 +324,7 @@ export const CaseRecordPage = () => {
               ))}
             </div>
           ) : (
-            <p className="text-sm text-[#102A43]/40 italic">No documents attached to this application.</p>
+            <p className="text-sm text-slate-400 italic">No documents attached to this application.</p>
           )}
         </Section>
       </div>
@@ -329,17 +333,18 @@ export const CaseRecordPage = () => {
       {isCompleted && vr && (
         <div className="space-y-5">
           {/* Outcome banner */}
-          <div className={`rounded-2xl p-5 border-2 flex items-center gap-4 ${isPassed ? 'bg-emerald-50 border-emerald-200' : 'bg-red-50 border-red-200'}`}>
-            <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${isPassed ? 'bg-emerald-100' : 'bg-red-100'}`}>
-              {isPassed ? <CheckCircle2 className="w-7 h-7 text-emerald-700" /> : <XCircle className="w-7 h-7 text-red-700" />}
+          <div className={`rounded-sm p-5 border flex items-center gap-4 relative overflow-hidden ${isPassed ? 'bg-emerald-50/70 border-emerald-300' : 'bg-red-50/70 border-red-300'}`}>
+            <div className={`h-1 absolute top-0 left-0 right-0 ${isPassed ? 'bg-emerald-600' : 'bg-red-600'}`}></div>
+            <div className={`w-11 h-11 rounded-sm border flex items-center justify-center shrink-0 ${isPassed ? 'bg-emerald-100/80 border-emerald-300' : 'bg-red-100/80 border-red-300'}`}>
+              {isPassed ? <CheckCircle2 className="w-6 h-6 text-emerald-700" /> : <XCircle className="w-6 h-6 text-red-700" />}
             </div>
             <div>
-              <p className={`text-lg font-serif font-bold ${isPassed ? 'text-emerald-800' : 'text-red-800'}`}>
-                Verification {isPassed ? 'PASSED' : 'FAILED'}
+              <p className={`text-base font-mono font-bold uppercase tracking-wider ${isPassed ? 'text-emerald-900' : 'text-red-900'}`}>
+                Statutory Verification {isPassed ? '[ PASSED / CERTIFIED ]' : '[ FAILED / REJECT NOTICE ]'}
               </p>
-              <p className="text-xs text-[#102A43]/60 mt-0.5">
+              <p className="text-xs text-slate-500 font-mono mt-0.5">
                 Completed: {vr.createdAt ? new Date(vr.createdAt).toLocaleString('en-IN') : '—'}
-                {app.assignedOfficerName && ` · Verified by: ${app.assignedOfficerName}`}
+                {app.assignedOfficerName && ` · Inspector: ${app.assignedOfficerName}`}
               </p>
             </div>
           </div>
@@ -369,15 +374,15 @@ export const CaseRecordPage = () => {
                       };
                       const passed = val === true || val === 'YES' || val === 'PASSED' || val === 'NEW';
                       return (
-                        <div key={key} className="flex items-center gap-3 p-2.5 rounded-xl bg-[#F8FAFB] border border-[#102A43]/8">
-                          <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${passed ? 'bg-emerald-100' : 'bg-red-100'}`}>
+                        <div key={key} className="flex items-center gap-3 p-2.5 rounded-sm bg-slate-50/70 border border-slate-200">
+                          <div className={`w-5 h-5 rounded-xs flex items-center justify-center shrink-0 border ${passed ? 'bg-emerald-50 border-emerald-300' : 'bg-red-50 border-red-300'}`}>
                             {passed
                               ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
                               : <XCircle className="w-3.5 h-3.5 text-red-700" />
                             }
                           </div>
-                          <span className="text-xs font-medium text-[#102A43]">{labels[key] || key}</span>
-                          <span className={`ml-auto text-[10px] font-bold uppercase ${passed ? 'text-emerald-700' : 'text-red-700'}`}>
+                          <span className="text-xs font-medium text-slate-800">{labels[key] || key}</span>
+                          <span className={`ml-auto text-[10px] font-mono font-bold uppercase ${passed ? 'text-emerald-700' : 'text-red-700'}`}>
                             {typeof val === 'boolean' ? (val ? 'Pass' : 'Fail') : val}
                           </span>
                         </div>
@@ -446,11 +451,11 @@ export const CaseRecordPage = () => {
                         labMpe: 'Analytical Sensitivity & MPE'
                       };
                       return (
-                        <div key={key} className="flex items-start justify-between gap-2 border-b border-[#102A43]/5 pb-1.5 last:border-b-0">
-                          <span className="text-[10px] text-[#102A43]/50 uppercase font-semibold tracking-wider">
+                        <div key={key} className="flex items-start justify-between gap-2 border-b border-slate-100 pb-1.5 last:border-b-0">
+                          <span className="text-[10px] text-slate-500 uppercase font-mono font-semibold tracking-wider">
                             {labels[key] || key.replace(/([A-Z])/g, ' $1').trim()}
                           </span>
-                          <span className="text-xs font-mono font-bold text-[#102A43] text-right">
+                          <span className="text-xs font-mono font-medium text-slate-900 text-right tabular-nums">
                             {String(val)}
                           </span>
                         </div>
@@ -459,53 +464,53 @@ export const CaseRecordPage = () => {
 
                   {/* Explainable Regulatory MPE Derivation Audit Card */}
                   {vr.technicalTestResults.verificationScaleInterval && (
-                    <div className="mt-3 p-3.5 bg-[#F0F9FA] rounded-xl border border-[#B85D19]/25 space-y-2">
-                      <div className="flex items-center justify-between border-b border-[#B85D19]/15 pb-1.5 flex-wrap gap-1">
+                    <div className="mt-3 p-3.5 bg-slate-50 rounded-sm border border-slate-300 space-y-2">
+                      <div className="flex items-center justify-between border-b border-slate-200 pb-1.5 flex-wrap gap-1">
                         <div className="flex items-center gap-1.5">
-                          <Scale className="w-3.5 h-3.5 text-[#B85D19]" />
-                          <span className="text-[10px] uppercase font-bold text-[#B85D19] tracking-wider">
+                          <Scale className="w-3.5 h-3.5 text-[#C87541]" />
+                          <span className="text-[10px] uppercase font-mono font-bold text-[#0B315B] tracking-wider">
                             Regulatory MPE Calculation & Derivation Audit
                           </span>
                           {vr.technicalTestResults.verificationStage && (
-                            <span className="px-2 py-0.5 rounded-full bg-[#B85D19]/10 text-[#B85D19] text-[9px] font-bold uppercase">
+                            <span className="border border-slate-300 bg-white px-2 py-0.5 rounded-xs text-slate-700 text-[9px] font-mono font-semibold uppercase">
                               {vr.technicalTestResults.verificationStageLabel || vr.technicalTestResults.verificationStage}
                               {vr.technicalTestResults.stageMultiplier ? ` (${vr.technicalTestResults.stageMultiplier}x MPE)` : ''}
                             </span>
                           )}
                         </div>
-                        <span className="text-[9px] font-mono text-[#102A43]/60">
+                        <span className="text-[9px] font-mono text-slate-400">
                           {vr.technicalTestResults.mpeRuleReference || 'OIML R76-1 / LM Rules 2011'}
                         </span>
                       </div>
                       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
                         <div>
-                          <span className="text-[10px] text-[#102A43]/50 uppercase font-semibold block">Scale Interval (e)</span>
-                          <span className="font-mono font-bold text-[#102A43]">
+                          <span className="text-[10px] text-slate-400 font-mono uppercase font-semibold block">Scale Interval (e)</span>
+                          <span className="font-mono font-medium text-slate-900 tabular-nums">
                             {vr.technicalTestResults.verificationScaleInterval}
                           </span>
                         </div>
                         <div>
-                          <span className="text-[10px] text-[#102A43]/50 uppercase font-semibold block">Tested Load (m)</span>
-                          <span className="font-mono font-bold text-[#102A43]">
+                          <span className="text-[10px] text-slate-400 font-mono uppercase font-semibold block">Tested Load (m)</span>
+                          <span className="font-mono font-medium text-slate-900 tabular-nums">
                             {vr.technicalTestResults.testedLoad || '—'}
                             {vr.technicalTestResults.testedLoadInE && ` (${vr.technicalTestResults.testedLoadInE.toLocaleString()} e)`}
                           </span>
                         </div>
                         <div>
-                          <span className="text-[10px] text-[#102A43]/50 uppercase font-semibold block">Regulatory Limit</span>
-                          <span className="font-mono font-bold text-[#B85D19]">
+                          <span className="text-[10px] text-slate-400 font-mono uppercase font-semibold block">Regulatory Limit</span>
+                          <span className="font-mono font-semibold text-[#C87541] tabular-nums">
                             {vr.technicalTestResults.mpeLimit || '—'}
                           </span>
                         </div>
                         <div>
-                          <span className="text-[10px] text-[#102A43]/50 uppercase font-semibold block">Observed Error</span>
-                          <span className="font-mono font-bold text-[#102A43]">
+                          <span className="text-[10px] text-slate-400 font-mono uppercase font-semibold block">Observed Error</span>
+                          <span className="font-mono font-medium text-slate-900 tabular-nums">
                             {vr.technicalTestResults.observedError || '—'}
                           </span>
                         </div>
                       </div>
                       {vr.technicalTestResults.mpeExplanation && (
-                        <p className="text-[11px] text-[#102A43]/70 italic border-t border-[#B85D19]/10 pt-1.5">
+                        <p className="text-[11px] font-mono text-slate-500 border-t border-slate-200 pt-1.5">
                           {vr.technicalTestResults.mpeExplanation}
                         </p>
                       )}
@@ -528,22 +533,22 @@ export const CaseRecordPage = () => {
                       key={i}
                       type="button"
                       onClick={() => displayUrl && setLightboxPhoto({ url: displayUrl, name: fileName })}
-                      className="group relative rounded-xl overflow-hidden border border-[#102A43]/15 bg-[#F8FAFB] aspect-square flex items-center justify-center hover:border-[#B85D19] transition-all focus:outline-none focus:ring-2 focus:ring-[#B85D19]"
+                      className="group relative rounded-sm overflow-hidden border border-slate-300 bg-slate-50 aspect-square flex items-center justify-center hover:border-[#C87541] transition-all focus:outline-none focus:ring-1 focus:ring-[#C87541]"
                     >
                       {displayUrl ? (
                         <>
                           <img src={displayUrl} alt={`Evidence ${i + 1}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" />
-                          <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
                             <Maximize2 className="w-5 h-5" />
                           </div>
-                          <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent p-1.5 text-left">
+                          <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent p-1.5 text-left">
                             <p className="text-[10px] text-white font-mono truncate">{fileName}</p>
                           </div>
                         </>
                       ) : (
                         <div className="flex flex-col items-center gap-1 p-3 text-center">
-                          <Camera className="w-6 h-6 text-[#102A43]/30" />
-                          <span className="text-[10px] text-[#102A43]/40 font-mono break-all">{fileName}</span>
+                          <Camera className="w-6 h-6 text-slate-300" />
+                          <span className="text-[10px] text-slate-400 font-mono break-all">{fileName}</span>
                         </div>
                       )}
                     </button>
@@ -551,8 +556,8 @@ export const CaseRecordPage = () => {
                 })}
               </div>
             ) : (
-              <div className="p-4 bg-[#F8FAFB] rounded-xl border border-[#102A43]/8 text-center text-xs text-[#102A43]/50 italic">
-                No photo evidence attached to this verification.
+              <div className="p-4 bg-slate-50/60 rounded-sm border border-slate-200 text-center text-xs text-slate-500 font-mono">
+                No physical photo evidence attached to this verification docket.
               </div>
             )}
           </Section>
@@ -560,23 +565,24 @@ export const CaseRecordPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             {/* Officer Remarks */}
             <Section icon={User} title="Officer Remarks">
-              <p className="text-sm text-[#102A43] leading-relaxed whitespace-pre-wrap">
-                {vr.officerRemarks || <span className="text-[#102A43]/40 italic">No remarks recorded.</span>}
+              <p className="text-sm text-slate-800 leading-relaxed whitespace-pre-wrap font-sans">
+                {vr.officerRemarks || <span className="text-slate-400 italic">No remarks recorded.</span>}
               </p>
             </Section>
 
             {/* Failure Reason or Stamp Decision */}
             {!isPassed && vr.rejectionReason ? (
               <Section icon={AlertTriangle} title="Failure Reason">
-                <div className="p-3 bg-red-50 rounded-xl border border-red-200">
-                  <p className="text-sm text-red-800 font-medium leading-relaxed">
+                <div className="p-3 bg-red-50/80 rounded-sm border border-red-200">
+                  <p className="text-xs text-red-900 font-medium leading-relaxed font-mono">
                     {vr.rejectionReason}
                   </p>
                 </div>
               </Section>
             ) : (
               <Section icon={CheckCircle2} title="Stamping & Seal Decision">
-                <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-xs text-emerald-800 font-medium leading-relaxed">
+                <div className="p-3 bg-emerald-50/80 rounded-sm border border-emerald-200 text-xs text-emerald-900 font-medium leading-relaxed">
+                  <span className="font-mono text-[11px] uppercase tracking-wider text-emerald-800 block mb-0.5 font-semibold">Statutory Compliant</span>
                   Instrument verified compliant under Legal Metrology Rules, 2011. Verification mark and security seal applied.
                 </div>
               </Section>
@@ -597,29 +603,31 @@ export const CaseRecordPage = () => {
               return (
                 <div
                   key={attempt.id || idx}
-                  className={`p-4 rounded-xl border transition-all ${
+                  className={`p-4 rounded-sm border transition-all ${
                     isLatest
-                      ? 'bg-[#F0F9FA] border-[#B85D19]/30 shadow-2xs'
-                      : 'bg-[#FBF9F5] border-[#102A43]/10'
+                      ? 'bg-amber-50/30 border-[#C87541]/40'
+                      : 'bg-white border-slate-200'
                   }`}
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#102A43]/10 pb-2 mb-2">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-2 mb-2">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-[#102A43] text-sm">
+                      <span className="font-semibold text-[#0B315B] text-sm">
                         Attempt #{attemptNumber}
                       </span>
                       {isLatest && (
-                        <span className="text-[10px] uppercase font-extrabold px-2 py-0.5 rounded-full bg-[#B85D19] text-white">
+                        <span className="text-[9px] uppercase font-mono font-semibold px-2 py-0.5 rounded-xs bg-[#C87541] text-white tracking-wider">
                           Latest Attempt
                         </span>
                       )}
                     </div>
                     <div className="flex items-center gap-3">
-                      <span className="text-xs font-mono text-[#102A43]/60">
+                      <span className="text-xs font-mono text-slate-500 tabular-nums">
                         {attempt.createdAt ? new Date(attempt.createdAt).toLocaleString('en-IN') : '—'}
                       </span>
-                      <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${
-                        isAttemptPassed ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'
+                      <span className={`px-2 py-0.5 rounded-xs text-[10px] font-mono uppercase font-semibold tracking-wider border ${
+                        isAttemptPassed 
+                          ? 'bg-emerald-50 text-emerald-800 border-emerald-600/40' 
+                          : 'bg-red-50 text-red-800 border-red-600/40'
                       }`}>
                         {attempt.outcome}
                       </span>
@@ -627,23 +635,23 @@ export const CaseRecordPage = () => {
                   </div>
 
                   {!isAttemptPassed && attempt.rejectionReason && (
-                    <div className="mb-2 p-2.5 bg-red-50 rounded-lg border border-red-200">
-                      <span className="text-[10px] uppercase font-bold text-red-700 block">Failure Reason</span>
-                      <p className="text-xs text-red-900 font-semibold mt-0.5">{attempt.rejectionReason}</p>
+                    <div className="mb-2 p-2.5 bg-red-50/80 rounded-sm border border-red-200">
+                      <span className="text-[10px] uppercase font-mono font-semibold text-red-700 block">Failure Reason</span>
+                      <p className="text-xs text-red-900 font-mono mt-0.5">{attempt.rejectionReason}</p>
                     </div>
                   )}
 
                   {attempt.officerRemarks && (
-                    <div className="text-xs text-[#102A43]/80">
-                      <span className="text-[10px] uppercase font-bold text-[#102A43]/50 block">Officer Remarks</span>
+                    <div className="text-xs text-slate-700">
+                      <span className="text-[10px] uppercase font-mono text-slate-400 block">Officer Remarks</span>
                       <p className="mt-0.5 italic">{attempt.officerRemarks}</p>
                     </div>
                   )}
 
                   {attempt.photoEvidenceUrls && attempt.photoEvidenceUrls.length > 0 && (
-                    <div className="mt-3 pt-2.5 border-t border-[#102A43]/10">
+                    <div className="mt-3 pt-2.5 border-t border-slate-200">
                       <div className="flex items-center justify-between">
-                        <div className="text-[11px] text-[#B85D19] font-semibold flex items-center gap-1.5">
+                        <div className="text-[11px] text-[#C87541] font-mono font-medium flex items-center gap-1.5">
                           <Camera className="w-3.5 h-3.5" />
                           <span>{attempt.photoEvidenceUrls.length} evidence photo(s) recorded</span>
                         </div>
@@ -657,7 +665,7 @@ export const CaseRecordPage = () => {
                             }
                             setExpandedHistoryPhotos(prev => ({ ...prev, [key]: !isExp }));
                           }}
-                          className="text-[11px] text-[#102A43] hover:text-[#B85D19] font-bold flex items-center gap-1 underline transition-colors"
+                          className="text-[11px] text-[#0B315B] hover:text-[#C87541] font-mono font-semibold flex items-center gap-1 transition-colors"
                         >
                           <Eye className="w-3 h-3" />
                           {expandedHistoryPhotos[attempt.id || `idx-${idx}`] ? 'Hide Photos' : 'View Photos'}
@@ -674,19 +682,19 @@ export const CaseRecordPage = () => {
                                 key={pIdx}
                                 type="button"
                                 onClick={() => displayUrl && setLightboxPhoto({ url: displayUrl, name: fName })}
-                                className="group relative rounded-lg overflow-hidden border border-[#102A43]/15 bg-white aspect-square flex items-center justify-center hover:border-[#B85D19] transition-all"
+                                className="group relative rounded-sm overflow-hidden border border-slate-300 bg-slate-50 aspect-square flex items-center justify-center hover:border-[#C87541] transition-all"
                               >
                                 {displayUrl ? (
                                   <>
                                     <img src={displayUrl} alt={`Attempt ${attemptNumber} Evidence ${pIdx + 1}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-                                    <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white transition-opacity">
+                                    <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white transition-opacity">
                                       <Maximize2 className="w-4 h-4" />
                                     </div>
                                   </>
                                 ) : (
                                   <div className="p-2 text-center">
-                                    <Camera className="w-4 h-4 mx-auto text-[#102A43]/30" />
-                                    <span className="text-[9px] text-[#102A43]/40 font-mono block truncate mt-1">{fName}</span>
+                                    <Camera className="w-4 h-4 mx-auto text-slate-300" />
+                                    <span className="text-[9px] text-slate-400 font-mono block truncate mt-1">{fName}</span>
                                   </div>
                                 )}
                               </button>
@@ -706,9 +714,9 @@ export const CaseRecordPage = () => {
       {/* ── WORKFLOW TIMELINE ── */}
       <Section icon={Clock} title="Workflow Timeline">
         {loadingTimeline ? (
-          <p className="text-xs text-[#102A43]/50 italic">Loading timeline…</p>
+          <p className="text-xs text-slate-400 font-mono italic">Loading audit trail timeline…</p>
         ) : timeline.length === 0 ? (
-          <p className="text-xs text-[#102A43]/40 italic">No timeline events recorded yet.</p>
+          <p className="text-xs text-slate-400 font-mono italic">No timeline events recorded yet.</p>
         ) : (
           <div>
             {timeline.map((t, i) => (
@@ -723,11 +731,11 @@ export const CaseRecordPage = () => {
         <div className="flex justify-end pt-2">
           <button
             onClick={() => navigate(`/officer/verify/new?appId=${app.id}`)}
-            className="flex items-center gap-2 px-6 py-3 rounded-full bg-[#102A43] text-white font-bold hover:bg-[#0A1C2E] transition-colors shadow-lg"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-sm bg-[#0B315B] text-white font-semibold text-xs hover:bg-[#082240] transition-colors border border-[#0B315B] shadow-xs tracking-wide"
           >
-            <ClipboardList className="w-5 h-5" />
+            <ClipboardList className="w-4 h-4 text-[#C87541]" />
             Start Physical Verification
-            <ChevronRight className="w-4 h-4" />
+            <ChevronRight className="w-3.5 h-3.5" />
           </button>
         </div>
       )}
@@ -739,28 +747,28 @@ export const CaseRecordPage = () => {
           onClick={() => setLightboxPhoto(null)}
         >
           <div
-            className="relative max-w-4xl w-full bg-[#102A43] rounded-2xl overflow-hidden shadow-2xl flex flex-col"
+            className="relative max-w-4xl w-full bg-[#0B315B] rounded-sm border border-slate-700 overflow-hidden shadow-2xl flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between px-4 py-3 bg-[#0A1C2E] text-white border-b border-white/10">
+            <div className="flex items-center justify-between px-4 py-2.5 bg-[#082240] text-white border-b border-white/10">
               <div className="flex items-center gap-2">
-                <Camera className="w-4 h-4 text-[#C2672B]" />
-                <span className="text-xs font-mono font-bold truncate max-w-md">{lightboxPhoto.name}</span>
+                <Camera className="w-4 h-4 text-[#C87541]" />
+                <span className="text-xs font-mono font-medium truncate max-w-md">{lightboxPhoto.name}</span>
               </div>
               <button
                 type="button"
                 onClick={() => setLightboxPhoto(null)}
-                className="p-1 hover:bg-white/10 rounded-lg transition-colors text-white/80 hover:text-white"
+                className="p-1 hover:bg-white/10 rounded-sm transition-colors text-white/80 hover:text-white"
                 title="Close Lightbox"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
             <div className="p-3 bg-black/90 flex items-center justify-center min-h-[250px] max-h-[75vh] overflow-auto">
               <img
                 src={lightboxPhoto.url}
                 alt={lightboxPhoto.name}
-                className="max-w-full max-h-[70vh] object-contain rounded-lg"
+                className="max-w-full max-h-[70vh] object-contain rounded-xs"
               />
             </div>
           </div>

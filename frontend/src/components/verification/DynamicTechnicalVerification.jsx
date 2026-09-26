@@ -232,28 +232,36 @@ export const DynamicTechnicalVerification = ({
   // 🔴 1. FUEL DISPENSING METER
   if (isFuelDispenser) {
     return (
-      <div className="space-y-4 bg-amber-50/60 p-4 sm:p-5 rounded-2xl border border-amber-200">
-        <div className="flex items-center justify-between border-b border-amber-200 pb-2">
-          <h4 className="font-serif font-bold text-base text-[#102A43] flex items-center gap-2">
-            <Fuel className="w-5 h-5 text-amber-700" />
-            <span>2. Fuel Dispenser Volumetric Tests (Liquid Measuring System)</span>
-          </h4>
-          <span className="px-2.5 py-0.5 rounded-full bg-amber-200 text-amber-900 text-[10px] font-bold uppercase">
-            Multi-Product Meter
-          </span>
+      <div className="space-y-4 bg-white p-4 sm:p-5 rounded-sm border border-slate-300 relative shadow-sm">
+        <div className="h-1 bg-[#C87541] -mx-4 sm:-mx-5 -mt-4 sm:-mt-5 mb-4"></div>
+        <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+          <div>
+            <span className="text-[10px] font-mono tracking-widest uppercase text-slate-500 block mb-0.5">
+              Statutory Test Protocol • OIML R117-1
+            </span>
+            <h4 className="font-semibold text-base text-[#0B315B] flex items-center gap-2 tracking-tight">
+              <Fuel className="w-4 h-4 text-[#C87541]" />
+              <span>Fuel Dispenser Volumetric Tests (Liquid Measuring System)</span>
+            </h4>
+          </div>
+          <div className="border border-slate-300 bg-slate-50 px-2 py-0.5 rounded-xs">
+            <span className="text-[9px] font-mono uppercase font-semibold text-slate-700 tracking-wider">
+              Multi-Product Meter
+            </span>
+          </div>
         </div>
 
         {/* Product & Nozzle Selector */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white p-3 rounded-xl border border-amber-200 text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-slate-50/70 p-3 rounded-sm border border-slate-200 text-xs">
           <div>
-            <label className="block font-bold text-[#102A43] mb-1">Product / Nozzle Selected</label>
+            <label className="block text-[11px] font-mono uppercase font-semibold text-slate-600 mb-1">Product / Nozzle Selected</label>
             <select
               value={fuelProduct}
               onChange={(e) => {
                 setFuelProduct(e.target.value);
                 setNozzleId(e.target.value === 'Petrol' ? 'NZ-01-PETROL' : e.target.value === 'Diesel' ? 'NZ-02-DIESEL' : 'NZ-03-SPEED');
               }}
-              className="w-full bg-[#FBF9F5] border border-[#102A43]/20 rounded-lg px-3 py-2 font-bold text-[#102A43]"
+              className="w-full bg-white border border-slate-300 rounded-sm px-3 py-2 font-medium text-slate-900 focus:outline-none focus:border-[#0B315B]"
             >
               <option value="Petrol">Petrol (MS - Motor Spirit)</option>
               <option value="Diesel">Diesel (HSD - High Speed Diesel)</option>
@@ -261,12 +269,12 @@ export const DynamicTechnicalVerification = ({
             </select>
           </div>
           <div>
-            <label className="block font-bold text-[#102A43] mb-1">Nozzle Identification ID</label>
+            <label className="block text-[11px] font-mono uppercase font-semibold text-slate-600 mb-1">Nozzle Identification ID</label>
             <input
               type="text"
               value={nozzleId}
               onChange={(e) => setNozzleId(e.target.value)}
-              className="w-full bg-[#FBF9F5] border border-[#102A43]/20 rounded-lg px-3 py-2 font-mono font-bold text-[#102A43]"
+              className="w-full bg-white border border-slate-300 rounded-sm px-3 py-2 font-mono font-medium text-slate-900 focus:outline-none focus:border-[#0B315B]"
             />
           </div>
         </div>
@@ -274,35 +282,37 @@ export const DynamicTechnicalVerification = ({
         {/* Volumetric Test Controls */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
           <div className="space-y-1">
-            <label className="block font-bold text-[#102A43]">
-              Zero Reset Verification <span className="text-gray-500 font-normal">(Expected: 0.000 L)</span>
+            <label className="block text-[11px] font-mono uppercase font-semibold text-slate-600">
+              Zero Reset Verification <span className="text-slate-400 font-normal lowercase">(expected: 0.000 L)</span>
             </label>
             <input
               type="text"
               value={fuelZeroReset}
               onChange={(e) => setFuelZeroReset(e.target.value)}
-              className="w-full bg-white border border-[#102A43]/20 rounded-xl px-3 py-2.5 font-mono font-bold text-[#102A43]"
+              className="w-full bg-white border border-slate-300 rounded-sm px-3 py-2.5 font-mono font-medium text-slate-900 tabular-nums focus:outline-none focus:border-[#0B315B]"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="block font-bold text-[#102A43]">
+            <label className="block text-[11px] font-mono uppercase font-semibold text-slate-600">
               Standard Measure (20 L Prover Test)
             </label>
             <input
               type="text"
               value={dispensedVolume}
               onChange={(e) => setDispensedVolume(e.target.value)}
-              className="w-full bg-white border border-[#102A43]/20 rounded-xl px-3 py-2.5 font-mono font-bold text-[#102A43]"
+              className="w-full bg-white border border-slate-300 rounded-sm px-3 py-2.5 font-mono font-medium text-slate-900 tabular-nums focus:outline-none focus:border-[#0B315B]"
             />
           </div>
         </div>
 
-        <div className="p-3.5 bg-white rounded-xl border border-amber-300 text-xs font-bold text-amber-900 flex justify-between items-center">
-          <span>Volumetric Permissible Limit: ±0.20% (±40 mL on 20 L)</span>
-          <span className="text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full text-[11px]">
-            {fuelMpeResult}
-          </span>
+        <div className="p-3 bg-slate-50 rounded-sm border border-slate-200 text-xs flex justify-between items-center">
+          <span className="font-mono text-slate-600 text-[11px]">Volumetric Permissible Limit: ±0.20% (±40 mL on 20 L)</span>
+          <div className="border border-emerald-600/40 bg-emerald-50/70 px-2 py-0.5 rounded-xs">
+            <span className="font-mono text-[10px] uppercase font-semibold text-emerald-800 tracking-wider">
+              {fuelMpeResult}
+            </span>
+          </div>
         </div>
       </div>
     );
@@ -311,54 +321,64 @@ export const DynamicTechnicalVerification = ({
   // 💧 2. INDUSTRIAL FLOWMETER
   if (isFlowmeter) {
     return (
-      <div className="space-y-4 bg-blue-50/60 p-4 sm:p-5 rounded-2xl border border-blue-200">
-        <div className="flex items-center justify-between border-b border-blue-200 pb-2">
-          <h4 className="font-serif font-bold text-base text-[#102A43] flex items-center gap-2">
-            <Droplets className="w-5 h-5 text-blue-700" />
-            <span>2. Bulk Flowmeter Metering Accuracy Tests (Class 0.3)</span>
-          </h4>
-          <span className="px-2.5 py-0.5 rounded-full bg-blue-200 text-blue-900 text-[10px] font-bold uppercase">
-            Liquid Measurement
-          </span>
+      <div className="space-y-4 bg-white p-4 sm:p-5 rounded-sm border border-slate-300 relative shadow-sm">
+        <div className="h-1 bg-[#C87541] -mx-4 sm:-mx-5 -mt-4 sm:-mt-5 mb-4"></div>
+        <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+          <div>
+            <span className="text-[10px] font-mono tracking-widest uppercase text-slate-500 block mb-0.5">
+              Bulk Metering Protocol • Class 0.3
+            </span>
+            <h4 className="font-semibold text-base text-[#0B315B] flex items-center gap-2 tracking-tight">
+              <Droplets className="w-4 h-4 text-[#C87541]" />
+              <span>Bulk Flowmeter Metering Accuracy Tests (Class 0.3)</span>
+            </h4>
+          </div>
+          <div className="border border-slate-300 bg-slate-50 px-2 py-0.5 rounded-xs">
+            <span className="text-[9px] font-mono uppercase font-semibold text-slate-700 tracking-wider">
+              Liquid Measurement
+            </span>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
           <div className="space-y-1">
-            <label className="block font-bold text-[#102A43]">Operating Flow Rate</label>
+            <label className="block text-[11px] font-mono uppercase font-semibold text-slate-600">Operating Flow Rate</label>
             <input
               type="text"
               value={flowRate}
               onChange={(e) => setFlowRate(e.target.value)}
-              className="w-full bg-white border border-[#102A43]/20 rounded-xl px-3 py-2 font-mono font-bold text-[#102A43]"
+              className="w-full bg-white border border-slate-300 rounded-sm px-3 py-2 font-mono font-medium text-slate-900 tabular-nums focus:outline-none focus:border-[#0B315B]"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="block font-bold text-[#102A43]">Reference Master Volume</label>
+            <label className="block text-[11px] font-mono uppercase font-semibold text-slate-600">Reference Master Volume</label>
             <input
               type="text"
               value={referenceVolume}
               onChange={(e) => setReferenceVolume(e.target.value)}
-              className="w-full bg-white border border-[#102A43]/20 rounded-xl px-3 py-2 font-mono font-bold text-[#102A43]"
+              className="w-full bg-white border border-slate-300 rounded-sm px-3 py-2 font-mono font-medium text-slate-900 tabular-nums focus:outline-none focus:border-[#0B315B]"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="block font-bold text-[#102A43]">Meter Indicated Volume</label>
+            <label className="block text-[11px] font-mono uppercase font-semibold text-slate-600">Meter Indicated Volume</label>
             <input
               type="text"
               value={measuredVolume}
               onChange={(e) => setMeasuredVolume(e.target.value)}
-              className="w-full bg-white border border-[#102A43]/20 rounded-xl px-3 py-2 font-mono font-bold text-[#102A43]"
+              className="w-full bg-white border border-slate-300 rounded-sm px-3 py-2 font-mono font-medium text-slate-900 tabular-nums focus:outline-none focus:border-[#0B315B]"
             />
           </div>
         </div>
 
-        <div className="p-3 bg-white rounded-xl border border-blue-200 text-xs font-bold text-[#102A43] flex justify-between items-center">
-          <span>Class 0.3 Accuracy Limit: ±0.15%</span>
-          <span className="text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full text-[11px]">
-            {flowmeterMpe}
-          </span>
+        <div className="p-3 bg-slate-50 rounded-sm border border-slate-200 text-xs flex justify-between items-center">
+          <span className="font-mono text-slate-600 text-[11px]">Class 0.3 Accuracy Limit: ±0.15%</span>
+          <div className="border border-emerald-600/40 bg-emerald-50/70 px-2 py-0.5 rounded-xs">
+            <span className="font-mono text-[10px] uppercase font-semibold text-emerald-800 tracking-wider">
+              {flowmeterMpe}
+            </span>
+          </div>
         </div>
       </div>
     );
@@ -367,54 +387,64 @@ export const DynamicTechnicalVerification = ({
   // 🟡 3. PRE-PACKAGED QUANTITY CHECK SCALE
   if (isPrePackaged) {
     return (
-      <div className="space-y-4 bg-yellow-50/60 p-4 sm:p-5 rounded-2xl border border-yellow-200">
-        <div className="flex items-center justify-between border-b border-yellow-200 pb-2">
-          <h4 className="font-serif font-bold text-base text-[#102A43] flex items-center gap-2">
-            <Scale className="w-5 h-5 text-yellow-800" />
-            <span>2. Pre-packaged Quantity & Net Contents Check Tests</span>
-          </h4>
-          <span className="px-2.5 py-0.5 rounded-full bg-yellow-200 text-yellow-900 text-[10px] font-bold uppercase">
-            Net Weight Check
-          </span>
+      <div className="space-y-4 bg-white p-4 sm:p-5 rounded-sm border border-slate-300 relative shadow-sm">
+        <div className="h-1 bg-[#C87541] -mx-4 sm:-mx-5 -mt-4 sm:-mt-5 mb-4"></div>
+        <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+          <div>
+            <span className="text-[10px] font-mono tracking-widest uppercase text-slate-500 block mb-0.5">
+              Net Commodity Protocol • PCR Rules 2011
+            </span>
+            <h4 className="font-semibold text-base text-[#0B315B] flex items-center gap-2 tracking-tight">
+              <Scale className="w-4 h-4 text-[#C87541]" />
+              <span>Pre-packaged Quantity & Net Contents Verification Tests</span>
+            </h4>
+          </div>
+          <div className="border border-slate-300 bg-slate-50 px-2 py-0.5 rounded-xs">
+            <span className="text-[9px] font-mono uppercase font-semibold text-slate-700 tracking-wider">
+              Net Weight Check
+            </span>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
           <div className="space-y-1">
-            <label className="block font-bold text-[#102A43]">Sample 1 Weight (kg)</label>
+            <label className="block text-[11px] font-mono uppercase font-semibold text-slate-600">Sample 1 Weight (kg)</label>
             <input
               type="text"
               value={sample1}
               onChange={(e) => setSample1(e.target.value)}
-              className="w-full bg-white border border-[#102A43]/20 rounded-xl px-3 py-2 font-mono font-bold text-[#102A43]"
+              className="w-full bg-white border border-slate-300 rounded-sm px-3 py-2 font-mono font-medium text-slate-900 tabular-nums focus:outline-none focus:border-[#0B315B]"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="block font-bold text-[#102A43]">Sample 2 Weight (kg)</label>
+            <label className="block text-[11px] font-mono uppercase font-semibold text-slate-600">Sample 2 Weight (kg)</label>
             <input
               type="text"
               value={sample2}
               onChange={(e) => setSample2(e.target.value)}
-              className="w-full bg-white border border-[#102A43]/20 rounded-xl px-3 py-2 font-mono font-bold text-[#102A43]"
+              className="w-full bg-white border border-slate-300 rounded-sm px-3 py-2 font-mono font-medium text-slate-900 tabular-nums focus:outline-none focus:border-[#0B315B]"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="block font-bold text-[#102A43]">Sample 3 Weight (kg)</label>
+            <label className="block text-[11px] font-mono uppercase font-semibold text-slate-600">Sample 3 Weight (kg)</label>
             <input
               type="text"
               value={sample3}
               onChange={(e) => setSample3(e.target.value)}
-              className="w-full bg-white border border-[#102A43]/20 rounded-xl px-3 py-2 font-mono font-bold text-[#102A43]"
+              className="w-full bg-white border border-slate-300 rounded-sm px-3 py-2 font-mono font-medium text-slate-900 tabular-nums focus:outline-none focus:border-[#0B315B]"
             />
           </div>
         </div>
 
-        <div className="p-3 bg-white rounded-xl border border-yellow-200 text-xs font-bold text-[#102A43] flex justify-between items-center">
-          <span>Calculated Average Net Weight: {calculateAverage()} kg</span>
-          <span className="text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full text-[11px]">
-            PASS - Within ±1.5g Permissible Error
-          </span>
+        <div className="p-3 bg-slate-50 rounded-sm border border-slate-200 text-xs flex justify-between items-center">
+          <span className="font-mono text-slate-600 text-[11px]">Calculated Average Net Weight: <strong className="text-slate-900">{calculateAverage()} kg</strong></span>
+          <div className="border border-emerald-600/40 bg-emerald-50/70 px-2 py-0.5 rounded-xs">
+            <span className="font-mono text-[10px] uppercase font-semibold text-emerald-800 tracking-wider">
+              PASS • Within ±1.5g Permissible Error
+            </span>
+          </div>
         </div>
       </div>
     );
@@ -423,20 +453,28 @@ export const DynamicTechnicalVerification = ({
   // 🟢 4. PRECISION LABORATORY ANALYTICAL BALANCE
   if (isLabBalance) {
     return (
-      <div className="space-y-4 bg-teal-50/60 p-4 sm:p-5 rounded-2xl border border-teal-200">
-        <div className="flex items-center justify-between border-b border-teal-200 pb-2">
-          <h4 className="font-serif font-bold text-base text-[#102A43] flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-teal-700" />
-            <span>2. Precision Laboratory Balance Calibration Tests (Class I)</span>
-          </h4>
-          <span className="px-2.5 py-0.5 rounded-full bg-teal-200 text-teal-900 text-[10px] font-bold uppercase">
-            Class I Analytical
-          </span>
+      <div className="space-y-4 bg-white p-4 sm:p-5 rounded-sm border border-slate-300 relative shadow-sm">
+        <div className="h-1 bg-[#C87541] -mx-4 sm:-mx-5 -mt-4 sm:-mt-5 mb-4"></div>
+        <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+          <div>
+            <span className="text-[10px] font-mono tracking-widest uppercase text-slate-500 block mb-0.5">
+              High-Precision Calibration • OIML R76 Class I
+            </span>
+            <h4 className="font-semibold text-base text-[#0B315B] flex items-center gap-2 tracking-tight">
+              <Sparkles className="w-4 h-4 text-[#C87541]" />
+              <span>Precision Laboratory Analytical Balance Tests (Class I)</span>
+            </h4>
+          </div>
+          <div className="border border-slate-300 bg-slate-50 px-2 py-0.5 rounded-xs">
+            <span className="text-[9px] font-mono uppercase font-semibold text-slate-700 tracking-wider">
+              Class I Analytical
+            </span>
+          </div>
         </div>
 
         {/* Verification Scale Interval input */}
-        <div className="bg-white p-3 rounded-xl border border-teal-200 text-xs">
-          <label className="block font-bold text-[#102A43] mb-1">
+        <div className="bg-slate-50/70 p-3 rounded-sm border border-slate-200 text-xs">
+          <label className="block text-[11px] font-mono uppercase font-semibold text-slate-600 mb-1">
             Verification Scale Interval (e)
           </label>
           <input
@@ -444,38 +482,38 @@ export const DynamicTechnicalVerification = ({
             value={confirmedScaleInterval || '0.001 g'}
             onChange={(e) => setConfirmedScaleInterval(e.target.value)}
             placeholder="e.g. 0.001 g (1 mg)"
-            className="w-full bg-[#FBF9F5] border border-[#102A43]/20 rounded-lg px-3 py-2 font-mono font-bold text-[#102A43]"
+            className="w-full bg-white border border-slate-300 rounded-sm px-3 py-2 font-mono font-medium text-slate-900 focus:outline-none focus:border-[#0B315B]"
           />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
           <div className="space-y-1">
-            <label className="block font-bold text-[#102A43]">
-              Standard Mass Check <span className="text-gray-500 font-normal">(Target: 100.0000 g)</span>
+            <label className="block text-[11px] font-mono uppercase font-semibold text-slate-600">
+              Standard Mass Check <span className="text-slate-400 font-normal lowercase">(target: 100.0000 g)</span>
             </label>
             <input
               type="text"
               value={obsMass}
               onChange={(e) => setObsMass(e.target.value)}
-              className="w-full bg-white border border-[#102A43]/20 rounded-xl px-3 py-2.5 font-mono font-bold text-[#102A43]"
+              className="w-full bg-white border border-slate-300 rounded-sm px-3 py-2.5 font-mono font-medium text-slate-900 tabular-nums focus:outline-none focus:border-[#0B315B]"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="block font-bold text-[#102A43]">
+            <label className="block text-[11px] font-mono uppercase font-semibold text-slate-600">
               Linearity & Sensitivity Result
             </label>
             <input
               type="text"
               value={labMpeCalculation.valid ? `${labMpeCalculation.result} - Error ${labMpeCalculation.observedErrorFormatted} within ${labMpeCalculation.mpeLimitFormatted}` : 'PENDING'}
               readOnly
-              className="w-full bg-emerald-50 border border-emerald-300 text-emerald-900 rounded-xl px-3 py-2.5 font-mono font-bold"
+              className="w-full bg-emerald-50/70 border border-emerald-300 text-emerald-900 rounded-sm px-3 py-2.5 font-mono font-semibold"
             />
           </div>
         </div>
 
         {labMpeCalculation.valid && (
-          <p className="text-[11px] text-[#102A43]/70 italic bg-white p-2.5 rounded-lg border border-teal-200">
+          <p className="text-[11px] font-mono text-slate-600 bg-slate-50 p-2.5 rounded-sm border border-slate-200">
             {labMpeCalculation.explanation}
           </p>
         )}
@@ -486,42 +524,50 @@ export const DynamicTechnicalVerification = ({
   // 🟢 5. RETAIL DIGITAL COUNTER SCALE
   if (isCounterScale) {
     return (
-      <div className="space-y-4 bg-cyan-50/60 p-4 sm:p-5 rounded-2xl border border-cyan-200">
-        <div className="flex items-center justify-between border-b border-cyan-200 pb-2">
-          <h4 className="font-serif font-bold text-base text-[#102A43] flex items-center gap-2">
-            <Gauge className="w-5 h-5 text-cyan-700" />
-            <span>2. Retail Counter Scale Technical Tests ({getCounterClassLabel(accuracyClass)})</span>
-          </h4>
-          <span className="px-2.5 py-0.5 rounded-full bg-cyan-200 text-cyan-900 text-[10px] font-bold uppercase">
-            Commercial Counter Scale
-          </span>
+      <div className="space-y-4 bg-white p-4 sm:p-5 rounded-sm border border-slate-300 relative shadow-sm">
+        <div className="h-1 bg-[#C87541] -mx-4 sm:-mx-5 -mt-4 sm:-mt-5 mb-4"></div>
+        <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+          <div>
+            <span className="text-[10px] font-mono tracking-widest uppercase text-slate-500 block mb-0.5">
+              Commercial Metrology Audit • OIML R76-1
+            </span>
+            <h4 className="font-semibold text-base text-[#0B315B] flex items-center gap-2 tracking-tight">
+              <Gauge className="w-4 h-4 text-[#C87541]" />
+              <span>Retail Counter Scale Technical Verification ({getCounterClassLabel(accuracyClass)})</span>
+            </h4>
+          </div>
+          <div className="border border-slate-300 bg-slate-50 px-2 py-0.5 rounded-xs">
+            <span className="text-[9px] font-mono uppercase font-semibold text-slate-700 tracking-wider">
+              Commercial Counter Scale
+            </span>
+          </div>
         </div>
 
         {/* 1. Scale Interval (e) Input */}
-        <div className="bg-white p-3.5 rounded-xl border border-cyan-200 text-xs space-y-1">
+        <div className="bg-slate-50/70 p-3.5 rounded-sm border border-slate-200 text-xs space-y-1">
           <div className="flex items-center justify-between">
-            <label className="font-bold text-[#102A43] flex items-center gap-1.5">
-              <Scale className="w-4 h-4 text-cyan-700" />
+            <label className="font-mono text-[11px] uppercase font-semibold text-slate-700 flex items-center gap-1.5">
+              <Scale className="w-3.5 h-3.5 text-[#C87541]" />
               Verification Scale Interval (e)
               <span className="text-red-500 font-bold">*</span>
             </label>
-            <span className="text-[10px] font-mono text-[#102A43]/60">OIML R76 Parameter</span>
+            <span className="text-[10px] font-mono text-slate-500">OIML R76 Parameter</span>
           </div>
           <input
             type="text"
             value={confirmedScaleInterval}
             onChange={(e) => setConfirmedScaleInterval(e.target.value)}
             placeholder="e.g. 1 g, 2 g, 0.5 g, 10 g"
-            className="w-full bg-[#FBF9F5] border border-[#102A43]/20 rounded-lg px-3 py-2 font-mono font-bold text-[#102A43] focus:border-[#B85D19]"
+            className="w-full bg-white border border-slate-300 rounded-sm px-3 py-2 font-mono font-medium text-slate-900 focus:outline-none focus:border-[#0B315B]"
           />
           {!confirmedScaleInterval ? (
-            <p className="text-[10px] text-amber-700 font-medium flex items-center gap-1 mt-1">
+            <p className="text-[10px] font-mono text-amber-700 flex items-center gap-1 mt-1">
               <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
               Scale Interval (e) not stored in instrument profile. Confirm from physical nameplate to calculate statutory MPE.
             </p>
           ) : (
-            <p className="text-[10px] text-emerald-700 font-medium mt-1">
-              ✓ Verification Scale Interval e = {confirmedScaleInterval} loaded for OIML R76 Table 6 derivation.
+            <p className="text-[10px] font-mono text-emerald-700 mt-1">
+              ✓ Scale Interval e = {confirmedScaleInterval} loaded for OIML R76 Table 6 derivation.
             </p>
           )}
         </div>
@@ -529,85 +575,87 @@ export const DynamicTechnicalVerification = ({
         {/* 2. Load Tests */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
           <div className="space-y-1">
-            <label className="block font-bold text-[#102A43]">
-              Zero Error Test <span className="text-gray-500 font-normal">(Expected: 0.000 kg)</span>
+            <label className="block text-[11px] font-mono uppercase font-semibold text-slate-600">
+              Zero Error Test <span className="text-slate-400 font-normal lowercase">(expected: 0.000 kg)</span>
             </label>
             <input
               type="text"
               value={counterZero}
               onChange={(e) => setCounterZero(e.target.value)}
-              className="w-full bg-white border border-[#102A43]/20 rounded-xl px-3 py-2.5 font-mono font-bold text-[#102A43]"
+              className="w-full bg-white border border-slate-300 rounded-sm px-3 py-2.5 font-mono font-medium text-slate-900 tabular-nums focus:outline-none focus:border-[#0B315B]"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="block font-bold text-[#102A43]">
-              Half Capacity Test <span className="text-gray-500 font-normal">(Std Wt: 15.000 kg)</span>
+            <label className="block text-[11px] font-mono uppercase font-semibold text-slate-600">
+              Half Capacity Test <span className="text-slate-400 font-normal lowercase">(std wt: 15.000 kg)</span>
             </label>
             <input
               type="text"
               value={counterHalf}
               onChange={(e) => setCounterHalf(e.target.value)}
-              className="w-full bg-white border border-[#102A43]/20 rounded-xl px-3 py-2.5 font-mono font-bold text-[#102A43]"
+              className="w-full bg-white border border-slate-300 rounded-sm px-3 py-2.5 font-mono font-medium text-slate-900 tabular-nums focus:outline-none focus:border-[#0B315B]"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="block font-bold text-[#102A43]">
-              Max Capacity Eccentricity <span className="text-gray-500 font-normal">(Target: 30.000 kg)</span>
+            <label className="block text-[11px] font-mono uppercase font-semibold text-slate-600">
+              Max Capacity Eccentricity <span className="text-slate-400 font-normal lowercase">(target: 30.000 kg)</span>
             </label>
             <input
               type="text"
               value={counterMax}
               onChange={(e) => setCounterMax(e.target.value)}
-              className="w-full bg-white border border-[#102A43]/20 rounded-xl px-3 py-2.5 font-mono font-bold text-[#102A43]"
+              className="w-full bg-white border border-slate-300 rounded-sm px-3 py-2.5 font-mono font-medium text-slate-900 tabular-nums focus:outline-none focus:border-[#0B315B]"
             />
           </div>
         </div>
 
         {/* 3. Explainable Regulatory MPE Audit Breakdown Card */}
         {counterMpeCalculation.valid ? (
-          <div className="p-3.5 bg-white rounded-xl border border-cyan-300 shadow-2xs space-y-2 text-xs">
-            <div className="flex items-center justify-between border-b border-cyan-100 pb-1.5">
-              <span className="font-bold text-[#102A43] flex items-center gap-1.5 text-[11px] uppercase tracking-wider">
-                <Scale className="w-3.5 h-3.5 text-cyan-700" />
+          <div className="p-3.5 bg-slate-50/70 rounded-sm border border-slate-300 space-y-2 text-xs">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+              <span className="font-mono font-semibold text-[#0B315B] flex items-center gap-1.5 text-[11px] uppercase tracking-wider">
+                <Scale className="w-3.5 h-3.5 text-[#C87541]" />
                 OIML R76-1 / LM Rules 2011 MPE Audit Breakdown
               </span>
-              <span className="px-2 py-0.5 rounded-full font-bold text-[9px] uppercase bg-cyan-100 text-cyan-900">
-                {counterMpeCalculation.verificationStageLabel || counterMpeCalculation.verificationStage}
-              </span>
-              <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] uppercase ${counterMpeCalculation.result === 'PASS' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}`}>
-                {counterMpeCalculation.result}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="border border-slate-300 bg-white px-2 py-0.5 rounded-xs font-mono font-semibold text-[9px] uppercase text-slate-700">
+                  {counterMpeCalculation.verificationStageLabel || counterMpeCalculation.verificationStage}
+                </span>
+                <span className={`border px-2 py-0.5 rounded-xs font-mono font-bold text-[10px] uppercase ${counterMpeCalculation.result === 'PASS' ? 'border-emerald-600/40 bg-emerald-50 text-emerald-800' : 'border-red-600/40 bg-red-50 text-red-800'}`}>
+                  {counterMpeCalculation.result}
+                </span>
+              </div>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px]">
-              <div>
-                <span className="text-[#102A43]/50 block text-[9px] uppercase font-bold">Tested Load (m)</span>
-                <span className="font-mono font-bold text-[#102A43]">
+            <dl className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] bg-white p-3 rounded-xs border border-slate-200 divide-x divide-slate-100">
+              <div className="px-2 first:pl-0">
+                <dt className="text-slate-400 font-mono text-[9px] uppercase font-semibold">Tested Load (m)</dt>
+                <dd className="font-mono font-medium text-slate-900 mt-0.5 tabular-nums">
                   {counterMpeCalculation.testLoad} ({counterMpeCalculation.loadInE.toLocaleString()} e)
-                </span>
+                </dd>
               </div>
-              <div>
-                <span className="text-[#102A43]/50 block text-[9px] uppercase font-bold">OIML Bracket</span>
-                <span className="font-mono font-bold text-[#102A43]">{counterMpeCalculation.bracket}</span>
+              <div className="px-2">
+                <dt className="text-slate-400 font-mono text-[9px] uppercase font-semibold">OIML Bracket</dt>
+                <dd className="font-mono font-medium text-slate-900 mt-0.5 tabular-nums">{counterMpeCalculation.bracket}</dd>
               </div>
-              <div>
-                <span className="text-[#102A43]/50 block text-[9px] uppercase font-bold">Statutory Limit</span>
-                <span className="font-mono font-bold text-[#B85D19]">{counterMpeCalculation.mpeLimitFormatted}</span>
+              <div className="px-2">
+                <dt className="text-slate-400 font-mono text-[9px] uppercase font-semibold">Statutory Limit</dt>
+                <dd className="font-mono font-semibold text-[#C87541] mt-0.5 tabular-nums">{counterMpeCalculation.mpeLimitFormatted}</dd>
               </div>
-              <div>
-                <span className="text-[#102A43]/50 block text-[9px] uppercase font-bold">Observed Error</span>
-                <span className={`font-mono font-bold ${counterMpeCalculation.isCompliant ? 'text-emerald-700' : 'text-red-700'}`}>
+              <div className="px-2">
+                <dt className="text-slate-400 font-mono text-[9px] uppercase font-semibold">Observed Error</dt>
+                <dd className={`font-mono font-bold mt-0.5 tabular-nums ${counterMpeCalculation.isCompliant ? 'text-emerald-700' : 'text-red-700'}`}>
                   {counterMpeCalculation.observedErrorFormatted}
-                </span>
+                </dd>
               </div>
-            </div>
-            <p className="text-[10px] text-[#102A43]/70 italic border-t border-cyan-100 pt-1">
+            </dl>
+            <p className="text-[10px] font-mono text-slate-500 border-t border-slate-200 pt-1.5">
               {counterMpeCalculation.explanation}
             </p>
           </div>
         ) : (
-          <div className="p-3 bg-amber-50 rounded-xl border border-amber-300 text-xs text-amber-900 font-medium flex items-center gap-2">
+          <div className="p-3 bg-amber-50 rounded-sm border border-amber-300 text-xs text-amber-900 font-mono flex items-center gap-2">
             <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
             <span>{counterMpeCalculation.error}</span>
           </div>
@@ -618,36 +666,44 @@ export const DynamicTechnicalVerification = ({
 
   // 🔵 6. HEAVY ELECTRONIC WEIGHBRIDGE (DEFAULT)
   return (
-    <div className="space-y-4 bg-slate-50/60 p-4 sm:p-5 rounded-2xl border border-slate-200">
-      <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-        <h4 className="font-serif font-bold text-base text-[#102A43] flex items-center gap-2">
-          <Scale className="w-5 h-5 text-slate-600" />
-          <span>2. Weighbridge Load & Eccentricity Tests ({getCounterClassLabel(accuracyClass)})</span>
-        </h4>
-        <span className="px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-700 text-[10px] font-bold uppercase">
-          Heavy Industrial
-        </span>
+    <div className="space-y-4 bg-white p-4 sm:p-5 rounded-sm border border-slate-300 relative shadow-sm">
+      <div className="h-1 bg-[#C87541] -mx-4 sm:-mx-5 -mt-4 sm:-mt-5 mb-4"></div>
+      <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+        <div>
+          <span className="text-[10px] font-mono tracking-widest uppercase text-slate-500 block mb-0.5">
+            Heavy Capacity Protocol • OIML R76 Class III
+          </span>
+          <h4 className="font-semibold text-base text-[#0B315B] flex items-center gap-2 tracking-tight">
+            <Scale className="w-4 h-4 text-[#C87541]" />
+            <span>Weighbridge Load & Eccentricity Tests ({getCounterClassLabel(accuracyClass)})</span>
+          </h4>
+        </div>
+        <div className="border border-slate-300 bg-slate-50 px-2 py-0.5 rounded-xs">
+          <span className="text-[9px] font-mono uppercase font-semibold text-slate-700 tracking-wider">
+            Heavy Industrial
+          </span>
+        </div>
       </div>
 
       {/* Verification Scale Interval (e) Input */}
-      <div className="bg-white p-3.5 rounded-xl border border-slate-200 text-xs space-y-1">
+      <div className="bg-slate-50/70 p-3.5 rounded-sm border border-slate-200 text-xs space-y-1">
         <div className="flex items-center justify-between">
-          <label className="font-bold text-[#102A43] flex items-center gap-1.5">
-            <Scale className="w-4 h-4 text-slate-700" />
+          <label className="font-mono text-[11px] uppercase font-semibold text-slate-700 flex items-center gap-1.5">
+            <Scale className="w-3.5 h-3.5 text-[#C87541]" />
             Verification Scale Interval (e)
             <span className="text-red-500 font-bold">*</span>
           </label>
-          <span className="text-[10px] font-mono text-[#102A43]/60">OIML R76 Parameter</span>
+          <span className="text-[10px] font-mono text-slate-500">OIML R76 Parameter</span>
         </div>
         <input
           type="text"
           value={confirmedScaleInterval}
           onChange={(e) => setConfirmedScaleInterval(e.target.value)}
           placeholder="e.g. 10 kg, 20 kg, 5 kg"
-          className="w-full bg-[#FBF9F5] border border-[#102A43]/20 rounded-lg px-3 py-2 font-mono font-bold text-[#102A43] focus:border-[#B85D19]"
+          className="w-full bg-white border border-slate-300 rounded-sm px-3 py-2 font-mono font-medium text-slate-900 focus:outline-none focus:border-[#0B315B]"
         />
         {!confirmedScaleInterval && (
-          <p className="text-[10px] text-amber-700 font-medium flex items-center gap-1 mt-1">
+          <p className="text-[10px] font-mono text-amber-700 flex items-center gap-1 mt-1">
             <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
             Scale Interval (e) not stored in instrument profile. Enter e from nameplate (e.g., 10 kg) to calculate MPE.
           </p>
@@ -656,84 +712,86 @@ export const DynamicTechnicalVerification = ({
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
         <div className="space-y-1">
-          <label className="block font-bold text-[#102A43]">
-            Zero Tracking Test <span className="text-gray-500 font-normal">(Expected: 0.0 kg)</span>
+          <label className="block text-[11px] font-mono uppercase font-semibold text-slate-600">
+            Zero Tracking Test <span className="text-slate-400 font-normal lowercase">(expected: 0.0 kg)</span>
           </label>
           <input
             type="text"
             value={wbZero}
             onChange={(e) => setWbZero(e.target.value)}
-            className="w-full bg-white border border-[#102A43]/20 rounded-xl px-3 py-2.5 font-mono font-bold text-[#102A43]"
+            className="w-full bg-white border border-slate-300 rounded-sm px-3 py-2.5 font-mono font-medium text-slate-900 tabular-nums focus:outline-none focus:border-[#0B315B]"
           />
         </div>
 
         <div className="space-y-1">
-          <label className="block font-bold text-[#102A43]">
-            Eccentricity Test (Corner Load) <span className="text-gray-500 font-normal">(Target: 30,000.0 kg)</span>
+          <label className="block text-[11px] font-mono uppercase font-semibold text-slate-600">
+            Eccentricity Corner Load <span className="text-slate-400 font-normal lowercase">(target: 30,000.0 kg)</span>
           </label>
           <input
             type="text"
             value={wbHalf}
             onChange={(e) => setWbHalf(e.target.value)}
-            className="w-full bg-white border border-[#102A43]/20 rounded-xl px-3 py-2.5 font-mono font-bold text-[#102A43]"
+            className="w-full bg-white border border-slate-300 rounded-sm px-3 py-2.5 font-mono font-medium text-slate-900 tabular-nums focus:outline-none focus:border-[#0B315B]"
           />
         </div>
 
         <div className="space-y-1">
-          <label className="block font-bold text-[#102A43]">
-            Maximum Load MPE Check <span className="text-gray-500 font-normal">(Target: 60,000.0 kg)</span>
+          <label className="block text-[11px] font-mono uppercase font-semibold text-slate-600">
+            Maximum Load MPE Check <span className="text-slate-400 font-normal lowercase">(target: 60,000.0 kg)</span>
           </label>
           <input
             type="text"
             value={wbMax}
             onChange={(e) => setWbMax(e.target.value)}
-            className="w-full bg-white border border-[#102A43]/20 rounded-xl px-3 py-2.5 font-mono font-bold text-[#102A43]"
+            className="w-full bg-white border border-slate-300 rounded-sm px-3 py-2.5 font-mono font-medium text-slate-900 tabular-nums focus:outline-none focus:border-[#0B315B]"
           />
         </div>
       </div>
 
       {wbMpeCalculation.valid ? (
-        <div className="p-3.5 bg-white rounded-xl border border-slate-300 shadow-2xs space-y-2 text-xs">
-          <div className="flex items-center justify-between border-b border-slate-100 pb-1.5">
-            <span className="font-bold text-[#102A43] flex items-center gap-1.5 text-[11px] uppercase tracking-wider">
-              <Scale className="w-3.5 h-3.5 text-slate-600" />
+        <div className="p-3.5 bg-slate-50/70 rounded-sm border border-slate-300 space-y-2 text-xs">
+          <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+            <span className="font-mono font-semibold text-[#0B315B] flex items-center gap-1.5 text-[11px] uppercase tracking-wider">
+              <Scale className="w-3.5 h-3.5 text-[#C87541]" />
               OIML R76-1 / LM Rules 2011 Weighbridge MPE Audit
             </span>
-            <span className="px-2 py-0.5 rounded-full font-bold text-[9px] uppercase bg-slate-200 text-slate-800">
-              {wbMpeCalculation.verificationStageLabel || wbMpeCalculation.verificationStage}
-            </span>
-            <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] uppercase ${wbMpeCalculation.result === 'PASS' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}`}>
-              {wbMpeCalculation.result}
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="border border-slate-300 bg-white px-2 py-0.5 rounded-xs font-mono font-semibold text-[9px] uppercase text-slate-700">
+                {wbMpeCalculation.verificationStageLabel || wbMpeCalculation.verificationStage}
+              </span>
+              <span className={`border px-2 py-0.5 rounded-xs font-mono font-bold text-[10px] uppercase ${wbMpeCalculation.result === 'PASS' ? 'border-emerald-600/40 bg-emerald-50 text-emerald-800' : 'border-red-600/40 bg-red-50 text-red-800'}`}>
+                {wbMpeCalculation.result}
+              </span>
+            </div>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px]">
-            <div>
-              <span className="text-[#102A43]/50 block text-[9px] uppercase font-bold">Tested Load (m)</span>
-              <span className="font-mono font-bold text-[#102A43]">
+          <dl className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] bg-white p-3 rounded-xs border border-slate-200 divide-x divide-slate-100">
+            <div className="px-2 first:pl-0">
+              <dt className="text-slate-400 font-mono text-[9px] uppercase font-semibold">Tested Load (m)</dt>
+              <dd className="font-mono font-medium text-slate-900 mt-0.5 tabular-nums">
                 {wbMpeCalculation.testLoad} ({wbMpeCalculation.loadInE.toLocaleString()} e)
-              </span>
+              </dd>
             </div>
-            <div>
-              <span className="text-[#102A43]/50 block text-[9px] uppercase font-bold">OIML Bracket</span>
-              <span className="font-mono font-bold text-[#102A43]">{wbMpeCalculation.bracket}</span>
+            <div className="px-2">
+              <dt className="text-slate-400 font-mono text-[9px] uppercase font-semibold">OIML Bracket</dt>
+              <dd className="font-mono font-medium text-slate-900 mt-0.5 tabular-nums">{wbMpeCalculation.bracket}</dd>
             </div>
-            <div>
-              <span className="text-[#102A43]/50 block text-[9px] uppercase font-bold">Statutory Limit</span>
-              <span className="font-mono font-bold text-[#B85D19]">{wbMpeCalculation.mpeLimitFormatted}</span>
+            <div className="px-2">
+              <dt className="text-slate-400 font-mono text-[9px] uppercase font-semibold">Statutory Limit</dt>
+              <dd className="font-mono font-semibold text-[#C87541] mt-0.5 tabular-nums">{wbMpeCalculation.mpeLimitFormatted}</dd>
             </div>
-            <div>
-              <span className="text-[#102A43]/50 block text-[9px] uppercase font-bold">Observed Error</span>
-              <span className={`font-mono font-bold ${wbMpeCalculation.isCompliant ? 'text-emerald-700' : 'text-red-700'}`}>
+            <div className="px-2">
+              <dt className="text-slate-400 font-mono text-[9px] uppercase font-semibold">Observed Error</dt>
+              <dd className={`font-mono font-bold mt-0.5 tabular-nums ${wbMpeCalculation.isCompliant ? 'text-emerald-700' : 'text-red-700'}`}>
                 {wbMpeCalculation.observedErrorFormatted}
-              </span>
+              </dd>
             </div>
-          </div>
-          <p className="text-[10px] text-[#102A43]/70 italic border-t border-slate-100 pt-1">
+          </dl>
+          <p className="text-[10px] font-mono text-slate-500 border-t border-slate-200 pt-1.5">
             {wbMpeCalculation.explanation}
           </p>
         </div>
       ) : (
-        <div className="p-3 bg-amber-50 rounded-xl border border-amber-300 text-xs text-amber-900 font-medium flex items-center gap-2">
+        <div className="p-3 bg-amber-50 rounded-sm border border-amber-300 text-xs text-amber-900 font-mono flex items-center gap-2">
           <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
           <span>{wbMpeCalculation.error}</span>
         </div>

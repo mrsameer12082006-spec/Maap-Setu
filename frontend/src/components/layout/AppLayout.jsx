@@ -16,7 +16,7 @@ export const AppLayout = () => {
     isBusinessPage;
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800 font-sans">
+    <div className="min-h-screen flex flex-col drafting-grid-bg text-slate-800 font-sans">
       {!isLoginPage && <Navbar />}
       <div className="flex-1 flex w-full">
         {!isPublicPage && <Sidebar />}

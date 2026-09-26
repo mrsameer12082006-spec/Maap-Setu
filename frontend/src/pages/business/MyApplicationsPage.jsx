@@ -9,6 +9,7 @@ import { Badge } from '../../components/common/Badge';
 import { Modal } from '../../components/common/Modal';
 import { Button } from '../../components/common/Button';
 import { CertificateView } from '../../components/common/CertificateView';
+import { VernierRuler } from '../../components/common/VernierRuler';
 
 export const MyApplicationsPage = () => {
   const { applications, certificates } = useData();
@@ -40,29 +41,29 @@ export const MyApplicationsPage = () => {
     {
       header: 'App ID',
       key: 'id',
-      render: (row) => <span className="font-mono font-bold text-primary text-xs">{row.id}</span>
+      render: (row) => <span className="font-mono font-semibold text-[#0B315B] text-xs tabular-nums">{row.id}</span>
     },
     {
-      header: 'Instrument Name & Type',
+      header: 'Instrument Specification',
       key: 'instrumentName',
       render: (row) => (
         <div>
-          <p className="font-semibold text-neutral-900">{row.instrumentName}</p>
-          <p className="text-[11px] text-neutral-600">{row.applicationType}</p>
+          <p className="font-semibold text-slate-900">{row.instrumentName}</p>
+          <p className="text-[11px] text-slate-500 font-mono">{row.applicationType}</p>
         </div>
       )
     },
     {
       header: 'Submitted Date',
       key: 'submissionDate',
-      render: (row) => <span className="text-xs text-neutral-600">{row.submissionDate}</span>
+      render: (row) => <span className="text-xs font-mono text-slate-500 tabular-nums">{row.submissionDate}</span>
     },
     {
-      header: 'Assigned Inspector',
+      header: 'Assigned Verifier',
       key: 'assignedOfficerName',
       render: (row) => (
-        <span className="text-xs font-semibold text-neutral-800">
-          {row.assignedOfficerName || <span className="text-neutral-600 italic">Unassigned</span>}
+        <span className="text-xs font-medium text-slate-800">
+          {row.assignedOfficerName || <span className="text-slate-400 italic font-mono">Unassigned</span>}
         </span>
       )
     },
@@ -70,22 +71,22 @@ export const MyApplicationsPage = () => {
       header: 'Scheduled Date',
       key: 'scheduledInspectionDate',
       render: (row) => (
-        <span className="text-xs font-mono font-semibold text-neutral-800">
-          {row.scheduledInspectionDate || '-'}
+        <span className="text-xs font-mono text-slate-800 tabular-nums">
+          {row.scheduledInspectionDate || <span className="text-slate-400 italic font-sans">—</span>}
         </span>
       )
     },
     {
-      header: 'Status',
+      header: 'Legal Status',
       key: 'status',
       render: (row) => {
         const cert = certificates?.find(c => c.applicationId === row.id || c.instrumentId === row.instrumentId) || row.certificate;
         return (
           <div className="flex flex-col items-start gap-1">
-            <Badge status={row.status}>{row.status}</Badge>
+            <Badge status={row.status} variant="stamp" />
             {cert && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-300 px-1.5 py-0.5 rounded shadow-2xs">
-                <Award className="w-3 h-3 text-emerald-600" /> Cert Issued
+              <span className="inline-flex items-center gap-1 text-[9px] font-mono font-semibold text-emerald-800 bg-emerald-50 border border-emerald-300 px-1.5 py-0.5 rounded-xs">
+                <Award className="w-3 h-3 text-emerald-600" /> CERT ISSUED
               </span>
             )}
           </div>
@@ -93,7 +94,7 @@ export const MyApplicationsPage = () => {
       }
     },
     {
-      header: 'Action',
+      header: 'Statutory Actions',
       key: 'action',
       render: (row) => {
         const cert = certificates?.find(c => c.applicationId === row.id || c.instrumentId === row.instrumentId) || row.certificate;
@@ -112,7 +113,7 @@ export const MyApplicationsPage = () => {
                 variant="outline"
                 size="sm"
                 icon={Award}
-                className="text-emerald-700 border-emerald-300 hover:bg-emerald-50 font-semibold"
+                className="text-emerald-700 border-emerald-300 hover:bg-emerald-50 font-medium"
                 onClick={() => setSelectedCert(cert)}
               >
                 Certificate
@@ -126,51 +127,68 @@ export const MyApplicationsPage = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-neutral-900">My Verification Applications</h1>
-          <p className="text-xs text-neutral-600">Track and monitor all verification and re-verification requests submitted to Legal Metrology.</p>
-        </div>
+      {/* 1. Header with Tactile Instrument Aesthetic */}
+      <div className="relative bg-white border border-slate-200 rounded-sm p-6 shadow-none overflow-hidden text-left">
+        <div className="h-1 bg-[#C87541] w-full absolute top-0 left-0" />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
+          <div>
+            <span className="text-[10px] font-mono tracking-widest uppercase text-[#C87541] block">
+              ENTERPRISE TRACKING CONSOLE • SECTION 24(1)
+            </span>
+            <h1 className="text-xl sm:text-2xl font-semibold text-[#0B315B] tracking-tight">
+              My Verification Applications
+            </h1>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Track and monitor all verification and re-verification requests submitted to Legal Metrology.
+            </p>
+          </div>
 
-        <Link to="/business">
-          <Button variant="secondary" size="sm" icon={ArrowLeft} className="font-bold border-[#102A43]/20 shadow-xs">
-            Back to Dashboard
-          </Button>
-        </Link>
+          <div className="flex items-center gap-3">
+            <Badge status="in_progress" variant="stamp" subtext={`${filteredApps.length} ACTIVE APPLICATIONS`}>
+              PORTAL INTAKE
+            </Badge>
+            <Link to="/business">
+              <Button variant="secondary" size="sm" icon={ArrowLeft} className="font-mono text-xs">
+                Dashboard
+              </Button>
+            </Link>
+          </div>
+        </div>
+        <VernierRuler className="mt-4" />
       </div>
 
       {/* Filter bar */}
-      <Card className="bg-white p-4">
+      <div className="bg-white p-4 border border-slate-200 rounded-sm">
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
           <div className="relative flex-1 max-w-md">
-            <Search className="w-4 h-4 text-neutral-600 absolute left-3 top-3" />
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
             <input
               type="text"
               placeholder="Search by Application ID or Instrument..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-input border border-neutral-300 text-xs text-neutral-900 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full pl-9 pr-4 py-2 rounded-sm border border-slate-300 text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-[#0B315B]"
             />
           </div>
 
           <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-neutral-600" />
-            <span className="text-xs text-neutral-600 font-semibold">Filter Status:</span>
+            <Filter className="w-4 h-4 text-slate-500" />
+            <span className="text-xs font-mono text-slate-600 uppercase">Status:</span>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="rounded-input border border-neutral-300 text-xs py-2 px-3 bg-white text-neutral-900 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="rounded-sm border border-slate-300 text-xs py-1.5 px-3 bg-white text-slate-900 focus:outline-none focus:ring-1 focus:ring-[#0B315B] font-mono"
             >
-              <option value="all">All ({getStatusCount('all')})</option>
-                <option value="submitted">Submitted ({getStatusCount('submitted')})</option>
-                <option value="assigned">Assigned ({getStatusCount('assigned')})</option>
-                <option value="in_progress">In Progress ({getStatusCount('in_progress')})</option>
-                <option value="passed">Passed ({getStatusCount('passed')})</option>
-                <option value="failed">Failed ({getStatusCount('failed')})</option>
-              </select>
+              <option value="all">ALL ({getStatusCount('all')})</option>
+              <option value="submitted">SUBMITTED ({getStatusCount('submitted')})</option>
+              <option value="assigned">ASSIGNED ({getStatusCount('assigned')})</option>
+              <option value="in_progress">IN PROGRESS ({getStatusCount('in_progress')})</option>
+              <option value="passed">PASSED ({getStatusCount('passed')})</option>
+              <option value="failed">FAILED ({getStatusCount('failed')})</option>
+            </select>
           </div>
         </div>
-      </Card>
+      </div>
 
       {/* Applications Table */}
       <Table columns={columns} data={filteredApps} emptyMessage="No applications found matching criteria." />

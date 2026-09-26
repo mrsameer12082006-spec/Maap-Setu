@@ -65,8 +65,8 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['"Public Sans"', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'monospace'],
+        sans: ['"Instrument Sans"', '"Public Sans"', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        mono: ['"Geist Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'monospace'],
       },
       borderRadius: {
         card: '6px',
@@ -74,7 +74,7 @@ export default {
         input: '6px',
         md: '6px',
         sm: '4px',
-      }
+      },
     },
   },
   plugins: [],

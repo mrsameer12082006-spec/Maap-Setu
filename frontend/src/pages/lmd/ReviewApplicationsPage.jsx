@@ -8,6 +8,7 @@ import { Badge } from '../../components/common/Badge';
 import { Modal } from '../../components/common/Modal';
 import { Button } from '../../components/common/Button';
 import { DynamicTechnicalVerification } from '../../components/verification/DynamicTechnicalVerification';
+import { VernierRuler } from '../../components/common/VernierRuler';
 import {
   STATUS_CATEGORIES,
   getApplicationStatusCategory,
@@ -110,44 +111,44 @@ export const ReviewApplicationsPage = () => {
     {
       header: 'App ID',
       key: 'id',
-      render: (row) => <span className="font-mono font-bold text-primary text-xs">{row.id}</span>
+      render: (row) => <span className="font-mono font-semibold text-[#0B315B] text-xs tabular-nums">{row.id}</span>
     },
     {
-      header: 'Applicant & Business',
+      header: 'Applicant & Premises',
       key: 'applicantName',
       render: (row) => (
         <div>
-          <p className="font-semibold text-neutral-900">{row.applicantName}</p>
-          <p className="text-[11px] text-neutral-600">Location: {row.inspectionLocation.split(',')[0]}</p>
+          <p className="font-semibold text-slate-900">{row.applicantName}</p>
+          <p className="text-[11px] text-slate-500 font-mono">Location: {row.inspectionLocation?.split(',')[0]}</p>
         </div>
       )
     },
     {
-      header: 'Instrument Specs',
+      header: 'Instrument Specification',
       key: 'instrumentName',
       render: (row) => (
         <div>
-          <p className="font-semibold text-neutral-900">{row.instrumentName}</p>
-          <p className="text-[11px] text-neutral-600">{row.applicationType}</p>
+          <p className="font-semibold text-slate-900">{row.instrumentName}</p>
+          <p className="text-[11px] text-slate-500 font-mono">{row.applicationType}</p>
         </div>
       )
     },
     {
       header: 'Submitted',
       key: 'submissionDate',
-      render: (row) => <span className="text-xs text-neutral-600">{row.submissionDate}</span>
+      render: (row) => <span className="text-xs font-mono text-slate-500 tabular-nums">{row.submissionDate}</span>
     },
     {
-      header: 'Status',
+      header: 'Legal Status',
       key: 'status',
-      render: (row) => <Badge status={row.status}>{row.status}</Badge>
+      render: (row) => <Badge status={row.status} variant="stamp" />
     },
     {
       header: 'Assigned Verifier',
       key: 'assignedOfficerName',
       render: (row) => (
-        <span className="text-xs font-medium text-neutral-900">
-          {row.assignedOfficerName || <span className="text-neutral-600 italic">Unassigned</span>}
+        <span className="text-xs font-medium text-slate-900">
+          {row.assignedOfficerName || <span className="text-slate-400 italic">Unassigned</span>}
         </span>
       )
     },
@@ -155,13 +156,13 @@ export const ReviewApplicationsPage = () => {
       header: 'Scheduled Date',
       key: 'scheduledInspectionDate',
       render: (row) => (
-        <span className="text-xs font-medium text-neutral-900">
-          {row.scheduledInspectionDate || <span className="text-neutral-600 italic">-</span>}
+        <span className="text-xs font-mono text-slate-700 tabular-nums">
+          {row.scheduledInspectionDate || <span className="text-slate-400 italic font-sans">—</span>}
         </span>
       )
     },
     {
-      header: 'Actions',
+      header: 'Statutory Actions',
       key: 'action',
       render: (row) => {
         const isPassed = row.status === 'passed' || row.status === 'inspection_passed';
@@ -218,11 +219,26 @@ export const ReviewApplicationsPage = () => {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-neutral-900">Review Incoming Verification Applications</h1>
-        <p className="text-xs text-neutral-600">
-          Inspect submitted calibration certificates, model approvals, and owner credentials prior to assigning an inspector.
-        </p>
+      {/* 1. Page Header with Tactile Instrument Aesthetic */}
+      <div className="relative bg-white border border-slate-200 rounded-sm p-6 shadow-none overflow-hidden text-left">
+        <div className="h-1 bg-[#C87541] w-full absolute top-0 left-0" />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
+          <div>
+            <span className="text-[10px] font-mono tracking-widest uppercase text-[#C87541] block">
+              STATUTORY INTAKE QUEUE • SECTION 24(1)
+            </span>
+            <h1 className="text-xl sm:text-2xl font-semibold text-[#0B315B] tracking-tight">
+              Review Verification Applications
+            </h1>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Inspect submitted calibration certificates, model approvals, and owner credentials prior to assigning an inspector.
+            </p>
+          </div>
+          <Badge status="in_progress" variant="stamp" subtext={`${applications.length} TOTAL INTAKE`}>
+            LMD AUDIT DESK
+          </Badge>
+        </div>
+        <VernierRuler className="mt-4" />
       </div>
 
       {/* Category Filter Tabs */}
@@ -242,15 +258,15 @@ export const ReviewApplicationsPage = () => {
                   setSearchParams({ status: tab.key });
                 }
               }}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-2 ${
+              className={`px-3 py-1.5 rounded-sm text-xs font-mono transition-colors flex items-center gap-2 border ${
                 isActive
-                  ? 'bg-[#102A43] text-white shadow-sm'
-                  : 'bg-white border border-[#102A43]/15 text-[#102A43]/80 hover:bg-[#102A43]/5'
+                  ? 'bg-[#0B315B] text-white border-[#0B315B] shadow-xs'
+                  : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
               }`}
             >
-              <span>{tab.label}</span>
-              <span className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold ${
-                isActive ? 'bg-white/20 text-white' : 'bg-neutral-100 text-neutral-600'
+              <span>{tab.label.toUpperCase()}</span>
+              <span className={`px-1.5 py-0.2 rounded-xs text-[10px] font-mono tabular-nums ${
+                isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'
               }`}>
                 {count}
               </span>
@@ -259,23 +275,23 @@ export const ReviewApplicationsPage = () => {
         })}
       </div>
 
-      <Card className="p-4 bg-white">
+      <div className="p-4 bg-white border border-slate-200 rounded-sm">
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
           <div className="relative flex-1 max-w-md">
-            <Search className="w-4 h-4 text-neutral-600 absolute left-3 top-3" />
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
             <input
               type="text"
               placeholder="Filter by App ID, Instrument, or Applicant..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-input border border-neutral-300 text-xs text-neutral-900 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full pl-9 pr-4 py-2 rounded-sm border border-slate-300 text-xs text-slate-900 focus:outline-none focus:ring-1 focus:ring-[#0B315B]"
             />
           </div>
-          <div className="text-xs text-neutral-600 font-medium">
-            Showing <span className="font-bold text-neutral-900">{filteredApps.length}</span> of <span className="font-bold text-neutral-900">{applications.length}</span> applications
+          <div className="text-xs font-mono text-slate-500">
+            SHOWING <span className="font-semibold text-slate-900 tabular-nums">{filteredApps.length}</span> OF <span className="font-semibold text-slate-900 tabular-nums">{applications.length}</span> RECORDS
           </div>
         </div>
-      </Card>
+      </div>
 
       <Table
         columns={columns}
@@ -367,206 +383,174 @@ export const ReviewApplicationsPage = () => {
           }
         >
           <div className="space-y-6 text-sm">
-            <div className="flex justify-between items-center p-4 bg-neutral-100 rounded border border-neutral-300">
+            {/* Top Stat Bar */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-slate-50 rounded-sm border border-slate-200">
               <div>
-                <p className="text-xs text-neutral-600">Applicant</p>
-                <p className="font-bold text-neutral-900">{selectedApp.applicantName}</p>
+                <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500 block">APPLICANT ENTITY</span>
+                <p className="font-semibold text-slate-900 text-sm mt-0.5">{selectedApp.applicantName}</p>
+                <p className="text-[11px] text-slate-500 font-mono mt-0.5">{selectedApp.inspectionLocation}</p>
               </div>
-              <Badge status={selectedApp.status}>{selectedApp.status}</Badge>
+              <Badge status={selectedApp.status} variant="stamp" />
             </div>
 
-            {/* Full Machine Specifications & Legal Application Record */}
-            <div className="p-4 bg-[#FBF9F5] rounded-2xl border border-[#102A43]/15 space-y-4 text-xs">
-              <div className="flex items-center justify-between border-b border-[#102A43]/10 pb-2">
+            {/* Full Machine Specifications & Legal Application Record - Technical Spec Sheet */}
+            <div className="border border-slate-200 rounded-sm overflow-hidden text-xs">
+              <div className="h-1 bg-[#C87541] w-full" />
+              <div className="p-3.5 bg-slate-50/80 border-b border-slate-200 flex items-center justify-between">
                 <div>
-                  <span className="font-mono font-bold text-[#B85D19]">{selectedApp.id}</span>
-                  <h4 className="font-serif font-bold text-[#102A43] text-sm mt-0.5">{selectedApp.instrumentName}</h4>
+                  <span className="font-mono text-xs font-semibold text-[#0B315B] bg-slate-200/70 px-2 py-0.5 rounded-xs border border-slate-300">
+                    {selectedApp.id}
+                  </span>
+                  <span className="ml-2 font-semibold text-slate-900 text-xs">
+                    {selectedApp.instrumentName}
+                  </span>
                 </div>
-                <span className="px-2.5 py-1 rounded-full bg-[#FDF3EC] text-[#102A43] font-bold text-[10px] uppercase">
+                <span className="px-2 py-0.5 rounded-xs bg-slate-200/60 text-slate-700 font-mono text-[10px] uppercase border border-slate-300">
                   {selectedApp.applicationType}
                 </span>
               </div>
 
-              {/* 1. Technical Specifications */}
-              <div className="space-y-1.5">
-                <p className="font-bold uppercase text-[10px] tracking-wider text-[#B85D19]">
-                  1. Technical Specifications
-                </p>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 bg-white p-3 rounded-xl border border-[#102A43]/10">
-                  <div>
-                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Manufacturer</span>
-                    <span className="font-semibold text-[#102A43]">{selectedApp.instrument?.manufacturer || 'N/A'}</span>
-                  </div>
-                  <div>
-                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Model Designation</span>
-                    <span className="font-semibold text-[#102A43]">{selectedApp.instrument?.model || 'N/A'}</span>
-                  </div>
-                  <div>
-                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Serial Number</span>
-                    <span className="font-mono font-bold text-[#B85D19]">{selectedApp.instrument?.serialNumber || 'N/A'}</span>
-                  </div>
-                  <div>
-                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Max Capacity</span>
-                    <span className="font-semibold text-[#102A43]">{selectedApp.instrument?.maxCapacity || 'N/A'}</span>
-                  </div>
-                  <div>
-                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Min Capacity</span>
-                    <span className="font-semibold text-[#102A43]">{selectedApp.instrument?.minCapacity || 'N/A'}</span>
-                  </div>
-                  <div>
-                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Accuracy Class</span>
-                    <span className="font-semibold text-[#102A43]">{selectedApp.instrument?.accuracyClass || 'N/A'}</span>
-                  </div>
-                  <div>
-                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Scale Interval (e)</span>
-                    <span className="font-semibold text-[#102A43]">{selectedApp.instrument?.scaleInterval || 'N/A'}</span>
-                  </div>
-                  <div>
-                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Unit of Measure</span>
-                    <span className="font-semibold text-[#102A43]">{selectedApp.instrument?.unitOfMeasurement || 'N/A'}</span>
-                  </div>
-                  <div>
-                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Quantity</span>
-                    <span className="font-semibold text-[#102A43]">{selectedApp.instrument?.quantity || '1 Unit'}</span>
-                  </div>
+              {/* 1. Technical Specifications Grid */}
+              <div className="p-3 bg-slate-50/50 border-b border-slate-200 font-mono text-[10px] uppercase tracking-wider text-slate-500">
+                1. TECHNICAL SPECIFICATIONS & CALIBRATION METRICS
+              </div>
+              <dl className="grid grid-cols-2 sm:grid-cols-3 divide-x divide-y divide-slate-100 border-b border-slate-200 text-xs">
+                <div className="p-3">
+                  <dt className="text-slate-500 font-mono text-[10px] uppercase">MANUFACTURER</dt>
+                  <dd className="font-semibold text-slate-900 mt-0.5">{selectedApp.instrument?.manufacturer || 'N/A'}</dd>
                 </div>
+                <div className="p-3">
+                  <dt className="text-slate-500 font-mono text-[10px] uppercase">MODEL DESIGNATION</dt>
+                  <dd className="font-semibold text-slate-900 mt-0.5">{selectedApp.instrument?.model || 'N/A'}</dd>
+                </div>
+                <div className="p-3">
+                  <dt className="text-slate-500 font-mono text-[10px] uppercase">SERIAL NUMBER</dt>
+                  <dd className="font-mono font-medium text-[#0B315B] mt-0.5 tabular-nums">{selectedApp.instrument?.serialNumber || 'N/A'}</dd>
+                </div>
+                <div className="p-3">
+                  <dt className="text-slate-500 font-mono text-[10px] uppercase">MAX CAPACITY</dt>
+                  <dd className="font-mono font-medium text-slate-900 mt-0.5 tabular-nums">{selectedApp.instrument?.maxCapacity || 'N/A'}</dd>
+                </div>
+                <div className="p-3">
+                  <dt className="text-slate-500 font-mono text-[10px] uppercase">MIN CAPACITY</dt>
+                  <dd className="font-mono font-medium text-slate-900 mt-0.5 tabular-nums">{selectedApp.instrument?.minCapacity || 'N/A'}</dd>
+                </div>
+                <div className="p-3">
+                  <dt className="text-slate-500 font-mono text-[10px] uppercase">ACCURACY CLASS</dt>
+                  <dd className="font-medium text-slate-900 mt-0.5">{selectedApp.instrument?.accuracyClass || 'Class III'}</dd>
+                </div>
+                <div className="p-3">
+                  <dt className="text-slate-500 font-mono text-[10px] uppercase">SCALE INTERVAL (e)</dt>
+                  <dd className="font-mono font-medium text-slate-900 mt-0.5 tabular-nums">{selectedApp.instrument?.scaleInterval || 'e = 5 g'}</dd>
+                </div>
+                <div className="p-3">
+                  <dt className="text-slate-500 font-mono text-[10px] uppercase">MEASURE UNIT</dt>
+                  <dd className="font-medium text-slate-900 mt-0.5">{selectedApp.instrument?.unitOfMeasurement || 'Kilogram (kg)'}</dd>
+                </div>
+                <div className="p-3">
+                  <dt className="text-slate-500 font-mono text-[10px] uppercase">EQUIPMENT COUNT</dt>
+                  <dd className="font-mono font-medium text-slate-900 mt-0.5 tabular-nums">{selectedApp.instrument?.quantity || '1 Unit'}</dd>
+                </div>
+              </dl>
+
+              {/* 2. Legal Approval & Verification Details */}
+              <div className="p-3 bg-slate-50/50 border-b border-slate-200 font-mono text-[10px] uppercase tracking-wider text-slate-500">
+                2. STATUTORY APPROVALS & REGULATORY TRACEABILITY
+              </div>
+              <dl className="grid grid-cols-2 sm:grid-cols-3 divide-x divide-y divide-slate-100 border-b border-slate-200 text-xs">
+                <div className="p-3">
+                  <dt className="text-slate-500 font-mono text-[10px] uppercase">VERIFICATION TYPE</dt>
+                  <dd className="font-medium text-slate-900 mt-0.5">{selectedApp.applicationType}</dd>
+                </div>
+                <div className="p-3">
+                  <dt className="text-slate-500 font-mono text-[10px] uppercase">MODEL APPROVAL NO</dt>
+                  <dd className="font-mono font-medium text-slate-900 mt-0.5 tabular-nums">IND/09/2021/442</dd>
+                </div>
+                <div className="p-3">
+                  <dt className="text-slate-500 font-mono text-[10px] uppercase">STANDARDS BASIS</dt>
+                  <dd className="font-mono text-slate-700 mt-0.5">OIML R76 / LM ACT</dd>
+                </div>
+              </dl>
+
+              {/* 3. LMO Field Inspection Result & Technical Report */}
+              <div className="p-3 bg-slate-50/50 border-b border-slate-200 flex items-center justify-between">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-slate-500">
+                  3. FIELD INSPECTION AUDIT & TECHNICAL TEST REPORT
+                </span>
+                <Badge status={selectedApp.status} variant="stamp" />
               </div>
 
-              {/* 2. Premises & Installation Location */}
-              <div className="space-y-1.5">
-                <p className="font-bold uppercase text-[10px] tracking-wider text-[#B85D19]">
-                  2. Premises & Installation Details
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 bg-white p-3 rounded-xl border border-[#102A43]/10">
+              <div className="p-4 space-y-4 text-xs">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-slate-50 rounded-sm border border-slate-200 font-mono text-xs">
                   <div>
-                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Business / Premises</span>
-                    <span className="font-semibold text-[#102A43]">{selectedApp.applicantName}</span>
+                    <span className="text-[10px] uppercase text-slate-500 block">ASSIGNED INSPECTION OFFICER</span>
+                    <span className="font-semibold text-slate-900 mt-0.5 block">
+                      {selectedApp.assignedOfficerName || 'Inspector Rajesh V. Sharma (LMO Nagpur Zone)'}
+                    </span>
                   </div>
-                  <div>
-                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Installation Address</span>
-                    <span className="font-semibold text-[#102A43]">{selectedApp.inspectionLocation}</span>
+                  <div className="text-left sm:text-right">
+                    <span className="text-[10px] uppercase text-slate-500 block">SCHEDULED / INSPECTION DATE</span>
+                    <span className="font-medium text-slate-900 mt-0.5 block tabular-nums">
+                      {selectedApp.scheduledInspectionDate || '28 Aug 2026'}
+                    </span>
                   </div>
                 </div>
-              </div>
 
-              {/* 3. Legal Approval & Verification Details */}
-              <div className="space-y-1.5">
-                <p className="font-bold uppercase text-[10px] tracking-wider text-[#B85D19]">
-                  3. Legal Approval & Certificate Details
-                </p>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 bg-white p-3 rounded-xl border border-[#102A43]/10">
-                  <div>
-                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Verification Type</span>
-                    <span className="font-semibold text-[#102A43]">{selectedApp.applicationType}</span>
+                <div>
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-slate-500 block mb-2">
+                    PHYSICAL INSPECTION CHECKLIST (FIELD VERIFIED)
+                  </span>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
+                    <div className="p-2.5 bg-emerald-50/80 rounded-sm border border-emerald-300 text-emerald-900 text-[11px]">✓ NAMEPLATE CHECKED</div>
+                    <div className="p-2.5 bg-emerald-50/80 rounded-sm border border-emerald-300 text-emerald-900 text-[11px]">✓ MODEL APPROVED</div>
+                    <div className="p-2.5 bg-emerald-50/80 rounded-sm border border-emerald-300 text-emerald-900 text-[11px]">✓ CAPACITY CONFIRMED</div>
+                    <div className="p-2.5 bg-emerald-50/80 rounded-sm border border-emerald-300 text-emerald-900 text-[11px]">✓ LEAD SEAL AFFIXED</div>
                   </div>
-                  <div>
-                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Model Approval No</span>
-                    <span className="font-mono font-bold text-[#102A43]">IND/09/2021/442</span>
-                  </div>
-                  {selectedApp.applicationType?.toLowerCase().includes('re-verification') && (
-                    <div>
-                      <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Previous Cert No</span>
-                      <span className="font-mono font-bold text-[#102A43]">CERT-2025-8891</span>
-                    </div>
-                  )}
                 </div>
-              </div>
 
-              {/* 4. LMO Field Inspection Result & Technical Report */}
-              <div className="space-y-2 pt-2 border-t border-[#102A43]/15">
-                <div className="flex items-center justify-between">
-                  <p className="font-bold uppercase text-[11px] tracking-wider text-[#B85D19]">
-                    4. LMO Field Inspection Result & Technical Report
+                <div>
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-slate-500 block mb-2">
+                    DYNAMIC TECHNICAL VERIFICATION & MPE TOLERANCE ANALYSIS
+                  </span>
+                  <DynamicTechnicalVerification
+                    instrumentName={selectedApp.instrumentName}
+                    applicationType={selectedApp.applicationType}
+                    accuracyClass={selectedApp.instrument?.accuracyClass || selectedApp.instrument?.accuracy_class || selectedApp.accuracyClass}
+                    scaleInterval={selectedApp.instrument?.scaleInterval || selectedApp.instrument?.scale_interval}
+                    maxCapacity={selectedApp.instrument?.maxCapacity}
+                  />
+                </div>
+
+                <div className="p-3 bg-slate-50 rounded-sm border border-slate-200">
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-slate-500 block">OFFICER REMARKS & OBSERVATIONS</span>
+                  <p className="text-slate-800 text-xs mt-1 font-mono">
+                    "{selectedApp.observations || 'All physical inspection criteria passed. Lead seal affixed & QR code digital stamp generated.'}"
                   </p>
-                  {selectedApp.status === 'passed' && (
-                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-[10px] uppercase">
-                      ✓ PASS / STAMPED
-                    </span>
-                  )}
-                  {selectedApp.status === 'failed' && (
-                    <span className="px-2.5 py-0.5 rounded-full bg-red-100 text-red-800 font-extrabold text-[10px] uppercase">
-                      ✕ FAIL / REJECTED
-                    </span>
-                  )}
-                  {selectedApp.status !== 'passed' && selectedApp.status !== 'failed' && (
-                    <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 font-extrabold text-[10px] uppercase">
-                      ⏳ INSPECTION IN PROGRESS
-                    </span>
-                  )}
                 </div>
 
-                <div className="p-4 bg-white rounded-2xl border border-[#102A43]/15 space-y-3 text-xs">
-                  <div className="flex justify-between items-center bg-[#FBF9F5] p-3 rounded-xl border border-[#102A43]/10">
-                    <div>
-                      <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Assigned Inspection Officer</span>
-                      <span className="font-bold text-[#102A43] text-sm">
-                        {selectedApp.assignedOfficerName || 'Inspector Rajesh V. Sharma (LMO Nagpur Zone)'}
-                      </span>
-                    </div>
-                    <div className="text-right">
-                      <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Scheduled / Inspection Date</span>
-                      <span className="font-mono font-bold text-[#102A43]">
-                        {selectedApp.scheduledInspectionDate || '28 Aug 2026'}
-                      </span>
-                    </div>
+                {selectedApp.status === 'failed' && (
+                  <div className="p-3 bg-red-50 rounded-sm border border-red-300 text-red-900 font-mono text-xs">
+                    ⚠️ STATUTORY REJECTION GROUND: {selectedApp.rejectionReason || 'MPE Error Exceeded Rule Limits'}
                   </div>
-
-                  <div>
-                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase mb-1">
-                      Physical Inspection Checklist (Verified on Site)
-                    </span>
-                    <div className="grid grid-cols-2 gap-2 text-xs">
-                      <div className="p-2 bg-emerald-50 rounded-lg text-emerald-800 font-bold">✓ Nameplate Checked</div>
-                      <div className="p-2 bg-emerald-50 rounded-lg text-emerald-800 font-bold">✓ Model Approved</div>
-                      <div className="p-2 bg-emerald-50 rounded-lg text-emerald-800 font-bold">✓ Capacity Checked</div>
-                      <div className="p-2 bg-emerald-50 rounded-lg text-emerald-800 font-bold">✓ Lead Seal Affixed</div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase mb-1">
-                      Technical Verification & Rule MPE Test Results
-                    </span>
-                    <DynamicTechnicalVerification
-                      instrumentName={selectedApp.instrumentName}
-                      applicationType={selectedApp.applicationType}
-                      accuracyClass={selectedApp.instrument?.accuracyClass || selectedApp.instrument?.accuracy_class || selectedApp.accuracyClass}
-                      scaleInterval={selectedApp.instrument?.scaleInterval || selectedApp.instrument?.scale_interval}
-                      maxCapacity={selectedApp.instrument?.maxCapacity}
-                    />
-                  </div>
-
-                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200">
-                    <span className="text-[#102A43]/60 text-[10px] font-bold block uppercase">Officer Remarks & Observations</span>
-                    <p className="font-semibold text-[#102A43] text-xs mt-1">
-                      "{selectedApp.observations || 'All physical inspection criteria passed. Lead seal affixed & QR code digital stamp generated.'}"
-                    </p>
-                  </div>
-
-                  {selectedApp.status === 'failed' && (
-                    <div className="p-3 bg-red-50 rounded-xl border border-red-200 text-red-900 font-bold">
-                      ⚠️ Rejection Reason Recorded: {selectedApp.rejectionReason || 'MPE Error Exceeded Rule Limits'}
-                    </div>
-                  )}
-                </div>
+                )}
               </div>
             </div>
 
             {selectedApp.applicationType?.toLowerCase().includes('re-verification') && (
-              <div>
-                <h4 className="text-xs font-bold uppercase tracking-wider text-[#102A43]/80 border-b pb-1 mb-2">
-                  Attached Document (1)
-                </h4>
-                <div className="p-3 bg-white rounded-xl border border-[#102A43]/15 flex items-center justify-between text-xs shadow-xs">
-                  <span className="font-bold text-[#102A43] flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-[#B85D19]" /> Previous_Verification_Certificate_2025.pdf
+              <div className="border border-slate-200 rounded-sm p-4 bg-slate-50/50">
+                <span className="font-mono text-[10px] uppercase tracking-wider text-slate-500 block mb-2">
+                  ATTACHED PREVIOUS CERTIFICATE
+                </span>
+                <div className="p-3 bg-white rounded-sm border border-slate-200 flex items-center justify-between text-xs">
+                  <span className="font-mono text-slate-900 flex items-center gap-2">
+                    <FileText className="w-4 h-4 text-[#C87541]" /> Previous_Verification_Certificate_2025.pdf
                   </span>
                   <button
                     type="button"
                     onClick={() => alert('Previewing Previous_Verification_Certificate_2025.pdf')}
-                    className="text-xs text-[#B85D19] font-bold hover:underline"
+                    className="text-xs text-[#0B315B] font-mono hover:underline"
                   >
-                    Preview File
+                    View File
                   </button>
                 </div>
               </div>
@@ -574,68 +558,51 @@ export const ReviewApplicationsPage = () => {
 
             {/* Officer Verification Result Section */}
             {selectedApp.verification && (
-              <div className={`p-4 rounded-2xl border text-xs space-y-3 ${
-                selectedApp.verification.outcome === 'PASS' 
-                  ? 'bg-emerald-50 border-emerald-200' 
-                  : 'bg-red-50 border-red-200'
-              }`}>
-                <p className={`font-bold uppercase tracking-wider ${
-                  selectedApp.verification.outcome === 'PASS' ? 'text-emerald-900' : 'text-red-900'
-                }`}>
-                  OFFICER VERIFICATION RESULT
-                </p>
+              <div className="border border-slate-200 rounded-sm p-4 bg-slate-50/50 space-y-3 text-xs">
+                <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-slate-500">
+                    FIELD VERIFICATION AUDIT RECORD
+                  </span>
+                  <Badge status={selectedApp.verification.outcome} variant="stamp" />
+                </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <span className="block text-[10px] font-bold text-neutral-500 uppercase">Outcome</span>
-                    <span className={`font-extrabold ${
+                    <span className="block text-[10px] font-mono text-slate-500 uppercase">OFFICIAL DETERMINATION</span>
+                    <span className={`font-mono font-bold ${
                       selectedApp.verification.outcome === 'PASS' ? 'text-emerald-700' : 'text-red-700'
                     }`}>
                       {selectedApp.verification.outcome}
                     </span>
                   </div>
                   <div>
-                    <span className="block text-[10px] font-bold text-neutral-500 uppercase">Reason for Failure</span>
-                    <span className="font-semibold text-neutral-900">
+                    <span className="block text-[10px] font-mono text-slate-500 uppercase">FAILURE REASON</span>
+                    <span className="font-medium text-slate-900">
                       {selectedApp.verification.outcome === 'FAIL' 
                         ? (selectedApp.verification.rejectionReason || 'Not specified')
-                        : 'Not applicable'}
+                        : 'None (Compliant)'}
                     </span>
                   </div>
                 </div>
 
                 <div>
-                  <span className="block text-[10px] font-bold text-neutral-500 uppercase">Officer Remarks</span>
-                  <span className="font-semibold text-neutral-900">
-                    {selectedApp.verification.officerRemarks || 'No remarks provided.'}
-                  </span>
+                  <span className="block text-[10px] font-mono text-slate-500 uppercase">OFFICER OBSERVATIONS</span>
+                  <p className="font-mono text-slate-900 mt-0.5">
+                    {selectedApp.verification.officerRemarks || 'No remarks recorded.'}
+                  </p>
                 </div>
 
-                {selectedApp.verification.technicalTestResults && Object.keys(selectedApp.verification.technicalTestResults).length > 0 && (
-                  <div className="pt-2 border-t border-black/10 mt-2">
-                    <span className="block text-[10px] font-bold text-neutral-500 uppercase mb-1">Technical Summary</span>
-                    <ul className="space-y-1">
-                      {Object.entries(selectedApp.verification.technicalTestResults).map(([key, val]) => (
-                        <li key={key} className="flex justify-between font-medium text-neutral-800">
-                          <span className="capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}:</span>
-                          <span>{val}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
                 {selectedApp.verificationHistory?.length > 1 && (
-                  <div className="pt-2 border-t border-black/10 mt-2 space-y-1.5">
-                    <span className="block text-[10px] font-bold text-neutral-500 uppercase">Prior Verification Attempts</span>
+                  <div className="pt-2 border-t border-slate-200 mt-2 space-y-1.5 font-mono text-xs">
+                    <span className="block text-[10px] text-slate-500 uppercase">PRIOR VERIFICATION AUDIT TRAIL</span>
                     {selectedApp.verificationHistory.slice(1).map((hist, hIdx) => (
-                      <div key={hIdx} className="p-2 bg-neutral-50 rounded text-xs flex justify-between items-center">
+                      <div key={hIdx} className="p-2 bg-white border border-slate-200 rounded-xs flex justify-between items-center">
                         <div>
-                          <span className="font-bold text-neutral-700">Attempt #{selectedApp.verificationHistory.length - 1 - hIdx}: </span>
-                          <span className={`font-bold ${hist.outcome === 'PASS' ? 'text-emerald-700' : 'text-red-700'}`}>{hist.outcome}</span>
-                          {hist.rejectionReason && <span className="text-neutral-500"> — {hist.rejectionReason}</span>}
+                          <span className="text-slate-600">Attempt #{selectedApp.verificationHistory.length - 1 - hIdx}: </span>
+                          <span className={`font-semibold ${hist.outcome === 'PASS' ? 'text-emerald-700' : 'text-red-700'}`}>{hist.outcome}</span>
+                          {hist.rejectionReason && <span className="text-slate-500"> — {hist.rejectionReason}</span>}
                         </div>
-                        <span className="text-[10px] text-neutral-400 font-mono">
+                        <span className="text-[10px] text-slate-400 tabular-nums">
                           {hist.createdAt ? new Date(hist.createdAt).toLocaleDateString('en-IN') : ''}
                         </span>
                       </div>
@@ -646,9 +613,9 @@ export const ReviewApplicationsPage = () => {
             )}
 
             {selectedApp.notes && (
-              <div className="p-3 bg-neutral-100 rounded border border-neutral-300 text-xs">
-                <p className="font-semibold text-neutral-900">Applicant Notes:</p>
-                <p className="text-neutral-600 mt-0.5">{selectedApp.notes}</p>
+              <div className="p-3 bg-slate-50 rounded-sm border border-slate-200 text-xs font-mono">
+                <span className="text-[10px] uppercase text-slate-500 block">APPLICANT NOTES</span>
+                <p className="text-slate-800 mt-0.5">{selectedApp.notes}</p>
               </div>
             )}
           </div>

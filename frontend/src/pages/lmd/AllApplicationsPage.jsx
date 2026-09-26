@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Search, Filter, Eye } from 'lucide-react';
+import { Search, Filter, Eye, FileText, CheckCircle2, MapPin } from 'lucide-react';
 import { useData } from '../../context/DataContext';
 import { Card } from '../../components/common/Card';
 import { Table } from '../../components/common/Table';
 import { Badge } from '../../components/common/Badge';
 import { Modal } from '../../components/common/Modal';
 import { Button } from '../../components/common/Button';
+import { VernierRuler } from '../../components/common/VernierRuler';
 
 export const AllApplicationsPage = () => {
   const { applications } = useData();
@@ -53,36 +54,36 @@ export const AllApplicationsPage = () => {
 
   const columns = [
     {
-      header: 'App ID',
+      header: 'Docket ID',
       key: 'id',
-      render: (row) => <span className="font-mono font-bold text-primary text-xs">{row.id}</span>
+      render: (row) => <span className="font-mono font-medium text-[#0B315B] text-xs tabular-nums">{row.applicationNumber || row.id}</span>
     },
     {
       header: 'Applicant / Business',
       key: 'applicantName',
       render: (row) => (
         <div>
-          <p className="font-semibold text-neutral-900">{row.applicantName}</p>
-          <p className="text-[11px] text-neutral-600">Loc: {row.inspectionLocation.split(',')[0]}</p>
+          <p className="font-medium text-slate-900 text-xs">{row.applicantName}</p>
+          <p className="text-[10px] font-mono text-slate-500 mt-0.5">Loc: {row.inspectionLocation?.split(',')[0] || '—'}</p>
         </div>
       )
     },
     {
-      header: 'Instrument',
+      header: 'Instrument Specification',
       key: 'instrumentName',
-      render: (row) => <span className="font-semibold text-neutral-900">{row.instrumentName}</span>
+      render: (row) => <span className="font-medium text-slate-900 text-xs">{row.instrumentName}</span>
     },
     {
-      header: 'Application Type',
+      header: 'Application Category',
       key: 'applicationType',
-      render: (row) => <span className="text-xs text-neutral-600">{row.applicationType}</span>
+      render: (row) => <span className="text-[11px] font-mono text-slate-600">{row.applicationType}</span>
     },
     {
       header: 'Assigned Verifier',
       key: 'assignedOfficerName',
       render: (row) => (
-        <span className="text-xs font-medium text-neutral-900">
-          {row.assignedOfficerName || <span className="text-neutral-600 italic">Unassigned</span>}
+        <span className="text-xs font-mono text-slate-800">
+          {row.assignedOfficerName || <span className="text-slate-400 italic">Unassigned</span>}
         </span>
       )
     },
@@ -90,54 +91,68 @@ export const AllApplicationsPage = () => {
       header: 'Scheduled Date',
       key: 'scheduledInspectionDate',
       render: (row) => (
-        <span className="text-xs font-medium text-neutral-900">
-          {row.scheduledInspectionDate || <span className="text-neutral-600 italic">-</span>}
+        <span className="text-xs font-mono text-slate-900 tabular-nums">
+          {row.scheduledInspectionDate ? new Date(row.scheduledInspectionDate).toLocaleDateString('en-IN') : <span className="text-slate-400 italic">—</span>}
         </span>
       )
     },
     {
-      header: 'Status',
+      header: 'Compliance Status',
       key: 'status',
-      render: (row) => <Badge status={row.status}>{row.status}</Badge>
+      render: (row) => <Badge status={row.status} variant="stamp">{row.status?.replace('_', ' ')}</Badge>
     },
     {
       header: 'Actions',
       key: 'action',
       render: (row) => (
-        <Button variant="ghost" size="sm" icon={Eye} onClick={() => setSelectedApp(row)}>
-          Master Record
+        <Button variant="outline" size="sm" icon={Eye} onClick={() => setSelectedApp(row)} className="font-mono text-xs">
+          Docket
         </Button>
       )
     }
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 font-sans">
       <div>
-        <h1 className="text-2xl font-bold text-neutral-900">Master Verification Registry</h1>
-        <p className="text-xs text-neutral-600">Filter and search across all submitted, in-progress, passed, and failed verification records statewide.</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <span className="text-[10px] font-mono tracking-widest uppercase text-slate-500 block mb-0.5">
+              Statewide Master Registry • Legal Metrology Act 2009
+            </span>
+            <h1 className="text-xl font-semibold text-[#0B315B] tracking-tight">Master Statutory Verification Registry</h1>
+          </div>
+          <div className="hidden sm:flex items-center gap-2 border border-slate-300 bg-white px-3 py-1 rounded-sm">
+            <span className="text-[10px] font-mono uppercase text-slate-500">Registry Total:</span>
+            <span className="text-xs font-mono font-bold text-[#0B315B] tabular-nums">{applications.length} Dockets</span>
+          </div>
+        </div>
+        <VernierRuler className="my-3 opacity-75" />
+        <p className="text-xs text-slate-600">
+          Filter and search across all submitted, in-progress, passed, and rejected verification records statewide.
+        </p>
       </div>
 
-      <Card className="p-4 bg-white">
+      <Card accent className="p-4 bg-white border border-slate-300 rounded-sm shadow-none">
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
           <div className="relative flex-1 max-w-md">
-            <Search className="w-4 h-4 text-neutral-600 absolute left-3 top-3" />
+            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
             <input
               type="text"
-              placeholder="Search across all records..."
+              placeholder="Search across all records by ID, machine, vendor..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-input border border-neutral-300 text-xs text-neutral-900 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full pl-9 pr-4 py-1.5 rounded-sm border border-slate-300 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-[#0B315B] focus:border-[#0B315B] font-mono"
             />
           </div>
 
           <div className="flex items-center gap-2">
-            <Filter className="w-4 h-4 text-neutral-600" />
-            <span className="text-xs text-neutral-600 font-semibold">Status:</span>
+            <Filter className="w-3.5 h-3.5 text-slate-500" />
+            <span className="text-xs text-slate-600 font-medium font-mono uppercase text-[11px]">Status:</span>
             <select
               value={statusFilter}
               onChange={(e) => handleStatusFilterChange(e.target.value)}
-              className="rounded-input border border-neutral-300 text-xs py-2 px-3 bg-white text-neutral-900 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="rounded-sm border border-slate-300 text-xs py-1.5 px-2.5 bg-white text-slate-900 focus:outline-none focus:ring-1 focus:ring-[#0B315B] focus:border-[#0B315B] font-mono"
             >
               <option value="all">All ({getStatusCount('all')})</option>
               <option value="submitted">Submitted ({getStatusCount('submitted')})</option>
@@ -149,14 +164,14 @@ export const AllApplicationsPage = () => {
           </div>
         </div>
         
-        <div className="flex items-center justify-between mt-4 pt-3 border-t border-neutral-100">
-          <p className="text-xs text-neutral-600 font-medium">
-            Showing <span className="font-bold text-neutral-900">{filteredApps.length}</span> of <span className="font-bold text-neutral-900">{applications.length}</span> applications
+        <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-slate-200">
+          <p className="text-xs text-slate-600 font-mono">
+            Showing <span className="font-semibold text-slate-900 tabular-nums">{filteredApps.length}</span> of <span className="tabular-nums">{applications.length}</span> dockets
           </p>
           {(searchTerm || statusFilter !== 'all') && (
             <button
               onClick={() => { setSearchTerm(''); handleStatusFilterChange('all'); }}
-              className="text-xs font-semibold text-[#B85D19] hover:underline"
+              className="text-xs font-mono font-medium text-[#C87541] hover:underline"
             >
               Clear filters
             </button>
@@ -164,35 +179,56 @@ export const AllApplicationsPage = () => {
         </div>
       </Card>
 
-      <Table columns={columns} data={filteredApps} emptyMessage="No records match query." />
+      <Table columns={columns} data={filteredApps} emptyMessage="No records match query in master archive." />
 
       {selectedApp && (
         <Modal maxWidth="max-w-4xl" isOpen={!!selectedApp}
           onClose={() => setSelectedApp(null)}
-          title={`Master Application Record: ${selectedApp.id}`}
-          footer={<Button variant="secondary" onClick={() => setSelectedApp(null)}>Close Record</Button>}
+          title={`Master Docket Record: ${selectedApp.applicationNumber || selectedApp.id}`}
+          footer={<Button variant="outline" size="sm" onClick={() => setSelectedApp(null)} className="font-mono text-xs">Close Docket</Button>}
         >
-          <div className="space-y-4 text-xs">
-            <div className="p-3 bg-neutral-100 rounded border border-neutral-300 flex justify-between items-center">
+          <div className="space-y-4 text-xs font-sans">
+            <div className="p-3 bg-slate-50 rounded-sm border border-slate-300 flex justify-between items-center">
               <div>
-                <p className="font-bold text-neutral-900">{selectedApp.instrumentName}</p>
-                <p className="text-neutral-600">{selectedApp.applicantName}</p>
+                <p className="font-semibold text-slate-900 text-sm">{selectedApp.instrumentName}</p>
+                <p className="text-slate-500 font-mono text-[11px] mt-0.5">{selectedApp.applicantName}</p>
               </div>
-              <Badge status={selectedApp.status}>{selectedApp.status}</Badge>
+              <Badge status={selectedApp.status} variant="stamp">{selectedApp.status}</Badge>
             </div>
 
+            <dl className="grid grid-cols-2 text-xs divide-x divide-y divide-slate-100 border border-slate-200 rounded-sm">
+              <div className="p-2.5">
+                <dt className="text-slate-400 font-mono text-[10px] uppercase">Application Category</dt>
+                <dd className="font-medium text-slate-900 mt-0.5">{selectedApp.applicationType}</dd>
+              </div>
+              <div className="p-2.5">
+                <dt className="text-slate-400 font-mono text-[10px] uppercase">Field Location</dt>
+                <dd className="font-medium text-slate-900 mt-0.5">{selectedApp.inspectionLocation}</dd>
+              </div>
+              <div className="p-2.5">
+                <dt className="text-slate-400 font-mono text-[10px] uppercase">Assigned Verifier</dt>
+                <dd className="font-mono font-medium text-slate-900 mt-0.5">{selectedApp.assignedOfficerName || 'Pending'}</dd>
+              </div>
+              <div className="p-2.5">
+                <dt className="text-slate-400 font-mono text-[10px] uppercase">Scheduled Inspection</dt>
+                <dd className="font-mono font-medium text-slate-900 mt-0.5 tabular-nums">{selectedApp.scheduledInspectionDate || 'Not scheduled'}</dd>
+              </div>
+            </dl>
+
             <div>
-              <p className="font-semibold text-neutral-900 border-b pb-1 mb-2">Audit History</p>
-              <div className="space-y-2 pl-2 border-l-2 border-primary">
+              <p className="font-mono text-[11px] uppercase font-semibold text-slate-600 border-b border-slate-200 pb-1 mb-2">
+                Statutory Audit Trail
+              </p>
+              <div className="space-y-2 pl-3 border-l-2 border-[#0B315B]">
                 {selectedApp.timeline && selectedApp.timeline.length > 0 ? (
                   selectedApp.timeline.map((step, idx) => (
                     <div key={idx} className="text-[11px]">
-                      <p className="font-semibold text-neutral-900">{step.step}</p>
-                      <p className="text-neutral-600">{step.date} • {step.actor}</p>
+                      <p className="font-semibold text-slate-900">{step.step}</p>
+                      <p className="text-slate-500 font-mono text-[10px]">{step.date} • {step.actor}</p>
                     </div>
                   ))
                 ) : (
-                  <p className="text-neutral-500 italic">No legacy timeline steps recorded.</p>
+                  <p className="text-slate-400 font-mono italic text-[11px]">No audit trail steps recorded.</p>
                 )}
               </div>
             </div>

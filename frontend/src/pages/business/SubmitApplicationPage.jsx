@@ -7,6 +7,7 @@ import { Button } from '../../components/common/Button';
 import { Select } from '../../components/common/Select';
 import { Input } from '../../components/common/Input';
 import { Badge } from '../../components/common/Badge';
+import { VernierRuler } from '../../components/common/VernierRuler';
 
 export const SubmitApplicationPage = () => {
   const navigate = useNavigate();
@@ -61,20 +62,32 @@ export const SubmitApplicationPage = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-6 font-sans">
       <div>
-        <Link to="/business" className="inline-flex items-center gap-1 text-xs text-neutral-600 hover:text-neutral-900 mb-1">
+        <Link to="/business" className="inline-flex items-center gap-1.5 text-xs font-mono text-slate-500 hover:text-[#0B315B] mb-2 transition-colors">
           <ArrowLeft className="w-3.5 h-3.5" /> Back to Dashboard
         </Link>
-        <h1 className="text-2xl font-bold text-neutral-900">Submit Verification Application</h1>
-        <p className="text-xs text-neutral-600">
-          Request official Legal Metrology verification or mandatory periodic re-verification for your registered instrument.
+        <div className="flex items-center justify-between">
+          <div>
+            <span className="text-[10px] font-mono tracking-widest uppercase text-slate-500 block mb-0.5">
+              Docket Request • Form LM-2
+            </span>
+            <h1 className="text-xl font-semibold text-[#0B315B] tracking-tight">Submit Verification Application</h1>
+          </div>
+          <div className="hidden sm:flex items-center gap-2 border border-slate-300 bg-white px-3 py-1 rounded-sm">
+            <span className="text-[10px] font-mono uppercase text-slate-500">Standard:</span>
+            <span className="text-xs font-mono font-semibold text-[#0B315B]">OIML R76 / Sec. 24</span>
+          </div>
+        </div>
+        <VernierRuler className="my-3 opacity-75" />
+        <p className="text-xs text-slate-600">
+          Request official statutory verification or mandatory periodic re-verification for an instrument registered in your enterprise inventory.
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-5">
         {/* Step 1: Select Instrument */}
-        <Card title="1. Select Registered Instrument" subtitle="Choose from instruments registered in your business profile">
+        <Card accent title="1. Select Registered Instrument" subtitle="Choose from instruments registered in your business profile">
           <div className="space-y-4">
             <Select
               label="Select Instrument"
@@ -88,31 +101,34 @@ export const SubmitApplicationPage = () => {
             />
 
             {selectedInst && (
-              <div className="p-4 bg-neutral-100 rounded-lg border border-neutral-300 text-xs space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="font-semibold text-neutral-900">{selectedInst.type}</span>
-                  <Badge status={selectedInst.status}>{selectedInst.status}</Badge>
+              <div className="border border-slate-300 rounded-sm bg-white overflow-hidden">
+                <div className="p-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold text-xs text-[#0B315B]">{selectedInst.type}</span>
+                    <span className="text-[10px] font-mono text-slate-500">({selectedInst.manufacturer})</span>
+                  </div>
+                  <Badge status={selectedInst.status} variant="stamp">{selectedInst.status}</Badge>
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-neutral-600 pt-1">
-                  <div>
-                    <span className="block font-medium text-[10px] text-neutral-600 uppercase">Serial No</span>
-                    <span className="font-mono font-bold text-neutral-900">{selectedInst.serialNumber}</span>
+                <dl className="grid grid-cols-2 sm:grid-cols-4 text-xs divide-x divide-y divide-slate-100 border-b border-slate-200">
+                  <div className="p-3">
+                    <dt className="text-slate-500 font-mono text-[11px]">SERIAL NO.</dt>
+                    <dd className="font-mono font-medium text-slate-900 mt-0.5 tabular-nums">{selectedInst.serialNumber}</dd>
                   </div>
-                  <div>
-                    <span className="block font-medium text-[10px] text-neutral-600 uppercase">Capacity</span>
-                    <span className="font-medium text-neutral-900">{selectedInst.capacity}</span>
+                  <div className="p-3">
+                    <dt className="text-slate-500 font-mono text-[11px]">MAX CAPACITY</dt>
+                    <dd className="font-mono font-medium text-slate-900 mt-0.5 tabular-nums">{selectedInst.capacity}</dd>
                   </div>
-                  <div>
-                    <span className="block font-medium text-[10px] text-neutral-600 uppercase">Accuracy</span>
-                    <span className="font-medium text-neutral-900">{selectedInst.accuracyClass}</span>
+                  <div className="p-3">
+                    <dt className="text-slate-500 font-mono text-[11px]">ACCURACY CLASS</dt>
+                    <dd className="font-medium text-slate-900 mt-0.5">{selectedInst.accuracyClass}</dd>
                   </div>
-                  <div>
-                    <span className="block font-medium text-[10px] text-neutral-600 uppercase">Last Verified</span>
-                    <span className="font-medium text-neutral-900">{selectedInst.lastVerifiedDate || 'None'}</span>
+                  <div className="p-3">
+                    <dt className="text-slate-500 font-mono text-[11px]">LAST VERIFIED</dt>
+                    <dd className="font-mono font-medium text-slate-900 mt-0.5 tabular-nums">{selectedInst.lastVerifiedDate || 'Initial'}</dd>
                   </div>
-                </div>
-                <div className="flex items-center gap-1.5 text-neutral-600 pt-1">
-                  <MapPin className="w-3.5 h-3.5 text-primary shrink-0" />
+                </dl>
+                <div className="p-2.5 bg-slate-50/60 flex items-center gap-1.5 text-xs text-slate-600 font-sans">
+                  <MapPin className="w-3.5 h-3.5 text-[#0B315B] shrink-0" />
                   <span>{selectedInst.location}</span>
                 </div>
               </div>
@@ -121,7 +137,7 @@ export const SubmitApplicationPage = () => {
         </Card>
 
         {/* Step 2: Application Details */}
-        <Card title="2. Application Details & Preferred Schedule">
+        <Card accent title="2. Application Details & Preferred Schedule">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Select
               label="Verification Type"
@@ -146,26 +162,26 @@ export const SubmitApplicationPage = () => {
           </div>
 
           <div className="mt-4">
-            <label className="block text-sm font-medium text-neutral-900 mb-1">
-              Inspection Address / Special Notes
+            <label className="block text-[11px] font-mono uppercase font-semibold text-slate-600 mb-1">
+              Inspection Address / Site Instructions
             </label>
             <textarea
               rows={3}
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Provide site access instructions, contact person phone number, or required test weight equipment details..."
-              className="w-full rounded-input border border-neutral-300 text-sm text-neutral-900 bg-white p-3 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full rounded-sm border border-slate-300 text-xs text-slate-900 bg-white p-2.5 focus:outline-none focus:ring-1 focus:ring-[#0B315B] focus:border-[#0B315B]"
             />
           </div>
         </Card>
 
-        {/* Step 3: Mock Document Upload */}
-        <Card title="3. Supporting Documents" subtitle="Upload calibration reports, model approval certificates, or purchase invoices">
+        {/* Step 3: Document Upload */}
+        <Card accent title="3. Supporting Documents" subtitle="Upload calibration reports, model approval certificates, or purchase invoices">
           <div className="space-y-4">
-            <div className="border-2 border-dashed border-neutral-300 rounded-lg p-6 bg-neutral-100/50 text-center relative">
-              <Upload className="w-8 h-8 text-neutral-600 mx-auto mb-2" />
-              <p className="text-sm font-semibold text-neutral-900">Drag & Drop files or click to upload</p>
-              <p className="text-xs text-neutral-600 mt-1">Accepted: PDF, JPG, PNG (Max 10MB per file)</p>
+            <div className="border border-dashed border-slate-300 hover:border-[#C87541] rounded-sm p-5 bg-slate-50/50 text-center relative transition-colors cursor-pointer">
+              <Upload className="w-6 h-6 text-[#C87541] mx-auto mb-1.5" />
+              <p className="text-xs font-semibold text-slate-800">Drag & Drop files or click to upload</p>
+              <p className="text-[10px] font-mono text-slate-500 mt-0.5">Accepted: PDF, JPG, PNG (Max 10MB per file)</p>
               <input
                 type="file"
                 onChange={handleAddFile}
@@ -175,22 +191,22 @@ export const SubmitApplicationPage = () => {
 
             {/* Uploaded File List */}
             <div className="space-y-2">
-              <p className="text-xs font-semibold uppercase tracking-wider text-neutral-600">Attached Documents ({files.length})</p>
+              <p className="text-[10px] font-mono uppercase tracking-wider text-slate-500">Attached Documents ({files.length})</p>
               {files.map((file, idx) => (
-                <div key={idx} className="flex items-center justify-between p-3 bg-white rounded-md border border-neutral-300 text-xs">
+                <div key={idx} className="flex items-center justify-between p-2.5 bg-white rounded-sm border border-slate-300 text-xs">
                   <div className="flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-primary" />
+                    <FileText className="w-4 h-4 text-[#0B315B]" />
                     <div>
-                      <p className="font-semibold text-neutral-900">{file.name}</p>
-                      <p className="text-[10px] text-neutral-600">{file.size}</p>
+                      <p className="font-mono text-xs font-medium text-slate-900">{file.name}</p>
+                      <p className="text-[10px] font-mono text-slate-500 tabular-nums">{file.size}</p>
                     </div>
                   </div>
                   <button
                     type="button"
                     onClick={() => handleRemoveFile(idx)}
-                    className="text-neutral-600 hover:text-danger p-1"
+                    className="text-slate-400 hover:text-red-600 p-1 transition-colors"
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
               ))}
@@ -199,12 +215,12 @@ export const SubmitApplicationPage = () => {
         </Card>
 
         {/* Submit Actions */}
-        <div className="flex items-center justify-end gap-3 pt-4 border-t border-neutral-300">
+        <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-200">
           <Link to="/business">
-            <Button variant="ghost">Cancel</Button>
+            <Button variant="outline" size="sm" className="font-mono text-xs">Cancel</Button>
           </Link>
-          <Button type="submit" variant="primary" loading={submitLoading} icon={CheckCircle}>
-            Submit Verification Request
+          <Button type="submit" variant="primary" size="sm" loading={submitLoading} icon={CheckCircle} className="font-mono uppercase tracking-wider text-xs">
+            Submit Verification Docket
           </Button>
         </div>
       </form>

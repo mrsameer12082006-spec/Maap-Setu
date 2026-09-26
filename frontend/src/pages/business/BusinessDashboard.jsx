@@ -11,6 +11,9 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
+import { TechnicalSpecCard } from '../../components/common/TechnicalSpecCard';
+import { VernierRuler } from '../../components/common/VernierRuler';
+import { Badge } from '../../components/common/Badge';
 
 export const BusinessDashboard = () => {
   const { user } = useAuth();
@@ -61,25 +64,32 @@ export const BusinessDashboard = () => {
   return (
     <div className="w-full space-y-8 pb-16 text-left">
       {/* 1. WELCOME HEADER & PRIMARY ACTION */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-6">
-        <div className="space-y-1 text-left">
-          <h1 className="text-2xl sm:text-3xl font-semibold text-[#0B315B] tracking-tight">
-            Welcome back, {userName}
-          </h1>
-          <p className="text-sm text-slate-500">
-            Overview of weighing and measuring instrument compliance.
-          </p>
-        </div>
+      <div className="bg-white border border-slate-300 rounded-xs shadow-none overflow-hidden text-left">
+        <div className="h-1 bg-[#C87541] w-full" />
+        <div className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1 text-left">
+            <span className="text-[10px] font-mono tracking-widest uppercase text-slate-500 block">
+              Commercial Metrology Registry • Business Portal
+            </span>
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#0B315B] tracking-tight">
+              Welcome back, {userName}
+            </h1>
+            <p className="text-sm text-slate-600">
+              Statutory verification oversight, equipment compliance, and calibration certificate management.
+            </p>
+          </div>
 
-        {/* Primary Action Button (Single Primary Action) */}
-        <button
-          type="button"
-          onClick={() => navigate('/business/register')}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[44px] rounded-md bg-[#0B315B] hover:bg-blue-900 text-white font-medium text-sm transition-colors shadow-none shrink-0"
-        >
-          <ArrowRight className="w-4 h-4 shrink-0" />
-          <span>Register New Instrument</span>
-        </button>
+          {/* Primary Action Button */}
+          <button
+            type="button"
+            onClick={() => navigate('/business/register')}
+            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[44px] rounded-md bg-[#0B315B] hover:bg-blue-900 text-white font-medium text-sm transition-colors shadow-none shrink-0"
+          >
+            <ArrowRight className="w-4 h-4 shrink-0" />
+            <span>Register New Instrument</span>
+          </button>
+        </div>
+        <VernierRuler />
       </div>
 
       {/* 2. SUMMARY STAT CARDS (8px Grid & Flat Hierarchy) */}
@@ -141,28 +151,31 @@ export const BusinessDashboard = () => {
             </p>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {myCertifiedInstruments.map((inst) => (
-              <div key={inst.id} className="bg-white rounded-md p-4 sm:p-5 border border-slate-200 shadow-none flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-left">
-                <div className="flex items-center gap-3.5">
-                  <div className="w-9 h-9 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center shrink-0">
-                    <CheckCircle2 className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-slate-800 text-sm">{inst.instrumentName}</h4>
-                    <p className="text-xs text-slate-500 tabular-nums">
-                      Certificate #{inst.certificate.certificateNumber || inst.certificate.id} • Valid until {inst.certificate.expiryDate}
-                    </p>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => navigate(`/verify/${inst.certificate.id}`)}
-                  className="px-3.5 py-2 rounded-md border border-[#C87541] text-[#C87541] hover:bg-[#FDF3EC] font-medium text-xs transition-colors shrink-0 min-h-[36px]"
-                >
-                  View Certificate
-                </button>
-              </div>
+              <TechnicalSpecCard
+                key={inst.id}
+                recordId={inst.certificate.certificateNumber || inst.certificate.id}
+                title={inst.instrumentName}
+                modelClass={inst.accuracyClass || 'Class III Commercial'}
+                serialNumber={inst.serialNumber || 'N/A'}
+                verificationUnit={`e = ${inst.scaleInterval || '10 kg'}`}
+                maxCapacity={inst.capacity || '60,000 kg'}
+                deviation="Compliant (Within MPE Limit)"
+                status="verified"
+                stampLabel="LMD Verified"
+                stampSubtext="NPL Traceable"
+                dueDate={inst.certificate.expiryDate}
+                actionButton={
+                  <button
+                    type="button"
+                    onClick={() => navigate(`/verify/${inst.certificate.id}`)}
+                    className="px-3 py-1.5 text-xs font-medium text-[#0B315B] hover:bg-slate-200/60 border border-slate-300 rounded-xs transition-colors"
+                  >
+                    View Certificate
+                  </button>
+                }
+              />
             ))}
           </div>
         )}
@@ -243,25 +256,27 @@ export const BusinessDashboard = () => {
                   <div className="w-9 h-9 rounded-md bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">
                     <FileText className="w-4 h-4" />
                   </div>
-                  <div>
+                  <div className="space-y-1">
                     <h4 className="font-semibold text-slate-800 text-sm flex items-center gap-2">
                       <span>{app.instrumentName}</span>
                       <span className="text-xs font-mono text-slate-400 tabular-nums">#{app.id}</span>
                     </h4>
-                    <p className="text-xs text-slate-500 mt-0.5 tabular-nums">
-                      Status: <span className="font-medium text-slate-700 capitalize">{app.status.replace('_', ' ')}</span>
-                      {app.assignedOfficerName && (' • Assigned: ' + app.assignedOfficerName)}
+                    <p className="text-xs text-slate-500 tabular-nums">
+                      {app.assignedOfficerName && ('Assigned: ' + app.assignedOfficerName)}
                       {app.scheduledInspectionDate && (' • Scheduled: ' + app.scheduledInspectionDate)}
                     </p>
                   </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => navigate('/business/applications')}
-                  className="px-3.5 py-1.5 rounded-md border border-slate-300 text-slate-700 hover:bg-slate-50 text-xs font-medium transition-colors shrink-0"
-                >
-                  View Application Details
-                </button>
+                <div className="flex items-center gap-3 shrink-0">
+                  <Badge status={app.status} variant="stamp" />
+                  <button
+                    type="button"
+                    onClick={() => navigate('/business/applications')}
+                    className="px-3 py-1.5 rounded-md border border-slate-300 text-slate-700 hover:bg-slate-50 text-xs font-medium transition-colors"
+                  >
+                    View Details
+                  </button>
+                </div>
               </div>
             ))}
           </div>

@@ -7,6 +7,8 @@ import { Button } from '../../components/common/Button';
 import { Badge } from '../../components/common/Badge';
 import { Modal } from '../../components/common/Modal';
 import { CertificateView } from '../../components/common/CertificateView';
+import { TechnicalSpecCard } from '../../components/common/TechnicalSpecCard';
+import { VernierRuler } from '../../components/common/VernierRuler';
 
 export const MyCertificatesPage = () => {
   const { certificates } = useData();
@@ -14,26 +16,41 @@ export const MyCertificatesPage = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-neutral-900">Digital Verification Certificates</h1>
-          <p className="text-xs text-neutral-600">
-            Official digital certificates and stamped verification records issued under the Legal Metrology Act, 2009.
-          </p>
-        </div>
+      {/* 1. Header with Tactile Instrument Aesthetic */}
+      <div className="relative bg-white border border-slate-200 rounded-sm p-6 shadow-none overflow-hidden text-left">
+        <div className="h-1 bg-[#C87541] w-full absolute top-0 left-0" />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
+          <div>
+            <span className="text-[10px] font-mono tracking-widest uppercase text-[#C87541] block">
+              OFFICIAL REPOSITORY • LEGAL METROLOGY ACT, 2009
+            </span>
+            <h1 className="text-xl sm:text-2xl font-semibold text-[#0B315B] tracking-tight">
+              Digital Verification Certificates
+            </h1>
+            <p className="text-xs text-slate-500 mt-0.5">
+              Official digital certificates and stamped verification records issued under Section 24(1).
+            </p>
+          </div>
 
-        <Link to="/business">
-          <Button variant="secondary" size="sm" icon={ArrowLeft} className="font-bold border-[#102A43]/20 shadow-xs">
-            Back to Dashboard
-          </Button>
-        </Link>
+          <div className="flex items-center gap-3">
+            <Badge status="passed" variant="stamp" subtext={`${certificates.length} ACTIVE CERTIFICATES`}>
+              STAMP REGISTRY
+            </Badge>
+            <Link to="/business">
+              <Button variant="secondary" size="sm" icon={ArrowLeft} className="font-mono text-xs">
+                Dashboard
+              </Button>
+            </Link>
+          </div>
+        </div>
+        <VernierRuler className="mt-4" />
       </div>
 
       {certificates.length === 0 ? (
-        <Card className="text-center py-12">
-          <Award className="w-12 h-12 text-neutral-400 mx-auto mb-3" />
-          <h3 className="text-base font-semibold text-neutral-900">No Certificates Issued Yet</h3>
-          <p className="text-xs text-neutral-600 mt-1 max-w-sm mx-auto">
+        <Card className="text-center py-12 rounded-sm" accent>
+          <Award className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+          <h3 className="text-base font-semibold text-slate-900">No Certificates Issued Yet</h3>
+          <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto font-mono">
             Certificates are automatically generated and linked to your profile once an LMO inspector submits a PASS result for your instrument.
           </p>
         </Card>
@@ -42,71 +59,34 @@ export const MyCertificatesPage = () => {
           {certificates.map((cert) => {
             const isExpired = new Date(cert.expiryDate) < new Date();
             return (
-              <Card key={cert.id} className="flex flex-col justify-between hover:border-primary/50 transition-all space-y-4">
-                <div className="space-y-3">
-                  {/* Top Bar */}
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-xs font-bold text-primary bg-primary-light px-2.5 py-1 rounded">
-                      {cert.id}
-                    </span>
-                    <Badge status={isExpired ? 'EXPIRED' : cert.status}>
-                      {isExpired ? 'EXPIRED' : cert.status}
-                    </Badge>
-                  </div>
-
-                  {/* Instrument info */}
-                  <div>
-                    <h3 className="text-base font-bold text-neutral-900">{cert.instrumentType}</h3>
-                    <p className="text-xs text-neutral-600">
-                      S/N: <span className="font-mono font-semibold text-neutral-900">{cert.serialNumber}</span> • {cert.manufacturer}
-                    </p>
-                  </div>
-
-                  {/* Dates Grid */}
-                  <div className="grid grid-cols-2 gap-2 p-3 bg-neutral-100 rounded-md border border-neutral-300 text-xs">
-                    <div>
-                      <p className="text-[10px] text-neutral-600 uppercase font-semibold">Verification Date</p>
-                      <p className="font-medium text-neutral-900">{cert.verificationDate}</p>
-                    </div>
-                    <div>
-                      <p className="text-[10px] text-neutral-600 uppercase font-semibold">Valid Until</p>
-                      <p className={`font-semibold ${isExpired ? 'text-danger' : 'text-accent'}`}>{cert.expiryDate}</p>
-                    </div>
-                  </div>
-
-                  {/* Officer info & QR preview thumbnail */}
-                  <div className="flex items-center justify-between pt-1 text-xs">
-                    <div>
-                      <p className="text-[10px] text-neutral-600">Authorized Officer</p>
-                      <p className="font-medium text-neutral-900 truncate max-w-[200px]">{cert.verificationOfficer}</p>
-                    </div>
-                    <div className="flex items-center gap-1.5 bg-neutral-900 text-white p-1.5 rounded text-[10px] font-mono">
-                      <QrCode className="w-4 h-4 text-emerald-400" />
-                      <span>QR Active</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Actions */}
-                <div className="pt-3 border-t border-neutral-300 flex items-center justify-between gap-2">
-                  <Button variant="secondary" size="sm" icon={Eye} onClick={() => setSelectedCert(cert)}>
-                    View / Print
-                  </Button>
-                  <Link to={`/verify/${cert.id}`} target="_blank">
-                    <Button variant="ghost" size="sm" icon={ExternalLink}>
-                      Public Verify
-                    </Button>
-                  </Link>
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    icon={Download}
-                    onClick={() => alert(`Downloading official PDF for ${cert.id}...`)}
+              <TechnicalSpecCard
+                key={cert.id}
+                title={cert.instrumentType}
+                recordId={cert.id}
+                subtitle="Verification Record • Sec. 24(1)"
+                stampStatus={isExpired ? 'DEFECTIVE' : 'VERIFIED'}
+                stampSubtext={isExpired ? 'EXPIRED' : 'NPL TRACEABLE'}
+                specs={[
+                  { label: 'SERIAL NO.', value: cert.serialNumber, mono: true },
+                  { label: 'MANUFACTURER', value: cert.manufacturer },
+                  { label: 'VERIFIED DATE', value: cert.verificationDate, mono: true },
+                  { label: 'VALID UNTIL', value: cert.expiryDate, mono: true },
+                  { label: 'OFFICER IN CHARGE', value: cert.verificationOfficer },
+                  { label: 'LEAD SEAL INTEGRITY', value: 'Intact • QR Stamp Active', mono: true }
+                ]}
+                actionLabel="View Certificate"
+                onAction={() => setSelectedCert(cert)}
+                secondaryAction={
+                  <Link
+                    to={`/verify/${cert.id}`}
+                    target="_blank"
+                    className="text-xs font-mono text-[#0B315B] hover:text-[#C87541] flex items-center gap-1 transition-colors"
                   >
-                    PDF
-                  </Button>
-                </div>
-              </Card>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                    <span>Public Verify</span>
+                  </Link>
+                }
+              />
             );
           })}
         </div>

@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
+import { buildCertificateVerificationUrl } from '../../utils/urlHelpers';
 
 export const BusinessDashboard = () => {
   const { user } = useAuth();
@@ -158,7 +159,7 @@ export const BusinessDashboard = () => {
                 </div>
                 <button
                   type="button"
-                  onClick={() => navigate(`/verify/${inst.certificate.qrToken}`)}
+                  onClick={() => window.open(buildCertificateVerificationUrl(inst.certificate.qrToken), '_blank', 'noopener,noreferrer')}
                   className="px-4 py-2 rounded-full bg-[#003943] text-white font-bold text-xs hover:bg-[#002B33] transition-colors shrink-0"
                 >
                   View certificate
@@ -262,8 +263,8 @@ export const BusinessDashboard = () => {
                     <h4 className="font-bold text-[#003943] text-sm sm:text-base">{app.instrumentName} <span className="ml-2 text-xs font-mono text-[#003943]/50">{app.id}</span></h4>
                     <p className="text-xs text-[#003943]/60">
                       Status: <span className="font-semibold capitalize text-[#003943]">{app.status.replace('_', ' ')}</span>
-                      {app.assignedOfficerName && (' • Assigned: ' + app.assignedOfficerName)}
-                      {app.scheduledInspectionDate && (' • Scheduled: ' + app.scheduledInspectionDate)}
+                      {app.assignedOfficerName && (' ï¿½ Assigned: ' + app.assignedOfficerName)}
+                      {app.scheduledInspectionDate && (' ï¿½ Scheduled: ' + app.scheduledInspectionDate)}
                     </p>
                   </div>
                 </div>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Award, QrCode, Download, Eye, Calendar, ShieldCheck, Printer, ExternalLink } from 'lucide-react';
 import { useData } from '../../context/DataContext';
+import { buildCertificateVerificationUrl } from '../../utils/urlHelpers';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { Badge } from '../../components/common/Badge';
@@ -87,11 +88,11 @@ export const MyCertificatesPage = () => {
                   <Button variant="secondary" size="sm" icon={Eye} onClick={() => setSelectedCert(cert)}>
                     View / Print
                   </Button>
-                  <Link to={`/verify/${cert.qrToken}`} target="_blank">
+                  <a href={buildCertificateVerificationUrl(cert.qrToken)} target="_blank" rel="noopener noreferrer" className="inline-flex">
                     <Button variant="ghost" size="sm" icon={ExternalLink}>
                       Public Verify
                     </Button>
-                  </Link>
+                  </a>
                   <Button
                     variant="primary"
                     size="sm"
@@ -126,6 +127,7 @@ export const MyCertificatesPage = () => {
     </div>
   );
 };
+
 
 
 

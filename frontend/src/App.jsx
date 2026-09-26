@@ -17,6 +17,7 @@ import { RegisterInstrumentPage } from './pages/business/RegisterInstrumentPage'
 import { SubmitApplicationPage } from './pages/business/SubmitApplicationPage';
 import { MyApplicationsPage } from './pages/business/MyApplicationsPage';
 import { MyCertificatesPage } from './pages/business/MyCertificatesPage';
+import { CertificateLookupPage } from './pages/business/CertificateLookupPage';
 import { PremisesPage } from './pages/business/PremisesPage';
 
 // LMD Administrative Pages
@@ -83,6 +84,7 @@ export function App() {
               <Route path="business/premises" element={<ProtectedRoute allowedRole="business"><PremisesPage /></ProtectedRoute>} />
               <Route path="business/applications" element={<ProtectedRoute allowedRole="business"><MyApplicationsPage /></ProtectedRoute>} />
               <Route path="business/certificates" element={<ProtectedRoute allowedRole="business"><MyCertificatesPage /></ProtectedRoute>} />
+              <Route path="business/certificate-lookup" element={<ProtectedRoute allowedRole="business"><CertificateLookupPage /></ProtectedRoute>} />
 
               {/* LMD Administrator Portal Routes */}
               <Route path="lmd" element={<ProtectedRoute allowedRole="lmd"><LmdDashboard /></ProtectedRoute>} />

@@ -9,9 +9,9 @@ import {
   CheckSquare,
   Award,
   PlusCircle,
-  FileText,
   Building2,
-  ShieldAlert
+  ShieldAlert,
+  Search
 } from 'lucide-react';
 import { useAuth, USER_ROLES } from '../../context/AuthContext';
 
@@ -48,7 +48,8 @@ export const Sidebar = () => {
       { to: '/business/register', label: 'Register Instrument', icon: PlusCircle },
       { to: '/business/premises', label: 'My Premises', icon: Building2 },
       { to: '/business/applications', label: 'My Applications', icon: ClipboardList },
-      { to: '/business/certificates', label: 'My Certificates', icon: Award }
+      { to: '/business/certificates', label: 'My Certificates', icon: Award },
+      { to: '/business/certificate-lookup', label: 'Certificate Lookup', icon: Search }
     ];
   }
 

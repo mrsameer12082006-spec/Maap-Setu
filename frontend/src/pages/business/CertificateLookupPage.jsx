@@ -1,26 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { Search, ShieldAlert, ArrowLeft, Loader2, AlertTriangle, CheckCircle2, ShieldClose, QrCode } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
-import { CertificateView } from '../../components/common/CertificateView';
+import React, { useState } from 'react';
+import { Search, Loader2, ShieldAlert, ShieldClose, AlertTriangle, CheckCircle2, QrCode } from 'lucide-react';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
+import { CertificateView } from '../../components/common/CertificateView';
 
-const ROLE_BACK_NAV = {
-  business: { to: '/business', label: '← Back to Dashboard' },
-  lmd:      { to: '/lmd',      label: '← Back to Dashboard' },
-  officer:  { to: '/officer',  label: '← Back to Dashboard' },
-};
-const GUEST_BACK_NAV = { to: '/', label: '← Back to Home' };
-
-export const VerifyCertificatePage = () => {
-  const { certId } = useParams();
-  const { currentRole } = useAuth();
-
-  const backNav = ROLE_BACK_NAV[currentRole] ?? GUEST_BACK_NAV;
-
-  const [loading, setLoading] = useState(true);
+export const CertificateLookupPage = () => {
+  const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
+  const [inputCertId, setInputCertId] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
   const searchCert = async (targetId) => {
@@ -34,8 +21,6 @@ export const VerifyCertificatePage = () => {
       const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(targetId);
       const paramKey = isUUID ? 'qr_token' : 'cert_number';
 
-      // Use direct fetch — supabase.functions.invoke with method:'GET' + query does not
-      // reliably serialize query params into the URL in all SDK versions.
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://yrzhtrzelayycrnvmcup.supabase.co';
       const fnUrl = `${supabaseUrl}/functions/v1/verify-certificate?${paramKey}=${encodeURIComponent(targetId)}`;
 
@@ -54,65 +39,78 @@ export const VerifyCertificatePage = () => {
     }
   };
 
-  useEffect(() => {
-    if (certId) {
-      searchCert(certId);
-    } else {
-      setLoading(false);
-      setErrorMsg('No certificate identifier provided.');
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (inputCertId.trim()) {
+      searchCert(inputCertId.trim());
     }
-  }, [certId]);
+  };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 py-4">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
         <div>
-          <Link to={backNav.to} className="inline-flex items-center gap-1 text-xs text-neutral-600 hover:text-neutral-900 mb-1">
-            <ArrowLeft className="w-3.5 h-3.5" /> {backNav.label}
-          </Link>
-          <h1 className="text-2xl font-bold text-neutral-900">Public Certificate Verification</h1>
-          <p className="text-xs text-neutral-600">Scan QR code or verify certificate authenticity using official Legal Metrology registry.</p>
+          <h1 className="text-2xl font-bold text-neutral-900">Certificate Lookup</h1>
+          <p className="text-sm text-neutral-600 mt-1">Search the official Legal Metrology registry for any certified instrument.</p>
         </div>
       </div>
+
+      <Card className="bg-white border-neutral-300">
+        <form onSubmit={handleSearchSubmit} className="flex flex-col sm:flex-row gap-3">
+          <div className="flex-1 relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-neutral-600">
+              <QrCode className="w-5 h-5 text-primary" />
+            </div>
+            <input
+              type="text"
+              placeholder="Enter Certificate Number (e.g. CERT-2026-8891) or Scan QR Token..."
+              value={inputCertId}
+              onChange={(e) => setInputCertId(e.target.value)}
+              className="w-full pl-10 pr-4 py-2.5 rounded-input border border-neutral-300 bg-white font-mono text-sm uppercase text-neutral-900 focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+          </div>
+          <Button type="submit" variant="primary" icon={Search} disabled={loading || !inputCertId.trim()}>
+            Lookup Certificate
+          </Button>
+        </form>
+      </Card>
 
       {/* Verification Output Container */}
       {loading && (
         <Card className="text-center py-12">
           <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto mb-3" />
           <p className="text-sm font-semibold text-neutral-900">Querying National Metrology Verification Registry...</p>
-          <p className="text-xs text-neutral-600 mt-1">Verifying cryptographic digital signature & seal records</p>
         </Card>
       )}
 
       {!loading && errorMsg && (
-         <Card className="text-center py-12 border-danger/30 bg-danger/5">
-         <ShieldAlert className="w-12 h-12 text-danger mx-auto mb-3" />
-         <h3 className="text-lg font-bold text-neutral-900">System Error</h3>
-         <p className="text-sm text-neutral-600 mt-1">{errorMsg}</p>
-       </Card>
+        <Card className="text-center py-12 border-danger/30 bg-danger/5">
+          <ShieldAlert className="w-12 h-12 text-danger mx-auto mb-3" />
+          <h3 className="text-lg font-bold text-neutral-900">System Error</h3>
+          <p className="text-sm text-neutral-600 mt-1">{errorMsg}</p>
+        </Card>
       )}
 
       {!loading && result && (
-        <>
+        <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
           {result.verification_status === 'NOT_FOUND' && (
-            <Card className="text-center py-12 border-neutral-300 bg-neutral-50">
-              <ShieldAlert className="w-12 h-12 text-neutral-400 mx-auto mb-3" />
+            <Card className="text-center py-12 border-danger/30 bg-danger/5">
+              <ShieldClose className="w-12 h-12 text-danger mx-auto mb-3" />
               <h3 className="text-lg font-bold text-neutral-900">Certificate Not Found</h3>
               <p className="text-sm text-neutral-600 mt-1">
-                No record exists for <span className="font-mono font-bold">{inputCertId}</span>.
+                No official record exists for the provided identifier. 
+                Ensure you have entered a valid certificate number or scanned an authentic QR code.
               </p>
             </Card>
           )}
 
-          
-
           {result.verification_status === 'MISMATCH' && (
              <Card className="text-center py-12 border-danger/50 bg-danger/10">
-               <ShieldClose className="w-12 h-12 text-danger mx-auto mb-3" />
-               <h3 className="text-lg font-bold text-danger">TAMPERED / FORGED CERTIFICATE</h3>
-               <p className="text-sm text-neutral-800 mt-1 max-w-md mx-auto">
-                 The cryptographic signature failed verification. The contents of this certificate have been tampered with or the certificate is forged. DO NOT TRUST.
+               <ShieldAlert className="w-12 h-12 text-danger mx-auto mb-3" />
+               <h3 className="text-lg font-bold text-neutral-900">Tampering Detected</h3>
+               <p className="text-sm text-neutral-600 mt-1">
+                 This certificate exists, but its cryptographic signature does not match its contents. 
+                 The document may have been altered after issuance.
                </p>
              </Card>
           )}
@@ -122,7 +120,7 @@ export const VerifyCertificatePage = () => {
               {result.verification_status === 'VERIFIED' && (
                 <div className="p-4 mb-4 bg-success/10 border border-success/30 rounded-lg flex items-center gap-3 text-success text-sm font-semibold">
                   <CheckCircle2 className="w-5 h-5 shrink-0" />
-                  <span>CRYPTOGRAPHICALLY VERIFIED: This certificate is authentic and currently valid.</span>
+                  <span>VERIFIED: Cryptographically secured and officially issued by Legal Metrology.</span>
                 </div>
               )}
               {result.verification_status === 'EXPIRED' && (
@@ -131,7 +129,7 @@ export const VerifyCertificatePage = () => {
                   <span>EXPIRED: This certificate's signature is authentic, but the validity period has expired.</span>
                 </div>
               )}
-                                          {result.verification_status === 'REVOKED' && (
+              {result.verification_status === 'REVOKED' && (
                 <div className="p-4 mb-4 bg-danger/10 border border-danger/30 rounded-lg flex items-center gap-3 text-danger text-sm font-semibold">
                   <ShieldAlert className="w-5 h-5 shrink-0" />
                   <span>REVOKED: This certificate's signature is authentic, but it has been officially REVOKED by the Legal Metrology Department.</span>
@@ -144,16 +142,15 @@ export const VerifyCertificatePage = () => {
                 </div>
               )}
               
-              {/* Translate safe DTO to CertificateView expected keys */}
               <CertificateView 
                 certificate={{
                   certificateNumber: result.certificate_number,
                   instrumentType: result.instrument_type,
-                  serialNumber: result.serial_number,
                   manufacturer: result.manufacturer,
                   model: result.model,
                   capacity: result.capacity,
                   accuracyClass: result.accuracy_class,
+                  serialNumber: result.serial_number,
                   ownerName: result.owner_name,
                   ownerAddress: result.owner_address,
                   verificationAuthority: result.verification_authority,
@@ -167,7 +164,7 @@ export const VerifyCertificatePage = () => {
               />
             </div>
           )}
-        </>
+        </div>
       )}
     </div>
   );

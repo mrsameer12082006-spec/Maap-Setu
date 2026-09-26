@@ -158,7 +158,7 @@ export const BusinessDashboard = () => {
                 </div>
                 <button
                   type="button"
-                  onClick={() => navigate(`/verify/${inst.certificate.id}`)}
+                  onClick={() => navigate(`/verify/${inst.certificate.qrToken}`)}
                   className="px-4 py-2 rounded-full bg-[#003943] text-white font-bold text-xs hover:bg-[#002B33] transition-colors shrink-0"
                 >
                   View certificate

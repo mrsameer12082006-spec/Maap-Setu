@@ -102,7 +102,7 @@ export const ReviewApplicationsPage = () => {
     try {
       const cert = await generateCertificate(appId);
       if (cert) {
-        alert(`Legal Metrology Certificate ${cert.id} successfully generated & issued!`);
+        alert(`Legal Metrology Certificate ${cert.certificateNumber} successfully generated & issued!`);
       }
     } catch (err) {
       alert(`Failed to generate certificate: ${err.message}`);
@@ -308,7 +308,7 @@ export const ReviewApplicationsPage = () => {
                           <Award className="w-3.5 h-3.5 text-emerald-600" />
                           Certificate {cert.certificateNumber || cert.id} Issued
                         </span>
-                        <Link to={`/verify/${cert.id}`} target="_blank">
+                        <Link to={`/verify/${cert.qrToken}`} target="_blank">
                           <Button variant="ghost" size="sm">
                             Public Verify
                           </Button>

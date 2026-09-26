@@ -331,11 +331,11 @@ export const MyApplicationsPage = () => {
                           Download PDF
                         </Button>
                       </div>
-                      <Link to={`/verify/${selectedCertForApp.id}`} target="_blank">
+                      <a href={buildCertificateVerificationUrl(selectedCertForApp.qrToken || selectedCertForApp.qr_code_token)} target="_blank" rel="noopener noreferrer">
                         <Button variant="ghost" size="sm" icon={ExternalLink} className="text-emerald-800 hover:text-emerald-950">
                           Public QR Verification
                         </Button>
-                      </Link>
+                      </a>
                     </div>
                   </div>
                 );
@@ -423,11 +423,11 @@ export const MyApplicationsPage = () => {
           title={`Legal Metrology Verification Certificate: ${selectedCert.certificateNumber || selectedCert.id}`}
           footer={
             <div className="flex items-center justify-between w-full">
-              <Link to={`/verify/${selectedCert.id}`} target="_blank">
+              <a href={buildCertificateVerificationUrl(selectedCert.qrToken || selectedCert.qr_code_token)} target="_blank" rel="noopener noreferrer">
                 <Button variant="ghost" size="sm" icon={ExternalLink}>
                   Public QR Verification
                 </Button>
-              </Link>
+              </a>
               <Button variant="secondary" onClick={() => setSelectedCert(null)}>
                 Close Viewer
               </Button>

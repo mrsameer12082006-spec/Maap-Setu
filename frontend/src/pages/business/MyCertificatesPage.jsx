@@ -37,12 +37,12 @@ export const MyCertificatesPage = () => {
           {certificates.map((cert) => {
             const isExpired = new Date(cert.expiryDate) < new Date();
             return (
-              <Card key={cert.id} className="flex flex-col justify-between hover:border-primary/50 transition-all space-y-4">
+              <Card key={cert.certificateNumber} className="flex flex-col justify-between hover:border-primary/50 transition-all space-y-4">
                 <div className="space-y-3">
                   {/* Top Bar */}
                   <div className="flex items-center justify-between">
                     <span className="font-mono text-xs font-bold text-primary bg-primary-light px-2.5 py-1 rounded">
-                      {cert.id}
+                      {cert.certificateNumber}
                     </span>
                     <Badge status={isExpired ? 'EXPIRED' : cert.status}>
                       {isExpired ? 'EXPIRED' : cert.status}
@@ -87,7 +87,7 @@ export const MyCertificatesPage = () => {
                   <Button variant="secondary" size="sm" icon={Eye} onClick={() => setSelectedCert(cert)}>
                     View / Print
                   </Button>
-                  <Link to={`/verify/${cert.id}`} target="_blank">
+                  <Link to={`/verify/${cert.qrToken}`} target="_blank">
                     <Button variant="ghost" size="sm" icon={ExternalLink}>
                       Public Verify
                     </Button>
@@ -96,7 +96,7 @@ export const MyCertificatesPage = () => {
                     variant="primary"
                     size="sm"
                     icon={Download}
-                    onClick={() => alert(`Downloading official PDF for ${cert.id}...`)}
+                    onClick={() => alert(`Downloading official PDF for ${cert.certificateNumber}...`)}
                   >
                     PDF
                   </Button>
@@ -112,7 +112,7 @@ export const MyCertificatesPage = () => {
         <Modal
           isOpen={!!selectedCert}
           onClose={() => setSelectedCert(null)}
-          title={`Digital Certificate: ${selectedCert.id}`}
+          title={`Digital Certificate: ${selectedCert.certificateNumber}`}
           maxWidth="max-w-4xl"
           footer={
             <Button variant="secondary" onClick={() => setSelectedCert(null)}>

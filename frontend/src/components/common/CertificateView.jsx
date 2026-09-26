@@ -1,6 +1,7 @@
 import React from 'react';
 import { ShieldCheck, Award, Printer, Download, CheckCircle, AlertTriangle } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
+import { buildCertificateVerificationUrl } from '../../utils/urlHelpers';
 import { Badge } from './Badge';
 import { Button } from './Button';
 
@@ -23,7 +24,13 @@ export const CertificateView = ({ certificate, showActions = true }) => {
     );
   }
 
-  const verificationUrl = window.location.origin + '/verify/' + certificate.qrToken;
+  let verificationUrl = '';
+  let qrError = '';
+  try {
+    verificationUrl = buildCertificateVerificationUrl(certificate.qrToken);
+  } catch (err) {
+    qrError = err.message;
+  }
 
   return (
     <div className="bg-white text-neutral-900 rounded-card border-2 border-primary/20 shadow-md overflow-hidden max-w-3xl mx-auto my-4 relative">
@@ -149,8 +156,14 @@ export const CertificateView = ({ certificate, showActions = true }) => {
         {/* QR Verification Block */}
         <div className="flex flex-col sm:flex-row items-center justify-between p-4 border border-dashed border-neutral-300 rounded-lg gap-4 bg-white">
           <div className="flex items-center gap-3">
-            <div className="bg-white p-1 rounded-sm border border-neutral-300 flex flex-col items-center justify-center shrink-0">
-              <QRCodeSVG value={verificationUrl} size={64} level="M" />
+            <div className="bg-white p-1 rounded-sm border border-neutral-300 flex flex-col items-center justify-center shrink-0 w-[74px] h-[74px]">
+              {qrError ? (
+                <div className="text-red-500 text-[9px] text-center font-bold leading-tight flex items-center justify-center w-full h-full p-1 bg-red-50">
+                  {qrError.includes('configured') ? 'Public verification URL is not configured.' : 'QR Error'}
+                </div>
+              ) : (
+                <QRCodeSVG value={verificationUrl} size={64} level="M" />
+              )}
             </div>
             <div>
               <p className="text-xs font-semibold text-neutral-900">Digital Authenticity Verification</p>

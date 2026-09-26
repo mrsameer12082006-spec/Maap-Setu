@@ -444,3 +444,9 @@ entrypoint = "./functions/generate-certificate/index.ts"
 # Specifies static files to be bundled with the function. Supports glob patterns.
 # For example, if you want to serve static HTML pages in your function:
 # static_files = [ "./functions/generate-certificate/*.html" ]
+
+[functions.verify-certificate]
+enabled = true
+verify_jwt = false
+import_map = "./functions/verify-certificate/deno.json"
+entrypoint = "./functions/verify-certificate/index.ts"

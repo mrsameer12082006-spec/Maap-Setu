@@ -290,80 +290,100 @@ async function issueCertificateForApplication(
 
   // 3. Format certificate dates and numbers
   const currentYear = new Date().getFullYear()
-  const certNum = `CERT-${currentYear}-${Math.floor(1000 + Math.random() * 9000)}`
-  const verificationDate = new Date()
-  const expiryDate = new Date(verificationDate)
-  expiryDate.setFullYear(expiryDate.getFullYear() + 1) // 1 year regulatory validity
+    const certNum = `CERT-${currentYear}-${Math.floor(1000 + Math.random() * 9000)}`
+    const verificationDate = new Date()
+    const expiryDate = new Date(verificationDate)
+    expiryDate.setFullYear(expiryDate.getFullYear() + 1) // 1 year regulatory validity
+  
+    // Preserve regulatory verification stage semantics
+    const officerName = fullApp.officers?.profiles?.name || 'Authorized Verification Officer'
+    const authorityName = 'State Legal Metrology Department'
+  
+    const premisesPart = fullApp.instruments?.premises_name || fullApp.inspection_location || ''
+    const districtPart = fullApp.instruments?.district || ''
+    const ownerAddress = `${premisesPart}${premisesPart && districtPart ? ', ' : ''}${districtPart}`.trim() || 'Premises On Record'
+  
+    const newId = crypto.randomUUID();
+    const qrToken = crypto.randomUUID();
+    const issuedAt = new Date().toISOString();
 
-  // Preserve regulatory verification stage semantics
-  const officerName = fullApp.officers?.profiles?.name || 'Authorized Verification Officer'
-  const authorityName = 'State Legal Metrology Department'
-
-  const premisesPart = fullApp.instruments?.premises_name || fullApp.inspection_location || ''
-  const districtPart = fullApp.instruments?.district || ''
-  const ownerAddress = `${premisesPart}${premisesPart && districtPart ? ', ' : ''}${districtPart}`.trim() || 'Premises On Record'
-
-  const newCertPayload = {
-    application_id: applicationId,
-    instrument_id: fullApp.instrument_id,
-    certificate_number: certNum,
-    instrument_type: fullApp.instruments?.category || 'Weighing & Measuring Instrument',
-    serial_number: fullApp.instruments?.serial_number || 'N/A',
-    manufacturer: fullApp.instruments?.manufacturer || 'N/A',
-    model: fullApp.instruments?.model_number || 'N/A',
-    capacity: fullApp.instruments?.max_capacity ? `${fullApp.instruments.max_capacity} ${fullApp.instruments.unit_of_measurement || ''}`.trim() : 'N/A',
-    accuracy_class: fullApp.instruments?.accuracy_class || 'Class III',
-    owner_name: fullApp.profiles?.name || 'Registered Business',
-    owner_address: ownerAddress,
-    verification_authority: authorityName,
-    verification_officer: officerName,
-    verification_date: verificationDate.toISOString().split('T')[0],
-    expiry_date: expiryDate.toISOString().split('T')[0],
-    status: 'VERIFIED',
-    seal_number: `SEAL-${Math.floor(1000 + Math.random() * 9000)}`,
-    remarks: `${verificationStage} - Verified compliant under Legal Metrology Act, 2009 & OIML R76`
-  }
-
-  // 4. Insert certificate
-  const { data: cert, error: certError } = await supabaseAdmin
-    .from('certificates')
-    .insert([newCertPayload])
-    .select()
-    .single()
-
-  if (certError) {
-    // Graceful race condition check: if another concurrent process inserted it
-    if (certError.code === '23505') {
-      const { data: racedCert } = await supabaseAdmin
-        .from('certificates')
-        .select('*')
-        .eq('application_id', applicationId)
-        .maybeSingle()
-      if (racedCert) {
-        return { certificate: racedCert, isNew: false }
-      }
+    const newCertPayload = {
+      id: newId,
+      application_id: applicationId,
+      instrument_id: fullApp.instrument_id,
+      certificate_number: certNum,
+      instrument_type: fullApp.instruments?.category || 'Weighing & Measuring Instrument',
+      serial_number: fullApp.instruments?.serial_number || 'N/A',
+      manufacturer: fullApp.instruments?.manufacturer || 'N/A',
+      model: fullApp.instruments?.model_number || 'N/A',
+      capacity: fullApp.instruments?.max_capacity ? `${fullApp.instruments.max_capacity} ${fullApp.instruments.unit_of_measurement || ''}`.trim() : 'N/A',
+      accuracy_class: fullApp.instruments?.accuracy_class || 'Class III',
+      owner_name: fullApp.profiles?.name || 'Registered Business',
+      owner_address: ownerAddress,
+      verification_authority: authorityName,
+      verification_officer: officerName,
+      verification_date: verificationDate.toISOString().split('T')[0],
+      expiry_date: expiryDate.toISOString().split('T')[0],
+      seal_number: `SEAL-${Math.floor(1000 + Math.random() * 9000)}`,
+      qr_code_token: qrToken,
+      issued_at: issuedAt
     }
-    throw certError
-  }
+  
+    const { buildCertificatePayload, signPayload, hashPayload } = await import('../_shared/certificateSigning.ts');
+    
+    const canonicalPayload = buildCertificatePayload(newCertPayload);
+    const signingKey = Deno.env.get('CERT_SIGNING_KEY');
+    if (!signingKey) {
+      throw new Error('CERT_SIGNING_KEY not configured.');
+    }
 
-  // 5. Update Instrument Status to active with new verification dates
-  await supabaseAdmin.from('instruments').update({
-    status: 'active',
-    last_verification_date: newCertPayload.verification_date,
-    next_reverification_due: newCertPayload.expiry_date
-  }).eq('id', fullApp.instrument_id)
+    const signature = await signPayload(canonicalPayload, signingKey);
+    const contentHash = await hashPayload(canonicalPayload);
 
-  // 6. Record truthful timeline event for automatic certificate generation
-  await supabaseAdmin.from('app_timeline').insert({
-    application_id: applicationId,
-    event_type: 'CERTIFICATE_GENERATED',
-    step: 'Certificate Issued Automatically',
-    old_status: 'passed',
-    new_status: 'passed',
-    actor_user_id: officerUserId,
-    actor_role: 'system',
-    message: `Certificate ${cert.certificate_number} automatically issued upon Officer physical verification PASS`
-  })
+    // Call atomic RPC
+    const { data: certId, error: rpcError } = await supabaseAdmin.rpc('atomic_issue_certificate', {
+      p_cert_id: newId,
+      p_application_id: applicationId,
+      p_instrument_id: fullApp.instrument_id,
+      p_certificate_number: certNum,
+      p_instrument_type: newCertPayload.instrument_type,
+      p_serial_number: newCertPayload.serial_number,
+      p_manufacturer: newCertPayload.manufacturer,
+      p_model: newCertPayload.model,
+      p_capacity: newCertPayload.capacity,
+      p_accuracy_class: newCertPayload.accuracy_class,
+      p_owner_name: newCertPayload.owner_name,
+      p_owner_address: newCertPayload.owner_address,
+      p_verification_authority: newCertPayload.verification_authority,
+      p_verification_officer: newCertPayload.verification_officer,
+      p_verification_date: newCertPayload.verification_date,
+      p_expiry_date: newCertPayload.expiry_date,
+      p_seal_number: newCertPayload.seal_number,
+      p_qr_code_token: qrToken,
+      p_remarks: `${verificationStage} - Verified compliant under Legal Metrology Act, 2009 & OIML R76`,
+      p_issued_at: issuedAt,
+      p_content_hash: contentHash,
+      p_signature: signature,
+      p_issued_by: officerUserId,
+      p_timeline_message: `Certificate ${certNum} automatically issued upon Officer physical verification PASS`
+    });
 
-  return { certificate: cert, isNew: true }
+    if (rpcError) {
+      // Graceful race condition check: if another concurrent process inserted it
+      if (rpcError.message.includes('DUPLICATE_CERTIFICATE')) {
+        const { data: racedCert } = await supabaseAdmin
+          .from('certificates')
+          .select('*')
+          .eq('application_id', applicationId)
+          .maybeSingle()
+        if (racedCert) {
+          return { certificate: racedCert, isNew: false }
+        }
+      }
+      throw rpcError
+    }
+  
+    const { data: finalCert } = await supabaseAdmin.from('certificates').select('*').eq('id', certId).single();
+
+    return { certificate: finalCert, isNew: true }
 }

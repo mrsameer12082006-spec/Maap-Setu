@@ -92,7 +92,12 @@ serve(async (req) => {
     const expiryDate = new Date(verificationDate)
     expiryDate.setFullYear(expiryDate.getFullYear() + 1) // 1 year validity
 
+    const newId = crypto.randomUUID();
+    const qrToken = crypto.randomUUID();
+    const issuedAt = new Date().toISOString();
+
     const newCertPayload = {
+      id: newId,
       application_id: applicationId,
       instrument_id: app.instrument_id,
       certificate_number: certNum,
@@ -108,34 +113,61 @@ serve(async (req) => {
       verification_officer: app.officers?.profiles?.name || 'Assigned Officer',
       verification_date: verificationDate.toISOString().split('T')[0],
       expiry_date: expiryDate.toISOString().split('T')[0],
-      status: 'VERIFIED',
       seal_number: `SEAL-${Math.floor(1000 + Math.random() * 9000)}`,
-      remarks: 'Standard Reverification'
+      qr_code_token: qrToken,
+      issued_at: issuedAt,
     }
 
-    const { data: cert, error: certError } = await supabaseAdmin.from('certificates').insert([newCertPayload]).select().single()
-    if (certError) throw certError
+    const { buildCertificatePayload, signPayload, hashPayload } = await import('../_shared/certificateSigning.ts');
+    
+    const canonicalPayload = buildCertificatePayload(newCertPayload);
+    const signingKey = Deno.env.get('CERT_SIGNING_KEY');
+    if (!signingKey) {
+      throw new Error('CERT_SIGNING_KEY not configured.');
+    }
 
-    // Update Instrument Status
-    await supabaseAdmin.from('instruments').update({
-      status: 'active',
-      last_verification_date: newCertPayload.verification_date,
-      next_reverification_due: newCertPayload.expiry_date
-    }).eq('id', app.instrument_id)
+    const signature = await signPayload(canonicalPayload, signingKey);
+    const contentHash = await hashPayload(canonicalPayload);
 
-    // Timeline event
-    await supabaseAdmin.from('app_timeline').insert({
-      application_id: applicationId,
-      event_type: 'CERTIFICATE_GENERATED',
-      step: 'Certificate Issued',
-      old_status: 'passed',
-      new_status: 'passed',
-      actor_user_id: user.id,
-      actor_role: 'lmd',
-      message: `Certificate ${certNum} generated successfully`
-    })
+    // Call atomic RPC
+    const { data: certId, error: rpcError } = await supabaseAdmin.rpc('atomic_issue_certificate', {
+      p_cert_id: newId,
+      p_application_id: applicationId,
+      p_instrument_id: app.instrument_id,
+      p_certificate_number: certNum,
+      p_instrument_type: app.instruments.category,
+      p_serial_number: app.instruments.serial_number,
+      p_manufacturer: app.instruments.manufacturer,
+      p_model: app.instruments.model_number,
+      p_capacity: app.instruments.max_capacity,
+      p_accuracy_class: app.instruments.accuracy_class,
+      p_owner_name: app.profiles.name,
+      p_owner_address: app.instruments.premises_name + ', ' + app.instruments.district,
+      p_verification_authority: profile.name,
+      p_verification_officer: app.officers?.profiles?.name || 'Assigned Officer',
+      p_verification_date: newCertPayload.verification_date,
+      p_expiry_date: newCertPayload.expiry_date,
+      p_seal_number: newCertPayload.seal_number,
+      p_qr_code_token: qrToken,
+      p_remarks: 'Standard Reverification',
+      p_issued_at: issuedAt,
+      p_content_hash: contentHash,
+      p_signature: signature,
+      p_issued_by: user.id,
+      p_timeline_message: `Certificate ${certNum} generated successfully`
+    });
 
-    return new Response(JSON.stringify({ success: true, certificate: cert }), {
+    if (rpcError) {
+      if (rpcError.message.includes('DUPLICATE_CERTIFICATE')) {
+         const { data: existingCert } = await supabaseAdmin.from('certificates').select('*').eq('application_id', applicationId).maybeSingle();
+         return new Response(JSON.stringify({ success: true, certificate: existingCert, message: 'Certificate already exists for this application.' }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      }
+      throw rpcError;
+    }
+
+    const { data: finalCert } = await supabaseAdmin.from('certificates').select('*').eq('id', certId).single();
+
+    return new Response(JSON.stringify({ success: true, certificate: finalCert }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 200,
     })

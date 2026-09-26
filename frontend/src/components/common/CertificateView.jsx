@@ -1,5 +1,6 @@
 import React from 'react';
-import { ShieldCheck, Award, Printer, Download, CheckCircle, AlertTriangle, QrCode } from 'lucide-react';
+import { ShieldCheck, Award, Printer, Download, CheckCircle, AlertTriangle } from 'lucide-react';
+import { QRCodeSVG } from 'qrcode.react';
 import { Badge } from './Badge';
 import { Button } from './Button';
 
@@ -13,6 +14,17 @@ export const CertificateView = ({ certificate, showActions = true }) => {
     window.print();
   };
 
+  if (!certificate.qrToken) {
+    return (
+      <div className="bg-red-50 text-red-600 p-4 rounded-md border border-red-200 shadow-sm">
+        <p className="font-bold">Configuration Error</p>
+        <p className="text-sm">Missing required QR verification token for this certificate. Cryptographic verification unavailable.</p>
+      </div>
+    );
+  }
+
+  const verificationUrl = window.location.origin + '/verify/' + certificate.qrToken;
+
   return (
     <div className="bg-white text-neutral-900 rounded-card border-2 border-primary/20 shadow-md overflow-hidden max-w-3xl mx-auto my-4 relative">
       {/* Top Banner */}
@@ -20,104 +32,114 @@ export const CertificateView = ({ certificate, showActions = true }) => {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative z-10">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center border border-white/20">
-              <ShieldCheck className="w-7 h-7 text-white" />
+              <ShieldCheck className="w-6 h-6 text-white" />
             </div>
             <div>
-              <p className="text-xs text-primary-light uppercase tracking-wider font-semibold">Government of India</p>
-              <h2 className="text-xl sm:text-2xl font-bold text-white leading-tight">Legal Metrology Certificate</h2>
-              <p className="text-xs text-primary-light/80">Issued under Legal Metrology (General) Rules, 2011</p>
+              <h2 className="text-xl font-bold leading-tight">Verification Certificate</h2>
+              <p className="text-sm text-primary-light">Department of Legal Metrology</p>
             </div>
           </div>
-          <div className="bg-white/10 backdrop-blur-xs px-3 py-1.5 rounded-lg border border-white/20 text-right">
-            <p className="text-xs text-primary-light font-medium">Certificate ID</p>
-            <p className="text-base font-mono font-bold text-white">{certificate.id}</p>
+          <div className="text-left sm:text-right">
+            <p className="text-xs text-primary-light uppercase tracking-wider mb-1">Certificate No.</p>
+            <p className="font-mono text-lg font-bold">{certificate.certificateNumber}</p>
           </div>
         </div>
+        <Award className="absolute -right-8 -bottom-8 w-40 h-40 text-black/10 z-0" />
       </div>
 
-      {/* Main Certificate Content */}
-      <div className="p-6 sm:p-8 space-y-6">
-        {/* Status bar */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 bg-neutral-100 rounded-lg border border-neutral-300 gap-3">
-          <div className="flex items-center gap-2">
-            {statusDisplay === 'VERIFIED' ? (
-              <CheckCircle className="w-5 h-5 text-accent shrink-0" />
-            ) : (
-              <AlertTriangle className="w-5 h-5 text-danger shrink-0" />
-            )}
-            <div>
-              <p className="text-xs text-neutral-600 font-medium">Verification Status</p>
-              <p className="text-sm font-semibold">
-                {statusDisplay === 'VERIFIED' ? 'Officially Certified & Stamped' : 'Certificate Expired / Invalid'}
-              </p>
-            </div>
-          </div>
-          <Badge status={statusDisplay}>{statusDisplay}</Badge>
+      <div className="p-6 space-y-6 relative z-10">
+        
+        {/* Status Badge */}
+        <div className="flex justify-between items-center border-b border-neutral-300 pb-4">
+           <div>
+            <p className="text-xs text-neutral-600 mb-1">Verification Status</p>
+            {statusDisplay === 'VERIFIED' && <Badge variant="success" icon={CheckCircle}>ACTIVE & VERIFIED</Badge>}
+            {statusDisplay === 'EXPIRED' && <Badge variant="warning" icon={AlertTriangle}>EXPIRED</Badge>}
+            {statusDisplay === 'REVOKED' && <Badge variant="danger" icon={ShieldCheck}>REVOKED</Badge>}
+            {statusDisplay === 'NOT_VERIFIED' && <Badge variant="neutral" icon={AlertTriangle}>LEGACY / UNSIGNED</Badge>}
+           </div>
+           <div className="text-right">
+             <p className="text-xs text-neutral-600 mb-1">Date of Issue</p>
+             <p className="text-sm font-semibold">{certificate.verificationDate}</p>
+           </div>
         </div>
 
-        {/* Instrument Grid */}
-        <div>
-          <h4 className="text-xs font-semibold uppercase tracking-wider text-neutral-600 border-b border-neutral-300 pb-1 mb-3">
-            Instrument Details
-          </h4>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+        {/* Details Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+          {/* Column 1 */}
+          <div className="space-y-4">
             <div>
-              <p className="text-xs text-neutral-600">Instrument Type</p>
-              <p className="font-semibold text-neutral-900">{certificate.instrumentType}</p>
+              <h3 className="text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2">Instrument Details</h3>
+              <div className="bg-neutral-50 p-3 rounded border border-neutral-300 space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-xs text-neutral-600">Type</span>
+                  <span className="text-xs font-semibold">{certificate.instrumentType}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-xs text-neutral-600">Manufacturer</span>
+                  <span className="text-xs font-semibold">{certificate.manufacturer}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-xs text-neutral-600">Model</span>
+                  <span className="text-xs font-semibold">{certificate.model}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-xs text-neutral-600">Serial No.</span>
+                  <span className="text-xs font-mono font-bold">{certificate.serialNumber}</span>
+                </div>
+                <div className="flex justify-between border-t border-neutral-300 pt-2 mt-2">
+                  <span className="text-xs text-neutral-600">Capacity</span>
+                  <span className="text-xs font-semibold">{certificate.capacity}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-xs text-neutral-600">Class</span>
+                  <span className="text-xs font-semibold">{certificate.accuracyClass}</span>
+                </div>
+              </div>
             </div>
+            
             <div>
-              <p className="text-xs text-neutral-600">Serial Number</p>
-              <p className="font-mono font-semibold text-neutral-900">{certificate.serialNumber}</p>
+              <h3 className="text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2">Validity</h3>
+              <div className="bg-neutral-50 p-3 rounded border border-neutral-300 flex justify-between items-center">
+                <span className="text-xs text-neutral-600">Valid Until</span>
+                <span className={`text-sm font-bold ${isExpired ? 'text-danger' : 'text-neutral-900'}`}>
+                  {certificate.expiryDate}
+                </span>
+              </div>
             </div>
+          </div>
+
+          {/* Column 2 */}
+          <div className="space-y-4">
             <div>
-              <p className="text-xs text-neutral-600">Manufacturer & Model</p>
-              <p className="font-medium text-neutral-900">{certificate.manufacturer} - {certificate.model}</p>
+              <h3 className="text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2">Ownership</h3>
+              <div className="bg-neutral-50 p-3 rounded border border-neutral-300 space-y-2">
+                <p className="text-sm font-bold text-neutral-900">{certificate.ownerName}</p>
+                <p className="text-xs text-neutral-600 leading-relaxed">{certificate.ownerAddress}</p>
+              </div>
             </div>
+
             <div>
-              <p className="text-xs text-neutral-600">Capacity / Accuracy Class</p>
-              <p className="font-medium text-neutral-900">{certificate.capacity} ({certificate.accuracyClass})</p>
+              <h3 className="text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2">Verification Authority</h3>
+              <div className="bg-neutral-50 p-3 rounded border border-neutral-300 space-y-2">
+                <p className="text-sm font-bold text-neutral-900">{certificate.verificationAuthority}</p>
+                {certificate.verificationOfficer && (
+                  <p className="text-xs text-neutral-600">Inspected by: {certificate.verificationOfficer}</p>
+                )}
+                {certificate.sealNumber && (
+                   <div className="flex justify-between border-t border-neutral-300 pt-2 mt-2">
+                   <span className="text-xs text-neutral-600">Seal No.</span>
+                   <span className="text-xs font-mono font-bold">{certificate.sealNumber}</span>
+                 </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Ownership & Authority */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
-          <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-neutral-600 border-b border-neutral-300 pb-1 mb-3">
-              Registered Owner
-            </h4>
-            <p className="font-semibold text-sm text-neutral-900">{certificate.ownerName}</p>
-            <p className="text-xs text-neutral-600 mt-1">{certificate.ownerAddress}</p>
-          </div>
-          <div>
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-neutral-600 border-b border-neutral-300 pb-1 mb-3">
-              Verification Authority
-            </h4>
-            <p className="font-semibold text-sm text-neutral-900">{certificate.verificationAuthority}</p>
-            <p className="text-xs text-neutral-600 mt-1">{certificate.verificationOfficer}</p>
-          </div>
-        </div>
-
-        {/* Dates & Seal */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-primary-light/50 border border-primary/20 rounded-lg text-sm">
-          <div>
-            <p className="text-xs text-neutral-600">Verification Date</p>
-            <p className="font-semibold text-neutral-900">{certificate.verificationDate}</p>
-          </div>
-          <div>
-            <p className="text-xs text-neutral-600">Valid Until (Expiry)</p>
-            <p className={`font-semibold ${isExpired ? 'text-danger' : 'text-accent'}`}>{certificate.expiryDate}</p>
-          </div>
-          <div>
-            <p className="text-xs text-neutral-600">Government Lead Seal #</p>
-            <p className="font-mono font-semibold text-neutral-900">{certificate.sealNumber}</p>
-          </div>
-        </div>
-
-        {/* Remarks */}
         {certificate.remarks && (
           <div>
-            <p className="text-xs text-neutral-600 font-semibold mb-1">Inspector Verification Remarks</p>
+            <h3 className="text-xs font-bold text-neutral-500 uppercase tracking-wider mb-2">Remarks</h3>
             <p className="text-xs text-neutral-900 bg-neutral-100 p-3 rounded border border-neutral-300 italic">
               "{certificate.remarks}"
             </p>
@@ -127,13 +149,13 @@ export const CertificateView = ({ certificate, showActions = true }) => {
         {/* QR Verification Block */}
         <div className="flex flex-col sm:flex-row items-center justify-between p-4 border border-dashed border-neutral-300 rounded-lg gap-4 bg-white">
           <div className="flex items-center gap-3">
-            <div className="w-16 h-16 bg-neutral-900 text-white p-2 rounded-md flex flex-col items-center justify-center shrink-0">
-              <QrCode className="w-10 h-10" />
+            <div className="bg-white p-1 rounded-sm border border-neutral-300 flex flex-col items-center justify-center shrink-0">
+              <QRCodeSVG value={verificationUrl} size={64} level="M" />
             </div>
             <div>
               <p className="text-xs font-semibold text-neutral-900">Digital Authenticity Verification</p>
-              <p className="text-xs text-neutral-600">Scan QR or visit maapsetu.gov.in/verify/{certificate.id}</p>
-              <p className="text-[10px] text-neutral-600 mt-0.5">Cryptographically signed digital record</p>
+              <p className="text-[10px] text-neutral-600 max-w-[250px] truncate" title={verificationUrl}>Scan QR or visit {verificationUrl}</p>
+              <p className="text-[10px] text-primary mt-0.5 font-semibold">Cryptographically signed digital record</p>
             </div>
           </div>
           <div className="text-right">
@@ -148,13 +170,6 @@ export const CertificateView = ({ certificate, showActions = true }) => {
         <div className="bg-neutral-100 px-6 py-4 border-t border-neutral-300 flex justify-end gap-3 no-print">
           <Button variant="secondary" icon={Printer} onClick={handlePrint}>
             Print Certificate
-          </Button>
-          <Button
-            variant="primary"
-            icon={Download}
-            onClick={() => alert(`Certificate ${certificate.id} downloaded successfully (PDF)`)}
-          >
-            Download PDF
           </Button>
         </div>
       )}

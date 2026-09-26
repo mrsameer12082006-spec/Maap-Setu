@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { Search, ShieldAlert, ArrowLeft, Loader2, CheckCircle2, AlertTriangle, QrCode } from 'lucide-react';
-import { useData } from '../../context/DataContext';
+import { Search, ShieldAlert, ArrowLeft, Loader2, AlertTriangle, CheckCircle2, ShieldClose, QrCode } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { mockApiService } from '../../services/api';
+import { supabase } from '../../services/supabase';
 import { CertificateView } from '../../components/common/CertificateView';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
@@ -17,23 +16,39 @@ const GUEST_BACK_NAV = { to: '/', label: '← Back to Home' };
 
 export const VerifyCertificatePage = () => {
   const { certId } = useParams();
-  const { certificates } = useData();
   const { currentRole } = useAuth();
 
-  // Derive back nav from authenticated role; falls back to guest for public/unknown
   const backNav = ROLE_BACK_NAV[currentRole] ?? GUEST_BACK_NAV;
 
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState(null);
   const [inputCertId, setInputCertId] = useState(certId || '');
+  const [errorMsg, setErrorMsg] = useState('');
 
   const searchCert = async (targetId) => {
     if (!targetId) return;
     setLoading(true);
-    // Call mock API service (pass store)
-    const res = await mockApiService.getCertificateById({ certificates }, targetId);
-    setResult(res);
-    setLoading(false);
+    setResult(null);
+    setErrorMsg('');
+    
+    try {
+      // Determine if we are querying by UUID (QR token) or Cert Number
+      const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(targetId);
+      const queryParams = isUUID ? { qr_token: targetId } : { cert_number: targetId };
+
+      const { data, error } = await supabase.functions.invoke('verify-certificate', {
+        method: 'GET',
+        query: queryParams
+      });
+
+      if (error) throw error;
+      setResult(data);
+    } catch (err) {
+      console.error(err);
+      setErrorMsg('An error occurred connecting to the verification registry.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -43,7 +58,7 @@ export const VerifyCertificatePage = () => {
     } else {
       setLoading(false);
     }
-  }, [certId, certificates]);
+  }, [certId]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -74,7 +89,7 @@ export const VerifyCertificatePage = () => {
             </div>
             <input
               type="text"
-              placeholder="Enter Legal Metrology Certificate ID (e.g., CERT-2026-8891)..."
+              placeholder="Enter Certificate Number (e.g. CERT-2026-8891) or Scan QR..."
               value={inputCertId}
               onChange={(e) => setInputCertId(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 rounded-input border border-neutral-300 bg-white font-mono text-sm uppercase text-neutral-900 focus:outline-none focus:ring-2 focus:ring-primary"
@@ -87,33 +102,100 @@ export const VerifyCertificatePage = () => {
       </Card>
 
       {/* Verification Output Container */}
-      {loading ? (
+      {loading && (
         <Card className="text-center py-12">
           <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto mb-3" />
           <p className="text-sm font-semibold text-neutral-900">Querying National Metrology Verification Registry...</p>
-          <p className="text-xs text-neutral-600 mt-1">Verifying digital signature & seal records</p>
+          <p className="text-xs text-neutral-600 mt-1">Verifying cryptographic digital signature & seal records</p>
         </Card>
-      ) : result ? (
-        result.found ? (
-          <div>
-            {result.status === 'EXPIRED' && (
-              <div className="p-4 mb-4 bg-danger/10 border border-danger/30 rounded-lg flex items-center gap-3 text-danger text-sm font-semibold">
-                <AlertTriangle className="w-5 h-5 shrink-0" />
-                <span>WARNING: This certificate has expired! The associated instrument is not authorized for commercial use.</span>
-              </div>
-            )}
-            <CertificateView certificate={result.certificate} showActions={true} />
-          </div>
-        ) : (
-          <Card className="text-center py-12 border-danger/30 bg-danger/5">
-            <ShieldAlert className="w-12 h-12 text-danger mx-auto mb-3" />
-            <h3 className="text-lg font-bold text-neutral-900">Certificate Not Found</h3>
-            <p className="text-sm text-neutral-600 mt-1 max-w-md mx-auto">
-              No active Legal Metrology certificate matches ID <span className="font-mono font-bold text-neutral-900">{inputCertId}</span>. Please verify the Certificate ID printed on the physical stamp or QR code.
-            </p>
-          </Card>
-        )
-      ) : null}
+      )}
+
+      {!loading && errorMsg && (
+         <Card className="text-center py-12 border-danger/30 bg-danger/5">
+         <ShieldAlert className="w-12 h-12 text-danger mx-auto mb-3" />
+         <h3 className="text-lg font-bold text-neutral-900">System Error</h3>
+         <p className="text-sm text-neutral-600 mt-1">{errorMsg}</p>
+       </Card>
+      )}
+
+      {!loading && result && (
+        <>
+          {result.verification_status === 'NOT_FOUND' && (
+            <Card className="text-center py-12 border-neutral-300 bg-neutral-50">
+              <ShieldAlert className="w-12 h-12 text-neutral-400 mx-auto mb-3" />
+              <h3 className="text-lg font-bold text-neutral-900">Certificate Not Found</h3>
+              <p className="text-sm text-neutral-600 mt-1">
+                No record exists for <span className="font-mono font-bold">{inputCertId}</span>.
+              </p>
+            </Card>
+          )}
+
+          {result.verification_status === 'NOT_VERIFIED' && (
+            <Card className="text-center py-12 border-warning/30 bg-warning/5">
+              <ShieldAlert className="w-12 h-12 text-warning mx-auto mb-3" />
+              <h3 className="text-lg font-bold text-neutral-900">Legacy / Unsigned Certificate</h3>
+              <p className="text-sm text-neutral-600 mt-1">
+                This certificate exists but predates the cryptographic signature system (no issuance log found).
+              </p>
+            </Card>
+          )}
+
+          {result.verification_status === 'MISMATCH' && (
+             <Card className="text-center py-12 border-danger/50 bg-danger/10">
+               <ShieldClose className="w-12 h-12 text-danger mx-auto mb-3" />
+               <h3 className="text-lg font-bold text-danger">TAMPERED / FORGED CERTIFICATE</h3>
+               <p className="text-sm text-neutral-800 mt-1 max-w-md mx-auto">
+                 The cryptographic signature failed verification. The contents of this certificate have been tampered with or the certificate is forged. DO NOT TRUST.
+               </p>
+             </Card>
+          )}
+
+          {['VERIFIED', 'EXPIRED', 'REVOKED'].includes(result.verification_status) && (
+            <div>
+              {result.verification_status === 'VERIFIED' && (
+                <div className="p-4 mb-4 bg-success/10 border border-success/30 rounded-lg flex items-center gap-3 text-success text-sm font-semibold">
+                  <CheckCircle2 className="w-5 h-5 shrink-0" />
+                  <span>CRYPTOGRAPHICALLY VERIFIED: This certificate is authentic and currently valid.</span>
+                </div>
+              )}
+              {result.verification_status === 'EXPIRED' && (
+                <div className="p-4 mb-4 bg-warning/10 border border-warning/30 rounded-lg flex items-center gap-3 text-warning-dark text-sm font-semibold">
+                  <AlertTriangle className="w-5 h-5 shrink-0" />
+                  <span>EXPIRED: This certificate's signature is authentic, but the validity period has expired.</span>
+                </div>
+              )}
+              {result.verification_status === 'REVOKED' && (
+                <div className="p-4 mb-4 bg-danger/10 border border-danger/30 rounded-lg flex items-center gap-3 text-danger text-sm font-semibold">
+                  <ShieldAlert className="w-5 h-5 shrink-0" />
+                  <span>REVOKED: This certificate's signature is authentic, but it has been officially REVOKED by the Legal Metrology Department.</span>
+                </div>
+              )}
+              
+              {/* Translate safe DTO to old CertificateView expected keys */}
+              <CertificateView 
+                certificate={{
+                  certificateNumber: result.certificate_number,
+                  instrumentType: result.instrument_type,
+                  serialNumber: result.serial_number,
+                  manufacturer: result.manufacturer,
+                  model: result.model,
+                  capacity: result.capacity,
+                  accuracyClass: result.accuracy_class,
+                  ownerName: result.owner_name,
+                  ownerAddress: result.owner_address,
+                  verificationAuthority: result.verification_authority,
+                  verificationDate: result.verification_date,
+                  expiryDate: result.expiry_date,
+                  sealNumber: result.seal_number,
+                  status: result.verification_status,
+                  // the public endpoint doesn't return qr_token anymore, so QR code rendering inside CertificateView shouldn't rely on it (or we can just show static or no QR for this view)
+                }} 
+                showActions={true} 
+              />
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 };

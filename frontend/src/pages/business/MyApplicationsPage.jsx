@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Eye, Filter, Calendar, MapPin, FileText, CheckCircle2, Clock, Award, ExternalLink, Download, QrCode, ShieldCheck } from 'lucide-react';
+import { Search, ArrowLeft, Eye, Filter, Calendar, MapPin, FileText, CheckCircle2, Clock, Award, ExternalLink, Download, QrCode, ShieldCheck } from 'lucide-react';
 import { useData } from '../../context/DataContext';
 import { useAuth } from '../../context/AuthContext';
 import { Card } from '../../components/common/Card';

@@ -13,7 +13,7 @@
 
 The platform connects **instrument owners, Legal Metrology Departments (LMDs), Legal Metrology Officers (LMOs), and Government Approved Test Centres (GATCs)** through a unified digital workflow.
 
-Instead of relying heavily on fragmented/manual processes for applications, scheduling, verification records, certificates, and expiry tracking, VeriMaap provides a centralized digital system for managing these activities.
+Instead of relying heavily on fragmented/manual processes for applications, scheduling, verification records, certificates, and expiry tracking, MaapSetu provides a centralized digital system for managing these activities.
 
 > **Physical verification remains the responsibility of authorized officers/GATCs. VeriMaap digitizes the workflow, records, evidence, certification and lifecycle management surrounding that verification.**
 
@@ -397,19 +397,17 @@ AI
 
 ### Frontend
 
-* React / Next.js
-* HTML5
-* CSS / Tailwind CSS
-* JavaScript / TypeScript
+* React 
+* Tailwind CSS
+* JavaScript
 
 ### Backend
 
-* REST API
-* Node.js / Express or selected backend framework
+* Fastapi
 
 ### Database
 
-* PostgreSQL / MySQL or selected database
+* PostgreSQL 
 
 
 ### Other
